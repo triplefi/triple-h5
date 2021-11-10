@@ -1,0 +1,63 @@
+https://github.com/WangYi04/hedgex // contract origin code link
+
+1. Close, 平仓函数
+2. Open， 开仓函数
+3. addLiquidityToPool， 增加流动性
+4. getPoolNet， 获取流动池净值
+5. longPosition， 获取多仓总量
+6. longPrice，获取多仓持仓价格
+7. rechargeMargin， 保证金充值
+8. removeLiquidityFromPool, 从池子中移除流动性
+9. shortPosition, 获取空仓总量
+10. shortPrice，获取空仓持仓价格
+11. @，提取保证金
+12. getUserPosition，获取用户仓位信息
+
+
+addLiquidity //向对冲池中增加token0的流动性
+{
+  uint256 amount, //token0的总量
+  address to, //用户lp token的接收地址，新产生的lp会发送到此地址
+  uint256 deadline //the deadline timestamp
+}
+removeLiquidity //从总池中移走流动性代币token0
+{
+  uint256 liquidity, //发送到合约地址的lp代币数量
+  address to, //token0代币的接收地址
+  uint256 deadline
+}
+rechargeMargin //增加用户保证金
+{
+  uint256 amount, //发送到池中的token0代币数量
+  uint256 deadline //交易截止时间
+}
+withdrawMargin //用户提取保证金
+{
+  uint256 amount, //发送到池中的token0代币数量
+  uint256 deadline //交易截止时间
+}
+open //开仓函数
+{
+  int8 direction, //开仓方向
+  uint256 priceExp, //预期开仓价格
+  uint256 amount //开仓数量
+}
+close //平仓函数
+{
+  int8 direction, //平仓方向
+  uint256 priceExp, //预期平仓价格
+  uint256 amount //平仓数量
+}
+explosive // 
+{
+  address account,
+  address to
+}
+detectSlide //
+{
+  address account,
+  address to
+}
+getPoolNet // 获取流动池净值
+getAccountNet // 
+getLatestPrice // 

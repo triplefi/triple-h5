@@ -1,0 +1,101 @@
+/* 背景色 */
+.chart-page {
+  background-color: #fff;
+}
+.main-properties {
+  height: 240px !important;
+}
+/* 隐藏toolbar top */
+.tv-close-panel.top {
+  display: none;
+}
+/* intervals 背景边框色 */
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip {
+  background: transparent;
+  border-color: #dadde0;
+  color: rgba(0,0,0,0.5);
+  cursor: pointer;
+}
+/* 隐藏intervals 最后一项 */
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip:last-child {
+  display: none;
+}
+.left .header-group-intervals .intervals-container .submenu {
+  display: none;
+}
+
+/* intervals 选中hover样式 */
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip.selected {
+  color: #0F9D58;
+  background: transparent;
+}
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip:hover {
+  color: #0F9D58;
+  background: transparent;
+}
+
+/* 按钮样式图标颜色 */
+.left .group.space-single .button,
+.right .group.space-single .button {
+  border-color: #dadde0;
+  background: #fff;
+  cursor: pointer;
+}
+.left .group.space-single .button svg,
+.right .group.space-single .button svg{
+  fill: rgba(0,0,0,0.5);
+}
+.left .group.space-single .chart-style-widget .apply-common-tooltip {
+  border-color: #dadde0;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* left_tool 背景 */
+.drawingToolbar-2CoOuCv8- {
+  background: #fff;
+}
+
+/* left_tool 按钮样式和图标颜色 */
+.button-12d2ecdm- {
+  color: rgba(0,0,0,0.5);
+}
+.button-12d2ecdm- .icon-1Aj0C0n9- svg {
+  fill: rgba(0,0,0,0.5);
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-,
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover {
+  color: #0F9D58;
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover .icon-1Aj0C0n9- svg,
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg,
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg:hover {
+  fill: #0F9D58;
+}
+/* 下分割线 */
+.separator-3cgsM4c1- {
+  background-color: rgba(0,0,0,0.05);
+}
+/* 箭头 */
+.scrollBot-1mx_BeXt-, .scrollTop-2G6k9HF0- {
+  background: #fff;
+  color: rgba(0,0,0,0.87);
+  opacity: 1;
+}
+
+/* 内容边框线 */
+.chart-page .chart-container {
+  border-color: #dadde0;
+  background: transparent;
+}
+
+
+
+/* 隐藏切换k线类型 */
+/* .left .header-group-bars-style {
+  display: none;
+} */
+/* 隐藏截图 */
+/* .right {
+  display: none;
+} */

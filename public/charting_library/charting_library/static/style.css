@@ -1,0 +1,94 @@
+/* 自定义样式 */
+.getimage {
+  display: none!important;
+}
+.submenu {
+  display: none!important;
+}
+.tv-close-panel.top {
+  display: none;
+}
+/* .header-chart-panel-content .left {
+  margin-right: 20%;
+} */
+.apply-common-tooltip {
+  background: transparent!important;
+}
+.chart-page .chart-container {
+  border: none;
+  background: transparent;
+}
+.intervals-container .quick .apply-common-tooltip {
+  border: none;
+  color: rgba(255, 255, 255, .4);
+  font-size: 12px;
+  cursor: pointer;
+}
+.intervals-container .quick .apply-common-tooltip::before {
+  border: none;
+}
+.intervals-container  .quick .apply-common-tooltip.selected {
+  color: #F0BD42;
+}
+/* .header-group-intervals {
+  margin-right: 60%!important;
+} */
+.intervals-container  .quick .apply-common-tooltip:last-child {
+  display: none;
+}
+/* .button.indicators svg {
+  fill: rgba(255,255,255,0.80);
+} */
+.feature-no-touch .favored-list-container span:hover {
+  color: #F0BD42;
+  border: 0;
+}
+.chart-style-widget .quick .apply-common-tooltip:first-child {
+  border: 0 !important;
+  background: #2E2F32!important;
+
+}
+.chart-style-widget .quick .apply-common-tooltip::before {
+  border: 0 !important;
+  background: transparent!important;
+}
+.header-chart-panel .button.iconed {
+  border: 0 !important;
+  background: #2E2F32!important;
+}
+.header-chart-panel .button.iconed::before {
+  border: 0 !important;
+}
+.toggle-caption.indicators {
+  border: 0 !important;
+  background: #2E2F32!important;
+}
+.toggle-caption.indicators::before {
+  display: none!important;
+}
+
+.button-12d2ecdm- .icon-1Aj0C0n9- svg {
+  fill: #7d7d7d;
+}
+.bg-YlLYd-yv- {
+  fill: #7d7d7d;
+}
+.button-12d2ecdm- {
+  color: #7d7d7d;
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-,
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover {
+  color: #F0BD42;
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover .icon-1Aj0C0n9- svg {
+  fill: #F0BD42;
+}
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg {
+  fill: #F0BD42;
+}
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg:hover {
+  fill: #F0BD42;
+}
+.separator-3cgsM4c1- {
+  background-color: rgba(255, 255, 255, .2);
+}

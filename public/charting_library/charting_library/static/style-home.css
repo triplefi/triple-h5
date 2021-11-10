@@ -1,0 +1,21 @@
+/* .left .favored-list-container {
+  display: none;
+} */
+.left .favored-list-container .submenu {
+  display: none;
+}
+.left .favored-list-container .quick .apply-common-tooltip:last-child {
+  display: none!important;
+}
+/* .left .header-group-intervals,*/ .left .header-group-bars-style {
+  display: none;
+}
+.tv-close-panel {
+  display: none;
+}
+.right {
+  display: none;
+}
+.button.indicators:not(:only-child) {
+  border-right: 1px solid #dadde0;
+}

@@ -1,0 +1,118 @@
+html {
+  --COLOR-bg1: #0A0911;
+  --COLOR-bg2: #1A1825;
+  --COLOR-bg3: #282634;
+  --COLOR-bg4: #2E2C3D;
+
+  --COLOR-t1: #FFFFFF;
+  --COLOR-t2: #8E8E9A;
+  --COLOR-t3: #7A7981;
+  --COLOR-t4: #494653;
+  --COLOR-t5: #3C3A42;
+
+  --COLOR-c1: #2FAD68;
+  --COLOR-c2: #253731;
+  --COLOR-c3: #D88161;
+  --COLOR-c4: #342624;
+  --COLOR-c5: #5F549E;
+}
+
+h1 {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 56px;
+  line-height: 64px;
+  letter-spacing: -1px;
+}
+
+h2 {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -1px;
+}
+
+h3 {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -1px;
+}
+
+h4 {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.5px;
+}
+
+h5 {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h6 {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.fs16 {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.fs16b {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+.fs14 {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.fs14b {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: bold;
+}
+
+.fs13 {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.fs12 {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.btn14 {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.btn13 {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 20px;
+}

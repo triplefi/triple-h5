@@ -1,0 +1,78 @@
+.deal {
+  display: flex;
+  flex-direction: column;
+  height: 476px;
+  box-shadow: inset 0px -1px 0px #282634;
+
+  .title {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 56px;
+    background: #1a1825;
+    box-shadow: inset 0px -1px 0px #282634;
+
+    .line {
+      margin-top: -3px;
+      flex-grow: 1;
+      margin-left: 10px;
+      height: 4px;
+      background: #3c3a42;
+
+      &::after {
+        content: "";
+        display: block;
+        height: 1px;
+        background: #3c3a42;
+        margin-top: 6px;
+      }
+    }
+  }
+
+  .list {
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+
+    .list-item {
+      display: flex;
+      margin: 10px 0;
+
+      &.head {
+        margin-bottom: 0;
+
+        .fs12 {
+          color: var(--COLOR-t3);
+        }
+      }
+
+      .times {
+        flex: 8;
+      }
+
+      .price {
+        flex: 10;
+        text-align: right;
+        &.green {
+          color: var(--COLOR-c1);
+        }
+        &.red {
+          color: var(--COLOR-c3);
+        }
+      }
+
+      .amount {
+        flex: 10;
+        text-align: right;
+      }
+    }
+
+    .body {
+      height: 394px;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+    }
+  }
+}
