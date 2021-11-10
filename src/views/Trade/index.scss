@@ -1,0 +1,22 @@
+.trade {
+  min-height: calc(100vh - 40px);
+  display: flex;
+  background-color: var(--COLOR-bg1);
+
+  .right {
+    width: 268px;
+  }
+
+  .mis {
+    box-shadow: inset 0px -1px 0px #282634;
+  }
+
+  .mid {
+    box-shadow: inset -1px 0px 0px #282634;
+  }
+
+  .kline {
+    height: 420px;
+    box-shadow: inset 0px -1px 0px #282634;
+  }
+}

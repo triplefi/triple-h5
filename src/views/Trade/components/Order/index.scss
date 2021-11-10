@@ -1,0 +1,69 @@
+.order {
+  padding: 0 24px;
+
+  .title {
+    margin: 16px 0 12px;
+  }
+
+  .all {
+    margin-left: 8px;
+    color: var(--COLOR-c5);
+    cursor: pointer;
+  }
+
+  .btn-close {
+    margin-left: auto;
+    width: 127px;
+    background: var(--COLOR-bg4);
+    border-color: transparent;
+
+    &:hover {
+      background: var(--COLOR-bg3);
+    }
+
+    &:active {
+      background: var(--COLOR-bg2);
+    }
+  }
+
+  .a-table {
+    &.el-table {
+      background-color: transparent;
+
+      ::v-deep tr {
+        background-color: transparent;
+      }
+
+      ::v-deep th {
+        background-color: transparent;
+      }
+
+      ::v-deep .cell {
+        color: #fff;
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: bold;
+      }
+
+      ::v-deep th>.cell {
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: normal !important;
+        color: var(--COLOR-t2);
+      }
+
+      ::v-deep th.is-leaf,
+      ::v-deep td {
+        border: none;
+      }
+
+      &::before {
+        height: 0;
+      }
+
+      ::v-deep tr:hover>td {
+        background: transparent;
+      }
+    }
+  }
+}
