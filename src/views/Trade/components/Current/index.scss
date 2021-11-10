@@ -1,0 +1,56 @@
+.current {
+  height: 56px;
+  background: #1A1825;
+  box-shadow: inset -1px -1px 0px #282634;
+  display: flex;
+  align-items: center;
+  color: #fff;
+
+  .icons {
+    margin-left: 16px;
+    margin-right: 4px;
+    position: relative;
+    width: 32px;
+    height: 32px;
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      >img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .icon-1 {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .icon-2 {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+    }
+  }
+
+  .price {
+    color: var(--COLOR-c1);
+    margin-left: 24px;
+  }
+
+  .item {
+    margin-left: 24px;
+
+    .name {
+      color: var(--COLOR-t2);
+    }
+  }
+}

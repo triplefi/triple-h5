@@ -1,0 +1,153 @@
+/* 背景色 */
+.chart-page {
+  background-color: #232835;
+}
+.main-properties {
+  height: 240px !important;
+}
+/* 隐藏toolbar top */
+.tv-close-panel.top {
+  display: none;
+}
+/* intervals 背景边框色 */
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip {
+  background: transparent;
+  border-color: transparent;
+  color: #9a9a9a;
+  cursor: pointer;
+}
+/* 隐藏intervals 最后一项 */
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip:last-child {
+  display: none;
+}
+.left .header-group-intervals .intervals-container .submenu {
+  display: none;
+}
+
+/* intervals 选中hover样式 */
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip.selected {
+  color: #F0BD42;
+  background: transparent;
+}
+.left .header-group-intervals .intervals-container .quick .apply-common-tooltip:hover {
+  color: #F0BD42;
+  background: transparent;
+}
+
+/* 按钮样式图标颜色 */
+.left .group.space-single .button,
+.right .group.space-single .button {
+  border-color: #2E2F32;
+  background: transparent;
+  cursor: pointer;
+}
+.left .group.space-single .button svg,
+.right .group.space-single .button svg{
+  fill: #7d7d7d;
+}
+.left .group.space-single .chart-style-widget .apply-common-tooltip {
+  border-color: #2E2F32;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* left_tool 背景 */
+.drawingToolbar-2CoOuCv8- {
+  background: #232835;
+}
+
+/* left_tool 按钮样式和图标颜色 */
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-,
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover {
+  color: #F0BD42;
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover .icon-1Aj0C0n9- svg,
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg,
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg:hover {
+  fill: #F0BD42;
+}
+
+
+/* 内容边框线 */
+.chart-page .chart-container {
+  border-color: rgba(255,255,255,0.1);
+  background: transparent;
+}
+/* .intervals-container .quick .apply-common-tooltip {
+  border: none;
+  color: rgba(255, 255, 255, .4);
+  font-size: 12px;
+  cursor: pointer;
+}
+.intervals-container .quick .apply-common-tooltip::before {
+  border: none;
+}
+.intervals-container  .quick .apply-common-tooltip.selected {
+  color: #F0BD42;
+}
+.intervals-container  .quick .apply-common-tooltip:last-child {
+  display: none;
+}
+.feature-no-touch .favored-list-container span:hover {
+  color: #F0BD42;
+  border: 0;
+}
+.chart-style-widget .quick .apply-common-tooltip:first-child {
+  border: 0 !important;
+  background: #2E2F32!important;
+
+}
+.chart-style-widget .quick .apply-common-tooltip::before {
+  border: 0 !important;
+  background: transparent!important;
+}
+.header-chart-panel .button.iconed {
+  border: 0 !important;
+  background: #2E2F32!important;
+}
+.header-chart-panel .button.iconed::before {
+  border: 0 !important;
+}
+.toggle-caption.indicators {
+  border: 0 !important;
+  background: #2E2F32!important;
+}
+.toggle-caption.indicators::before {
+  display: none!important;
+}
+
+.button-12d2ecdm- .icon-1Aj0C0n9- svg {
+  fill: #7d7d7d;
+}
+.bg-YlLYd-yv- {
+  fill: #7d7d7d;
+}
+.button-12d2ecdm- {
+  color: #7d7d7d;
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-,
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover {
+  color: #F0BD42;
+}
+.feature-no-touch .button-12d2ecdm-.isActive-2rPH92mZ-:hover .icon-1Aj0C0n9- svg {
+  fill: #F0BD42;
+}
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg {
+  fill: #F0BD42;
+}
+.button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg, html.theme-dark .button-12d2ecdm-.isActive-2rPH92mZ- .icon-1Aj0C0n9- svg:hover {
+  fill: #F0BD42;
+}
+.separator-3cgsM4c1- {
+  background-color: rgba(255, 255, 255, .2);
+} */
+
+
+/* 隐藏切换k线类型 */
+/* .left .header-group-bars-style {
+  display: none;
+} */
+/* 隐藏截图 */
+/* .right {
+  display: none;
+} */

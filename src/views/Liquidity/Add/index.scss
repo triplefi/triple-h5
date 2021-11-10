@@ -1,0 +1,193 @@
+.liquidity {
+  min-height: calc(100vh - 40px);
+  background-color: var(--COLOR-bg1);
+
+  .main {
+    margin: 100px auto;
+    width: 416px;
+    // min-height: 670px;
+    background: #1a1825;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    padding-bottom: 62px;
+
+    .content-add {
+      margin-top: 16px;
+      color: var(--COLOR-t2);
+
+      .wrap {
+        background: #1a1825;
+        border: 1px solid #282634;
+        border-radius: 8px;
+        padding: 16px;
+
+        .a-select {
+          background: #18a0fb;
+          border-color: #18a0fb;
+        }
+
+        .amount,
+        .token {
+          color: #fff;
+        }
+
+        .amount {
+          width: 120px;
+          outline: none;
+          border: none;
+          background: transparent;
+          // &::placeholder {
+          //   font-weight: normal;
+          //   font-family: "Roboto Condensed";
+          // }
+        }
+
+        .max,
+        .currency {
+          display: inline-flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 4px 8px;
+          height: 30px;
+          background: #282634;
+          border-radius: 28px;
+          color: #fff;
+          cursor: pointer;
+
+          &:hover {
+            background: #2e2c3d;
+          }
+
+          .icon-coin {
+            width: 22px;
+            height: 22px;
+          }
+
+          > span {
+            margin: 0 8px;
+          }
+        }
+        .icon-approve {
+          margin-left: 10px;
+          cursor: pointer;
+        }
+      }
+
+      .max {
+        margin-left: auto;
+      }
+
+      .el-icon-plus {
+        font-size: 10px;
+        margin: 18px 0;
+        display: block;
+        text-align: center;
+        color: var(--COLOR-t3);
+      }
+
+      .btn-enter {
+        margin-top: 24px;
+        width: 100%;
+      }
+    }
+
+    .content-select {
+      .serach-input {
+        margin-bottom: 16px;
+
+        ::v-deep .el-input__inner {
+          text-align: center;
+          font-family: "Roboto Condensed";
+
+          &::placeholder {
+            text-align: center;
+            font-weight: normal;
+            color: #8e8e9a;
+            font-family: "Roboto Condensed";
+          }
+        }
+      }
+
+      .icon-question {
+        margin-left: 8px;
+      }
+
+      .currency {
+        margin: 8px 16px 8px 0;
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid #2e2c3d;
+        color: #fff;
+        cursor: pointer;
+
+        &:hover {
+          background: #1a1825;
+          border-color: #494653;
+        }
+
+        .icon {
+          margin: 0;
+          margin-right: 4px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .line {
+        margin-top: 8px;
+        height: 1px;
+        background: #282634;
+      }
+
+      .curreny-list {
+        margin: 0 -24px;
+        height: 296px;
+        overflow-y: auto;
+
+        .curreny-item {
+          padding: 0 24px;
+          height: 56px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+
+          &:hover {
+            background: #1a1825;
+          }
+
+          .icon {
+            margin-left: 0;
+            margin-right: 8px;
+            width: 24px;
+            height: 24px;
+          }
+
+          .code {
+            color: #fff;
+          }
+
+          .name {
+            color: var(--COLOR-t3);
+          }
+
+          .value {
+            margin-left: auto;
+            color: #fff;
+          }
+        }
+
+        .no-data {
+          margin-top: 128px;
+          text-align: center;
+          color: var(--COLOR-t3);
+        }
+      }
+    }
+  }
+}
