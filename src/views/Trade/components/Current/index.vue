@@ -44,15 +44,16 @@ export default {
   name: "Current",
   data() {
     return {
+      newPrice: "",
       indexPrice: "",
       totalPool: "",
       // fundingRate: "",
-      interval: null
+      interval: null,
     };
   },
   computed: {
     ...mapState(["contract", "fundingRate"]),
-    ...mapGetters(["NewPrice", "symbol"])
+    ...mapGetters(["NewPrice", "symbol"]),
   },
   mounted() {
     this.interval = setInterval(async () => {
@@ -62,7 +63,7 @@ export default {
   watch: {
     contract(n) {
       n && this.getPrice();
-    }
+    },
   },
   methods: {
     async getPrice() {
@@ -71,11 +72,11 @@ export default {
         this.$store.commit("setPrice", price * 1);
         this.totalPool = await this.contract.methods.totalPool().call();
       }
-    }
+    },
   },
   beforeDestroy() {
     this.interval && clearInterval(this.interval);
-  }
+  },
 };
 </script>
 

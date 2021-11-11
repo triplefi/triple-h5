@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       query: "",
-      list: []
+      list: [],
     };
   },
   watch: {
@@ -66,8 +66,8 @@ export default {
       handler(n) {
         n && this.list.length && this.init();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   async created() {
     const res = await getTradePairs();
@@ -90,8 +90,8 @@ export default {
       console.log("selectPair", item);
       localStorage.setItem("pairInfo", JSON.stringify(item));
       this.initContract({ pairInfo: item });
-    }
-  }
+    },
+  },
 };
 </script>
 

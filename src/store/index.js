@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import wallet from './wallet'
 import contracts from './contracts'
 import getters from './getters'
-import { sortBy } from "@/utils/util"
+import { sortBy } from '@/utils/util'
 
 Vue.use(Vuex)
 
@@ -50,7 +50,7 @@ const store = new Vuex.Store({
     trades: [], // 成交记录
 
     deadline: 2 * 60,
-    tolerance: 0.5 // 滑点
+    tolerance: 0.5, // 滑点
   },
   mutations: {
     setReady(state, payload) {
@@ -141,11 +141,16 @@ const store = new Vuex.Store({
       state.position = payload || {}
     },
     setTrade(state, payload) {
-      if (state.trades.length > 50) {
-        state.trades.pop()
+      const index = state.trades.findIndex(
+        (e) => e.transactionHash == payload.transactionHash,
+      )
+      if (index < 0) {
+        if (state.trades.length > 50) {
+          state.trades.pop()
+        }
+        state.trades.unshift(payload)
+        state.trades.sort(sortBy('time', true, false))
       }
-      state.trades.unshift(payload)
-      state.trades.sort(sortBy('time', true, false))
     },
     clearTrades(state) {
       state.trades = []
@@ -161,7 +166,7 @@ const store = new Vuex.Store({
     ...wallet,
     ...contracts,
   },
-  getters
+  getters,
 })
 
 export default store

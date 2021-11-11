@@ -1,6 +1,28 @@
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  devServer: {
+    host: '127.0.0.1',
+    port: '8080',
+    overlay: {
+      warnings: false,
+      errors: true,
+    },
+    proxy: {
+      '/': {
+        ws: true,
+        target: 'http://api.triple.fi',
+        secure: false,
+        changeOrigin: true,
+      },
+      '/ws': {
+        ws: true,
+        target: 'ws://api.triple.fi',
+        changeOrigin: true,
+      },
+    },
+    // before: require('./mock/mock-server.js')
+  },
+  chainWebpack: (config) => {
     const svgRule = config.module.rule('svg')
 
     // 清除已有的所有 loader。
@@ -11,11 +33,11 @@ module.exports = {
     svgRule
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
-      .tap(options => {
+      .tap((options) => {
         options = {
-          symbolId: 'icon-[name]'
+          symbolId: 'icon-[name]',
         }
         return options
       })
-  }
+  },
 }

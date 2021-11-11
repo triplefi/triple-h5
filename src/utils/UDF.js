@@ -1,99 +1,73 @@
-
 /* eslint-disable */
-const FirstData = require('./data').default
+import { getTradeKline } from '@/api'
 
-function Dep() {
-  this.handles = {};
-}
-
-Dep.prototype = { // 观察者模式
-  constructor: Dep,
-
-  sub: function (handle, callback) { // 添加事件
-    if (typeof handle !== 'string') {
-      throw new Error('handle must be a string!');
-    }
-    if (!this.handles[handle]) {
-      this.handles[handle] = [];
-    }
-    // 这样做可能会导致内存泄漏，待观察
-    // this.handles[handle] = [];
-    this.handles[handle].push(callback);
-  },
-
-  unSub: function (handle) { // 删除事件
-    var that = this;
-    if (this.handles[handle]) {
-      this.handles[handle].forEach(function (item, index) {
-        that.handles[handle][index] = null;
-      });
-      this.handles[handle] = null;
-    }
-  },
-
-  pub: function () { // 发布事件
-    if (!arguments[0] || typeof arguments[0] !== 'string') {
-      throw new Error('the first param must be a string!');
-    }
-    var handles = this.handles[arguments[0]];
-    if (handles && handles.length > 0) {
-      var arg = Array.prototype.slice.call(arguments, 1);
-      handles.forEach(function (handleItem) {
-        if (typeof handleItem === 'function') {
-          handleItem.apply(null, arg);
-        }
-      });
-    }
-  }
-};
-
-// 过滤对象数组去重   arr是数组，field是参考字段, 回调是后续可以对数组进行其他操作，已去重后的数组为参数，并需要返回处理后的数组。
-function duplicateRemoval(arr, field, callback) {
-  var hash = {};
-  arr = arr.reduce(function (item, next) {
-    hash[next[field]] ? '' : hash[next[field]] = true && item.push(next);
-    return item;
-  }, []);
-
-  if (callback) {
-    arr = callback(arr);
-  }
-
-  return arr;
-}
-
-// 格式化数据
-function formatBarData(data) {
+// 格式化单条数据
+function formatBarItem(data, pricescale) {
   if (!data) {
-    return [];
-  }
-  if (typeof data === 'string') {
-    data = JSON.parse(data);
+    return {}
   }
   if (data.constructor !== Array) {
-    throw new Error('data must be an array!');
+    console.error('data must be an array!')
+    return []
   }
-  var ret = [];
-  var tempObj = {};
-  data = duplicateRemoval(data, 'time');
-  data.forEach(function (item) {
+  const [open, high, low, close, time] = data
+  return {
+    open: open / pricescale,
+    high: high / pricescale,
+    low: low / pricescale,
+    close: close / pricescale,
+    time,
+    volume: 0,
+    isBarClosed: true,
+    isLastBar: false,
+  }
+}
+// 格式化多条数据
+function formatBarData(data, pricescale) {
+  if (!data) {
+    return []
+  }
+  if (typeof data === 'string') {
+    data = JSON.parse(data)
+  }
+  if (data.constructor !== Array) {
+    console.error('data must be an array!')
+    return []
+  }
+  var ret = []
+  var tempObj = {}
+  data.forEach((item) => {
+    const [open, high, low, close, time] = item
     tempObj = {
-      time: item.time,
-      close: item.close,
-      open: item.open,
-      high: item.high,
-      low: item.low,
+      open: open / pricescale,
+      high: high / pricescale,
+      low: low / pricescale,
+      close: close / pricescale,
+      time,
       volume: 0,
       isBarClosed: true,
-      isLastBar: false
-    };
-    // console.log(tempObj, '---00000');
-    ret.push(tempObj);
-  });
-  return ret;
+      isLastBar: false,
+    }
+    ret.push(tempObj)
+  })
+  return ret
 }
-const oneData = [{ "open": 62182.7, "high": 62336.57, "low": 62169.27, "close": 62176.93, "time": 1636257600000, "vol": 11.91780, "currencyVol": 741889.7186540 }]
-
+// resolutions 转成接口 type
+const resolutionsToKtype = {
+  1: 'm1',
+  5: 'm5',
+  10: 'm10',
+  15: 'm15',
+  30: 'm30',
+  60: 'h1',
+  120: 'h2',
+  240: 'h4',
+  360: 'h6',
+  720: 'h12',
+  D: 'd1',
+  // W: "1week",
+  // M: "1month",
+}
 export default class UDFCompatibleDatafeed {
   /**
    * UDFCompatibleDatafeed 类
@@ -103,51 +77,25 @@ export default class UDFCompatibleDatafeed {
    * @param { object } businessData 交易对信息
    */
   constructor(dataSource, vue, config, businessData) {
-    // this.DataProvider = dataSource;
-    this._ws = dataSource;
-    this._config = config;
-    this._businessConf = businessData;
-    this._vue = vue;
-    this._dep = new Dep();
-    this.isTooNear = false;
-    this.preData = [];
-    this.subscriberID = null;
-    this.getBarsTimer = null;
-    this.onResetCacheNeededCallback = function () { };
+    this._ws = dataSource
+    this._config = config
+    this._businessConf = businessData
+    this._vue = vue
+    this.isTooNear = false
+    this.preData = []
+    this.subscriberID = null
+    this.getBarsTimer = null
+    this.onResetCacheNeededCallback = () => {}
   }
 
   onReady(callback) {
     if (typeof this._config !== 'object') {
-      throw new Error('UDFCompatibleDatafeed config need an object!!');
+      throw new Error('UDFCompatibleDatafeed config need an object!!')
     }
-    var that = this;
-    setTimeout(function () {
-      callback(that._config);
-    }, 0);
-
-    // var sourceData = formatBarData(FirstData);
-    // sourceData[0].isBarClosed = true;
-    // sourceData[0].isLastBar = false;
-    // that.preData = JSON.parse(JSON.stringify(sourceData));
-    // console.log(sourceData)
-    // that._dep.pub('firstData', sourceData);
-
-    // setInterval(() => {
-    //   var sourceData = formatBarData(oneData)
-    //   var prevLen = that.preData.length;
-    //   var curLen = sourceData.length;
-
-    //   // 如果是当前交易对的更新数据判断随后一条k线时间与最新消息时间，如果最新消息时间比最新k线时间还小就舍弃
-    //   if (prevLen > 0 && curLen === 1 && that.preData[prevLen - 1].time > sourceData[0].time) {
-    //     return false;
-    //   }
-    //   sourceData[0].isBarClosed = true;
-    //   sourceData[0].isLastBar = false;
-    //   that.preData = JSON.parse(JSON.stringify(sourceData));
-    //   that._dep.pub('newData', sourceData);
-    // }, 1000)
-
-    return false;
+    setTimeout(() => {
+      callback(this._config)
+    }, 0)
+    return false
   }
 
   /**
@@ -157,71 +105,89 @@ export default class UDFCompatibleDatafeed {
    * @param { string } symbolType 请求的商品类型：指数、股票、外汇等等（由用户选择）。空值表示没有指定
    */
   searchSymbols(userInput, exchange, symbolType, onResultReadyCallback) {
-    onResultReadyCallback([]);
+    onResultReadyCallback([])
   }
 
   // 通过商品名称解析商品信息
   resolveSymbol(symbolName, onSymbolResolvedCallback, onResolveErrorCallback) {
-    var that = this;
-    setTimeout(function () {
-      onSymbolResolvedCallback(that._businessConf.symbolResolveConf);
-    }, 0);
-    return false;
+    setTimeout(() => {
+      onSymbolResolvedCallback(this._businessConf.symbolResolveConf)
+    }, 0)
+    return false
   }
 
   /**
    * 通过商品名称解析商品信息，切换interval（时间）时也会调用
    */
-  getBars(symbolInfo, resolution, from, to, onHistoryCallback, onErrorCallback, firstDataRequest) {
-    var that = this;
-    console.log('firstDataRequest', firstDataRequest)
+  getBars(
+    symbolInfo,
+    resolution,
+    from,
+    to,
+    onHistoryCallback,
+    onErrorCallback,
+    firstDataRequest,
+  ) {
+    console.log('firstDataRequest', firstDataRequest, symbolInfo)
     if (!firstDataRequest) {
-      onHistoryCallback([], { noData: true });
-      that._vue.$emit('chartReady');
+      onHistoryCallback([], { noData: true })
     } else {
-      var sourceData = formatBarData(FirstData);
-      sourceData[0].isBarClosed = true;
-      sourceData[0].isLastBar = false;
-      that.preData = JSON.parse(JSON.stringify(sourceData));
-      onHistoryCallback(sourceData);
-      that._vue.$emit('chartReady');
+      getTradeKline({
+        contract: symbolInfo.ticker,
+        type: resolutionsToKtype[resolution],
+        count: 1500,
+      }).then((res) => {
+        console.log('getTradeKline', res)
+        if (res.result) {
+          var sourceData = formatBarData(res.data, symbolInfo.pricescale)
+          this.preData = JSON.parse(JSON.stringify(sourceData))
+          onHistoryCallback(sourceData, { noData: false })
+          this._vue.$emit('chartReady')
+        }
+      })
+
+      let timer = setInterval(() => {
+        if (this._ws.isWsOpen()) {
+          clearTimeout(timer)
+          setTimeout(() => {
+            this._ws.sendMsg(
+              `${symbolInfo.ticker}:${resolutionsToKtype[resolution]}`,
+            )
+          }, 0)
+        }
+      }, 200)
     }
   }
 
-  subscribeBars(symbolInfo, resolution, onRealtimeCallback, subscriberUID, onResetCacheNeededCallback) {
-    // this._dep.sub('newData', function (data) {
-    //   // 更新最后一条K线
-    //   if (data.constructor === Array) {
-    //     data = data[0];
-    //   }
-    //   onRealtimeCallback(data);
-    // });
-    var that = this
-    setInterval(() => {
-      var data = JSON.parse(JSON.stringify(oneData))
-      data[0].vol = 0
-      data[0].close = data[0].close + Math.random() * 100
-      var sourceData = formatBarData(data)
-      var prevLen = that.preData.length;
-      var curLen = sourceData.length;
+  subscribeBars(
+    symbolInfo,
+    resolution,
+    onRealtimeCallback,
+    subscriberUID,
+    onResetCacheNeededCallback,
+  ) {
+    this._ws.opt.onMsgCall = (data) => {
+      if (data) var sourceData = formatBarItem(data, symbolInfo.pricescale)
+      var prevLen = this.preData.length
+      var curLen = sourceData.length
 
       // 如果是当前交易对的更新数据判断随后一条k线时间与最新消息时间，如果最新消息时间比最新k线时间还小就舍弃
-      if (prevLen > 0 && curLen === 1 && that.preData[prevLen - 1].time > sourceData[0].time) {
-        return false;
+      if (
+        prevLen > 0 &&
+        curLen === 1 &&
+        this.preData[prevLen - 1].time > sourceData[0].time
+      ) {
+        return false
       }
-      sourceData[0].isBarClosed = true;
-      sourceData[0].isLastBar = false;
-      that.preData = JSON.parse(JSON.stringify(sourceData));
-      // that._dep.pub('newData', sourceData);
-      onRealtimeCallback(sourceData[0]);
-    }, 1000)
+      this.preData = JSON.parse(JSON.stringify(sourceData))
+      console.log('subscribeBars', sourceData)
+      onRealtimeCallback(sourceData)
+    }
   }
 
-  unsubscribeBars(subscriberUID) {
-    // this._dep.unSub('newData');
-  }
+  unsubscribeBars(subscriberUID) {}
   // 处理深度
   calculateHistoryDepth(resolution, resolutionBack, intervalBack) {
-    return undefined;
+    return undefined
   }
-};
+}
