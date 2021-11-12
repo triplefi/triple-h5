@@ -11,7 +11,7 @@ export const fetchData = (query) => {
 // 获取交易对列表
 export const getTradePairs = (query) => {
   return request({
-    url: '/contract/trade_pairs',
+    url: '/api/contract/trade_pairs',
     method: 'get',
     params: query,
   })
@@ -37,7 +37,7 @@ export const getTradePairs = (query) => {
 // 获取交易对列表
 export const getTradeKline = (query) => {
   return request({
-    url: '/contract/kline',
+    url: '/api/contract/kline',
     method: 'get',
     params: query,
   })
@@ -46,7 +46,7 @@ export const getTradeKline = (query) => {
 // 获取用户自己的爆仓记录
 export const getUserExplosive = ({ addr }) => {
   return request({
-    url: '/contract/explosive',
+    url: '/api/contract/explosive',
     method: 'get',
     params: { addr },
   })
@@ -55,7 +55,7 @@ export const getUserExplosive = ({ addr }) => {
 // 获取用户自己的利息收取记录
 export const getUserInterest = ({ addr }) => {
   return request({
-    url: '/contract/interest',
+    url: '/api/contract/interest',
     method: 'get',
     params: { addr },
   })

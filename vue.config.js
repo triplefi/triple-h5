@@ -3,20 +3,21 @@ module.exports = {
   devServer: {
     host: '127.0.0.1',
     port: '8080',
+    https: true,
     overlay: {
       warnings: false,
       errors: true,
     },
     proxy: {
-      '/': {
+      '/api': {
         ws: true,
-        target: 'http://api.triple.fi',
-        secure: false,
+        target: 'https://triple.fi',
+        secure: true,
         changeOrigin: true,
       },
-      '/ws': {
+      '/wss': {
         ws: true,
-        target: 'ws://api.triple.fi',
+        target: 'wss://triple.fi/wss',
         changeOrigin: true,
       },
     },

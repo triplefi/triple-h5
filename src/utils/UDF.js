@@ -135,7 +135,7 @@ export default class UDFCompatibleDatafeed {
       getTradeKline({
         contract: symbolInfo.ticker,
         type: resolutionsToKtype[resolution],
-        count: 1500,
+        count: 2000,
       }).then((res) => {
         console.log('getTradeKline', res)
         if (res.result) {

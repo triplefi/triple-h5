@@ -187,9 +187,10 @@ export default {
     },
     // 设置k线配置
     setDataFeed() {
+      // const protocol = location.protocol === 'http:' ? 'ws:' : 'wss'
       this.initData = {
         interval: this.chartParams.interval,
-        wsURL: "ws://api.triple.fi/kline",
+        wsURL: "wss://triple.fi/wss/kline",
         chart: {
           resolutions: this.chartParams.resolutions,
           // resolutionsToKtype: this.chartParams.resolutionsToKtype,

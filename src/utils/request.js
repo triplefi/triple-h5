@@ -1,8 +1,7 @@
 import axios from 'axios'
 
 const service = axios.create({
-  // process.env.NODE_ENV === 'development' 来判断是否开发环境
-  baseURL: '/',
+  baseURL: process.env.NODE_ENV === 'development' ? '/' :  'https://triple.fi/',
   timeout: 5000,
 })
 
