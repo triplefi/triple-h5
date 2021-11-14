@@ -1,5 +1,8 @@
 <template>
-  <div class="kline" v-loading="!ready">
+  <div
+    class="kline"
+    v-loading="!ready"
+  >
     <c-tv
       v-if="ready"
       class="tvCon active"
@@ -23,7 +26,7 @@ export default {
       // 在data里面定义的是进入页面是默认的chart数据
       chartParams: {
         // 功能相关配置
-        interval: "1", // 默认时间k线
+        interval: "30", // 默认时间k线
         resolutions: ["1", "5", "10", "30", "60", "120", "240", "D"],
         resolutionsToKtype: {
           1: "m1",

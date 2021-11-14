@@ -6,7 +6,10 @@
     </div>
     <div class="search">
       <div class="search-input">
-        <svg-icon icon-class="ic_Search" class-name="icon-search"></svg-icon>
+        <svg-icon
+          icon-class="ic_Search"
+          class-name="icon-search"
+        ></svg-icon>
         <input
           class="input fs14"
           type="text"
@@ -23,12 +26,13 @@
     </div>
     <div class="coins">
       <div
-        class="coin up"
+        class="coin"
         :class="[
           item.trade_coin.toUpperCase() == tradeCoin &&
           item.margin_coin.toUpperCase() == marginCoin
             ? 'active'
             : '',
+          item.index_price - item.open_price >= 0 ? 'up' : 'dw'
         ]"
         v-for="item in list"
         :key="item.trade_coin"
@@ -43,8 +47,10 @@
         />
         <span class="btn13">{{ item.trade_coin.toUpperCase() }}</span>
         <span class="fs13 code"></span>
-        <span class="btn13 price">$34.22</span>
-        <div class="btn13 rate">+1.28%</div>
+        <span class="btn13 price">${{item.index_price}}</span>
+        <div class="btn13 rate">
+          {{item.index_price - item.open_price >= 0 ? '+' : ''}}{{((item.index_price - item.open_price) / item.open_price * 100).toFixed(2)}}%
+        </div>
       </div>
     </div>
   </div>
@@ -59,6 +65,7 @@ export default {
     return {
       query: "",
       list: [],
+      interval: null,
     };
   },
   watch: {
@@ -76,8 +83,22 @@ export default {
     }
     this.web3 && this.list.length && this.init();
   },
+  mounted() {
+    this.interval = setInterval(() => {
+      this.getList();
+    }, 3000);
+  },
+  beforeDestroy() {
+    this.interval && clearInterval(this.interval);
+  },
   methods: {
     ...mapActions(["initContract"]),
+    async getList() {
+      const res = await getTradePairs();
+      if (res.result) {
+        this.list = res.data;
+      }
+    },
     init() {
       const pairInfo = localStorage.getItem("pairInfo");
       if (pairInfo) {
@@ -87,6 +108,11 @@ export default {
       }
     },
     selectPair(item) {
+      if (
+        item.trade_coin.toUpperCase() == this.tradeCoin &&
+        item.margin_coin.toUpperCase() == this.marginCoin
+      )
+        return;
       console.log("selectPair", item);
       localStorage.setItem("pairInfo", JSON.stringify(item));
       this.initContract({ pairInfo: item });
