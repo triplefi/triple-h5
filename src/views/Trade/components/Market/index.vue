@@ -28,15 +28,14 @@
       <div
         class="coin"
         :class="[
-          item.trade_coin.toUpperCase() == tradeCoin &&
-          item.margin_coin.toUpperCase() == marginCoin
+            checkActive(item)
             ? 'active'
             : '',
           item.index_price - item.open_price >= 0 ? 'up' : 'dw'
         ]"
         v-for="item in list"
         :key="item.trade_coin"
-        @click="selectPair(item)"
+        @click="checkActive(item) && selectPair(item)"
       >
         <img
           class="icon"
@@ -108,14 +107,15 @@ export default {
       }
     },
     selectPair(item) {
-      if (
-        item.trade_coin.toUpperCase() == this.tradeCoin &&
-        item.margin_coin.toUpperCase() == this.marginCoin
-      )
-        return;
       console.log("selectPair", item);
       localStorage.setItem("pairInfo", JSON.stringify(item));
       this.initContract({ pairInfo: item });
+    },
+    checkActive(item) {
+      return (
+        item.trade_coin.toUpperCase() == this.tradeCoin &&
+        item.margin_coin.toUpperCase() == this.marginCoin
+      );
     },
   },
 };
