@@ -1,4 +1,5 @@
 // vue.config.js
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
   devServer: {
     host: '127.0.0.1',
@@ -41,4 +42,20 @@ module.exports = {
         return options
       })
   },
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      // 为生产环境修改配置...
+      config.optimization.minimizer.push(
+        new UglifyJsPlugin({
+          uglifyOptions:{
+            compress:{
+              drop_console: true
+            }
+          },
+        })
+      )
+    } else {
+      // 为开发环境修改配置...
+    }
+  }
 }

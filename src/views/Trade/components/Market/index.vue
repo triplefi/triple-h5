@@ -15,6 +15,7 @@
           type="text"
           placeholder="Search 67 Currency..."
           v-model="query"
+          @input="handleSearch"
         />
       </div>
       <div class="curreny">
@@ -33,9 +34,9 @@
             : '',
           item.index_price - item.open_price >= 0 ? 'up' : 'dw'
         ]"
-        v-for="item in list"
+        v-for="item in showList"
         :key="item.trade_coin"
-        @click="checkActive(item) && selectPair(item)"
+        @click="!checkActive(item) && selectPair(item)"
       >
         <img
           class="icon"
@@ -46,7 +47,7 @@
         />
         <span class="btn13">{{ item.trade_coin.toUpperCase() }}</span>
         <span class="fs13 code"></span>
-        <span class="btn13 price">${{item.index_price}}</span>
+        <span class="btn13 price">${{pricePrecision(item.index_price) | formatMoney}}</span>
         <div class="btn13 rate">
           {{item.index_price - item.open_price >= 0 ? '+' : ''}}{{((item.index_price - item.open_price) / item.open_price * 100).toFixed(2)}}%
         </div>
@@ -64,6 +65,7 @@ export default {
     return {
       query: "",
       list: [],
+      showList: [],
       interval: null,
     };
   },
@@ -79,8 +81,9 @@ export default {
     const res = await getTradePairs();
     if (res.result) {
       this.list = res.data;
+      this.showList = res.data;
     }
-    this.web3 && this.list.length && this.init();
+    this.list.length && this.init();
   },
   mounted() {
     this.interval = setInterval(() => {
@@ -109,13 +112,23 @@ export default {
     selectPair(item) {
       console.log("selectPair", item);
       localStorage.setItem("pairInfo", JSON.stringify(item));
-      this.initContract({ pairInfo: item });
+      this.$store.commit('setContractAddress', item.contract)
+      this.$store.commit('setPairInfo', item)
+      this.web3 && this.initContract({ pairInfo: item });
     },
     checkActive(item) {
       return (
         item.trade_coin.toUpperCase() == this.tradeCoin &&
         item.margin_coin.toUpperCase() == this.marginCoin
       );
+    },
+    handleSearch(e) {
+      let reg = `${e.target.value}`;
+      let Reg = new RegExp(reg, "i");
+
+      this.showList = this.list.filter(item => {
+        return item.trade_coin.match(Reg);
+      });
     },
   },
 };

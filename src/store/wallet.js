@@ -155,12 +155,12 @@ export default {
     let { notFirst, pairInfo } = payload
     console.log('pairInfo', pairInfo)
     pairInfo = pairInfo || {}
-    commit('setPairInfo', pairInfo)
+    // commit('setPairInfo', pairInfo)
 
     // contract
     // const contractAddress = '0xB21ceaec9B2259F28e839c87F8AeE35f835F3C7D'; // 合约地址
     const contractAddress = pairInfo.contract
-    commit('setContractAddress', contractAddress)
+    // commit('setContractAddress', contractAddress)
     const contract = new state.web3.eth.Contract(abi, contractAddress)
     const amountDecimal = await contract.methods.amountDecimal().call()
     const decimals = await contract.methods.decimals().call()

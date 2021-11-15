@@ -1,10 +1,10 @@
 <template>
   <div
     class="kline"
-    v-loading="!ready"
+    v-loading="showLoading"
   >
     <c-tv
-      v-if="ready"
+      v-if="contractAddress"
       class="tvCon active"
       @chartReady="onChartReady"
       @wsData="onWsData"
@@ -124,6 +124,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .kline {
+  padding-right: 1px;
+  padding-bottom: 1px;
   ::v-deep .el-loading-mask {
     right: 1px;
     bottom: 1px;
