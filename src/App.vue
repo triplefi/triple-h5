@@ -10,10 +10,10 @@ import Header from "./components/Header";
 import { mapActions } from "vuex";
 export default {
   components: {
-    Header
+    Header,
   },
   methods: {
-    ...mapActions(["metaMaskInit", "walletConnectInit"])
+    ...mapActions(["metaMaskInit", "walletConnectInit"]),
   },
   mounted() {
     const wallet = localStorage.getItem("wallet");
@@ -22,7 +22,7 @@ export default {
     } else if (wallet === "WalletConnect") {
       this.walletConnectInit();
     }
-  }
+  },
 };
 </script>
 
