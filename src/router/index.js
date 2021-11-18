@@ -40,12 +40,10 @@ const routes = [
       },
       {
         path: 'add/:currency',
-        name: 'PoolAdd',
         component: () => import(/* webpackChunkName: "pool-add" */ '../views/Liquidity/Add'),
       },
       {
         path: 'add/:currency/:token',
-        name: 'PoolAdd',
         component: () => import(/* webpackChunkName: "pool-add" */ '../views/Liquidity/Add'),
       }
     ]
