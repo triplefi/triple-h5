@@ -85,7 +85,8 @@
                         :precision="precision"
                         :step="step"
                         :min="0"
-                        :max="maxLiquidity * 1"
+                        :max="formatDecimals(maxLiquidity) * 1"
+                        @change="onChangeLiquidity"
                     ></el-input-number>
                     <div style="height: 8px"></div>
                     <el-slider
@@ -288,6 +289,10 @@ export default {
         formatPrecent(val) {
             return val + '%'
         },
+        onChangeLiquidity(val) {
+            this.liquidity = val
+            this.precent = (val / this.formatDecimals(this.maxLiquidity)) * 100
+        },
         precentChange() {
             this.liquidity = this.formatDecimals((this.maxLiquidity * this.precent) / 100)
         },
@@ -297,7 +302,6 @@ export default {
                 liquidity: this.toBN(this.liquidity * Math.pow(10, this.token0Decimals)),
                 to: this.coinbase
             }
-            console.log(params)
             try {
                 const res = await this.pcontract.methods
                     .removeLiquidity(params.liquidity, params.to)
@@ -346,6 +350,8 @@ export default {
                 if (canWithdraw > net / leverage) {
                     canWithdraw = net / leverage
                 }
+                // 增加removeCoefficient(0.99)系数，提高下单成功率。2021.11.20 -daihanqiao
+                canWithdraw = canWithdraw * this.$store.state.removeCoefficient
                 if (canWithdraw > 0) {
                     maxLiquidity = (canWithdraw * totalSupply) / net
                     if (balanceOf < maxLiquidity) {
