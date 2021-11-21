@@ -3,7 +3,7 @@
         <div class="flex-1 action-item long">
             <div class="flex flex-ac">
                 <div class="label btn13">Buy Price</div>
-                <h5 class="price">{{ pricePrecision(price) | formatMoney }}</h5>
+                <h5 class="price">{{ pricePrecision(slidePriceLong) | formatMoney }}</h5>
             </div>
             <div style="height: 24px">
                 <!-- Max Amount: {{amountPrecision(LongMaxAmount)}} -->
@@ -43,7 +43,7 @@
         <div class="flex-1 action-item short">
             <div class="flex flex-ac">
                 <div class="label btn13">Sell Price</div>
-                <h5 class="price">{{ pricePrecision(price) | formatMoney }}</h5>
+                <h5 class="price">{{ pricePrecision(slidePriceShort) | formatMoney }}</h5>
             </div>
             <div style="height: 24px">
                 <!-- Max Amount: {{amountPrecision(ShortMaxAmount)}} -->
@@ -189,7 +189,15 @@ export default {
     },
     computed: {
         ...mapState(['deadline', 'tolerance', 'allowance']),
-        ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin']),
+        ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin', 'slidePrice']),
+        slidePriceLong() {
+            //多仓偏移价格
+            return this.price + this.slidePrice
+        },
+        slidePriceShort() {
+            //空仓偏移价格
+            return this.price - this.slidePrice
+        },
         deadlineMinute() {
             return this.deadline / 60
         },
@@ -262,9 +270,9 @@ export default {
             }
             console.log(1 + this.tolerance / 100)
             const params = {
-                priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.price)),
-                amount: this.toBN(this.amount1),
-                rechargeAmount: this.toBN(this.LongRechargeAmount)
+                priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
+                amount: this.toBN(this.amount1)
+                // rechargeAmount: this.toBN(this.LongRechargeAmount)
             }
             console.log(params)
             this.openLong(params)
@@ -288,9 +296,9 @@ export default {
                 return this.handleApprove()
             }
             const params = {
-                priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.price)),
-                amount: this.toBN(this.amount2),
-                rechargeAmount: this.toBN(this.ShortRechargeAmount)
+                priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),
+                amount: this.toBN(this.amount2)
+                // rechargeAmount: this.toBN(this.ShortRechargeAmount)
             }
             console.log(params)
             this.openShort(params)

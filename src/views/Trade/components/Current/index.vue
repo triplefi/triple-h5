@@ -1,34 +1,34 @@
 <template>
-  <div class="current">
-    <div class="icons">
-      <div class="icon icon-1">
-        <img :src="require(`@/assets/coin/coin_${tradeCoin}.png`)" alt="" />
-      </div>
-      <div class="icon icon-2">
-        <img :src="require(`@/assets/coin/coin_${marginCoin}.png`)" alt="" />
-      </div>
+    <div class="current">
+        <div class="icons">
+            <div class="icon icon-1">
+                <img :src="require(`@/assets/coin/coin_${tradeCoin}.png`)" alt="" />
+            </div>
+            <div class="icon icon-2">
+                <img :src="require(`@/assets/coin/coin_${marginCoin}.png`)" alt="" />
+            </div>
+        </div>
+        <h5>{{ symbol }}</h5>
+        <h5 class="price">${{ pricePrecision(NewPrice) | formatMoney }}</h5>
+        <div class="item">
+            <div class="fs12 name">Index Price</div>
+            <div class="fs12b value">${{ pricePrecision(price) | formatMoney }}</div>
+        </div>
+        <div class="item">
+            <div class="fs12 name">Triple Pool</div>
+            <div class="fs12b value">
+                {{ formatDecimals(totalPool) | formatMoney }}
+            </div>
+        </div>
+        <div class="item">
+            <div class="fs12 name">Funding Rate</div>
+            <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3) }}%</div>
+        </div>
     </div>
-    <h5>{{ symbol }}</h5>
-    <h5 class="price">${{ pricePrecision(NewPrice) | formatMoney }}</h5>
-    <div class="item">
-      <div class="fs12 name">Index Price</div>
-      <div class="fs12b value">${{ pricePrecision(price) | formatMoney }}</div>
-    </div>
-    <div class="item">
-      <div class="fs12 name">Triple Pool</div>
-      <div class="fs12b value">
-        {{ formatDecimals(totalPool) | formatMoney }}
-      </div>
-    </div>
-    <div class="item">
-      <div class="fs12 name">Funding Rate</div>
-      <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3) }}%</div>
-    </div>
-  </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 // "1: getLatestPrice来获取价格
 // 2:
 // 3: totalPool对冲池总量
@@ -41,45 +41,46 @@ import { mapState, mapGetters } from "vuex";
 //     uint256 public poolLongPrice;
 //     uint256 public poolShortPrice;"
 export default {
-  name: "Current",
-  data() {
-    return {
-      newPrice: "",
-      indexPrice: "",
-      totalPool: "",
-      // fundingRate: "",
-      interval: null,
-    };
-  },
-  computed: {
-    ...mapState(["contract", "fundingRate"]),
-    ...mapGetters(["NewPrice", "symbol"]),
-  },
-  mounted() {
-    this.interval = setInterval(async () => {
-      this.getPrice();
-    }, 3000);
-  },
-  watch: {
-    contract(n) {
-      n && this.getPrice();
+    name: 'Current',
+    data() {
+        return {
+            newPrice: '',
+            indexPrice: '',
+            totalPool: '',
+            // fundingRate: "",
+            interval: null
+        }
     },
-  },
-  methods: {
-    async getPrice() {
-      if (this.contract) {
-        const price = await this.contract.methods.getLatestPrice().call();
-        this.$store.commit("setPrice", price * 1);
-        this.totalPool = await this.contract.methods.totalPool().call();
-      }
+    computed: {
+        ...mapState(['contract', 'fundingRate']),
+        ...mapGetters(['NewPrice', 'symbol'])
     },
-  },
-  beforeDestroy() {
-    this.interval && clearInterval(this.interval);
-  },
-};
+    mounted() {
+        this.interval = setInterval(async () => {
+            this.getPrice()
+        }, 3000)
+    },
+    watch: {
+        contract(n) {
+            n && this.getPrice()
+        }
+    },
+    methods: {
+        async getPrice() {
+            if (this.contract) {
+                const price = await this.contract.methods.getLatestPrice().call()
+                this.$store.commit('setPrice', price * 1)
+                this.totalPool = await this.contract.methods.totalPool().call()
+                // this.$store.commit('setTotalPool', this.totalPool * 1)
+            }
+        }
+    },
+    beforeDestroy() {
+        this.interval && clearInterval(this.interval)
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>

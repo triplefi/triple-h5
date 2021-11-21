@@ -176,7 +176,6 @@ export default {
         const feeRate = await contract.methods.feeRate().call()
         const divConst = await contract.methods.divConst().call()
         const singleTradeLimitRate = await contract.methods.singleTradeLimitRate().call()
-        console.log(singleTradeLimitRate, divConst, '=========')
         const slideP = await contract.methods.slideP().call()
         commit('setContract', contract)
         commit('setLeverage', leverage * 1)
@@ -184,6 +183,15 @@ export default {
         commit('setDivConst', divConst * 1)
         commit('setSingleTradeLimitRate', singleTradeLimitRate * 1)
         commit('setSlideP', slideP * 1)
+
+        // 读取poolNetAmountRateLimitOpen和poolNetAmountRateLimitPrice
+        Promise.all([
+            contract.methods.poolNetAmountRateLimitOpen().call(),
+            contract.methods.poolNetAmountRateLimitPrice().call()
+        ]).then((res) => {
+            commit('setPoolNetAmountRateLimitOpen', res[0] * 1)
+            commit('setPoolNetAmountRateLimitPrice', res[1] * 1)
+        })
 
         // token0
         // const token0Address = await contract.methods.token0().call(); // 获取token0address
