@@ -71,10 +71,15 @@ export default {
         // Subscribe Events
         state.provider.on('accountsChanged', async (accounts) => {
             console.log('accountsChanged', accounts)
-            dispatch('resetApp')
-            await dispatch('initWeb3')
-            dispatch('initContract', { notFirst: true })
-            bus.$emit('accountsChanged')
+            try {
+                dispatch('resetApp')
+                await dispatch('metaMaskInit')
+                // await dispatch('initWeb3')
+                // dispatch('initContract', { notFirst: true })
+                bus.$emit('accountsChanged')
+            } catch (error) {
+                console.log(error)
+            }
         })
         state.provider.on('chainChanged', (chainId) => {
             console.log('chainChanged', chainId)
