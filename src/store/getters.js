@@ -27,21 +27,16 @@ export default {
     },
     //多仓,空仓偏移价格
     slidePrice(state) {
-        if (JSON.stringify(state.position) !== '{}') {
-            const { longAmount, shortAmount } = state.position
-            const { price, poolNet, divConst, slideP, poolNetAmountRateLimitPrice } = state
-            const rV = longAmount - shortAmount // 用户净头寸
-            const R = ((rV * price) / poolNet) * divConst || 0 //净头⼨⽐率
-            let slideRate = 0
-            if (R >= (poolNetAmountRateLimitPrice * 3) / 2) {
-                slideRate = poolNetAmountRateLimitPrice / 10 + ((R - (poolNetAmountRateLimitPrice * 3) / 2) * 5) / 2
-            } else if (R >= poolNetAmountRateLimitPrice) {
-                slideRate = R - poolNetAmountRateLimitPrice / 5
-            }
-            return (price * (slideRate + slideP)) / divConst
-        } else {
-            return 0
+        const { poolLongAmount, poolShortAmount, price, poolNet, divConst, slideP, poolNetAmountRateLimitPrice } = state
+        const rV = poolLongAmount - poolShortAmount // pool净头寸
+        const R = ((rV * price) / poolNet) * divConst || 0 //净头⼨⽐率
+        let slideRate = 0
+        if (R >= (poolNetAmountRateLimitPrice * 3) / 2) {
+            slideRate = poolNetAmountRateLimitPrice / 10 + (2 * R - 3 * poolNetAmountRateLimitPrice) / 5
+        } else if (R >= poolNetAmountRateLimitPrice) {
+            slideRate = (R - poolNetAmountRateLimitPrice) / 5
         }
+        return (price * (slideRate + slideP)) / divConst
     },
     // NetValue=longAmount*(price - openPrice) + shortAmount*(openPrice - price) + margin;
     NetValue(state) {

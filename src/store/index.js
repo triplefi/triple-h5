@@ -55,7 +55,10 @@ const store = new Vuex.Store({
         removeCoefficient: 0.99, // remove下单时的系数，增加下单成功率
 
         poolNetAmountRateLimitOpen: 0,
-        poolNetAmountRateLimitPrice: 0
+        poolNetAmountRateLimitPrice: 0,
+
+        poolLongAmount: 0,
+        poolShortAmount: 0
     },
     mutations: {
         setReady(state, payload) {
@@ -169,6 +172,12 @@ const store = new Vuex.Store({
         },
         setPoolNetAmountRateLimitPrice(state, payload) {
             state.poolNetAmountRateLimitPrice = payload
+        },
+        setPoolLongAmount(state, payload) {
+            state.poolLongAmount = payload
+        },
+        setPoolShortAmount(state, payload) {
+            state.poolShortAmount = payload
         }
     },
     actions: {

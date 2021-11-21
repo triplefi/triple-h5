@@ -420,6 +420,11 @@
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "deadline",
+                "type": "uint256"
             }
         ],
         "name": "closeLong",
@@ -437,6 +442,11 @@
             {
                 "internalType": "uint256",
                 "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "deadline",
                 "type": "uint256"
             }
         ],
@@ -793,6 +803,11 @@
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "deadline",
+                "type": "uint256"
             }
         ],
         "name": "openLong",
@@ -810,6 +825,11 @@
             {
                 "internalType": "uint256",
                 "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "deadline",
                 "type": "uint256"
             }
         ],

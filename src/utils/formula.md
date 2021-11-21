@@ -13,16 +13,16 @@ poolNet = totalPool + (poolLongAmount _ price + poolShortAmount _ poolShortPrice
 可用保证金 canUseMargin = 用户净值- usedMargin
 用户钱包余额：用户地址中 token0 的数量，leftAmount
 也就是用户总可用保证金为 total = canUseMargin + leftAmount
-⽤⼾净头⼨ = trader.longAmount - trader.shortAmount（分正负）
-净头⼨⽐率 R = ⽤⼾净头⼨*indexPrice/对冲池净值 * 100% _ divConst;
+pool 净头⼨ = poolLongAmount - poolShortAmount（分正负）
+净头⼨⽐率 R = pool 净头⼨*indexPrice/对冲池净值 * 100% _ divConst;
 开多仓时，R < 合约中的 poolNetAmountRateLimitOpen;
 开空仓时，R > -合约中的 poolNetAmountRateLimitOpen;
 价格偏移量为：
 slideRate = 0
-if ((R >= (poolNetAmountRateLimitPrice _ 3) / 2) {
-slideRate = poolNetAmountRateLimitPrice / 10 + ((R - (poolNetAmountRateLimitPrice _ 3) / 2) _ 5) / 2;
+if (R >= (poolNetAmountRateLimitPrice _ 3) / 2) {
+slideRate = poolNetAmountRateLimitPrice / 10 + (2 _ R - 3 _ poolNetAmountRateLimitPrice) / 5;
 } else if (R >= poolNetAmountRateLimitPrice) {
-slideRate = R - poolNetAmountRateLimitPrice / 5;
+slideRate = (R - poolNetAmountRateLimitPrice) / 5;
 }
 SlidePrice = indexPrice _ (slideRate + slideP) / divConst;
 设最大可开仓量为 x，开仓价格为 price(indexPrice ± SlidePrice，多仓为+，空仓为-），手续费率为 r（合约中的 feeRate 除以 divConst），杠杆率为 l（合约中的 leverage）

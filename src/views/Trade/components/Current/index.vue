@@ -70,8 +70,16 @@ export default {
             if (this.contract) {
                 const price = await this.contract.methods.getLatestPrice().call()
                 this.$store.commit('setPrice', price * 1)
-                this.totalPool = await this.contract.methods.totalPool().call()
-                // this.$store.commit('setTotalPool', this.totalPool * 1)
+                Promise.all([
+                    this.contract.methods.totalPool().call(),
+                    this.contract.methods.poolLongAmount().call(),
+                    this.contract.methods.poolShortAmount().call()
+                ]).then((res) => {
+                    this.totalPool = res[0]
+                    // this.$store.commit('setTotalPool', this.totalPool * 1)
+                    this.$store.commit('setPoolLongAmount', res[1] * 1)
+                    this.$store.commit('setPoolShortAmount', res[2] * 1)
+                })
             }
         }
     },

@@ -134,6 +134,7 @@
                         :step="1"
                         :precision="0"
                         :min="1"
+                        :max="60"
                         @change="changeDeadline"
                     ></el-input-number>
                     <span class="min">Minute</span>
@@ -242,6 +243,9 @@ export default {
             } else {
                 return NeedMargin - this.canUseMargin
             }
+        },
+        deadlineTimestamp() {
+            return parseInt(new Date().getTime() / 1000) + this.deadline
         }
     },
     methods: {
@@ -271,7 +275,8 @@ export default {
             console.log(1 + this.tolerance / 100)
             const params = {
                 priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
-                amount: this.toBN(this.amount1)
+                amount: this.toBN(this.amount1),
+                deadline: this.deadlineTimestamp
                 // rechargeAmount: this.toBN(this.LongRechargeAmount)
             }
             console.log(params)
@@ -297,7 +302,8 @@ export default {
             }
             const params = {
                 priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),
-                amount: this.toBN(this.amount2)
+                amount: this.toBN(this.amount2),
+                deadline: this.deadlineTimestamp
                 // rechargeAmount: this.toBN(this.ShortRechargeAmount)
             }
             console.log(params)

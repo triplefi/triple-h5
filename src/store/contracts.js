@@ -1,20 +1,20 @@
 export default {
     /* 交易 Trade */
     // 平多仓函数
-    async closeLong({ state }, { priceExp, amount }) {
-        return await state.contract.methods.closeLong(priceExp, amount).send({ from: state.coinbase })
+    async closeLong({ state }, { priceExp, amount, deadline }) {
+        return await state.contract.methods.closeLong(priceExp, amount, deadline).send({ from: state.coinbase })
     },
     // 平空仓函数
-    async closeShort({ state }, { priceExp, amount }) {
-        return await state.contract.methods.closeShort(priceExp, amount).send({ from: state.coinbase })
+    async closeShort({ state }, { priceExp, amount, deadline }) {
+        return await state.contract.methods.closeShort(priceExp, amount, deadline).send({ from: state.coinbase })
     },
     // 开多仓函数
-    async openLong({ state }, { priceExp, amount }) {
-        return await state.contract.methods.openLong(priceExp, amount).send({ from: state.coinbase })
+    async openLong({ state }, { priceExp, amount, deadline }) {
+        return await state.contract.methods.openLong(priceExp, amount, deadline).send({ from: state.coinbase })
     },
     // 开空仓函数
-    async openShort({ state }, { priceExp, amount }) {
-        return await state.contract.methods.openShort(priceExp, amount).send({ from: state.coinbase })
+    async openShort({ state }, { priceExp, amount, deadline }) {
+        return await state.contract.methods.openShort(priceExp, amount, deadline).send({ from: state.coinbase })
     },
     // 保证金充值
     async rechargeMargin({ state }, { amount }) {
