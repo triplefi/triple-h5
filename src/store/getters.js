@@ -30,10 +30,8 @@ export default {
         if (JSON.stringify(state.position) !== '{}') {
             const { longAmount, shortAmount } = state.position
             const { price, poolNet, divConst, slideP, poolNetAmountRateLimitPrice } = state
-            console.log(price, poolNet, divConst, poolNetAmountRateLimitPrice, '===')
             const rV = longAmount - shortAmount // 用户净头寸
             const R = ((rV * price) / poolNet) * divConst || 0 //净头⼨⽐率
-            console.log(R, '======', poolNetAmountRateLimitPrice)
             let slideRate = 0
             if (R >= (poolNetAmountRateLimitPrice * 3) / 2) {
                 slideRate = poolNetAmountRateLimitPrice / 10 + ((R - (poolNetAmountRateLimitPrice * 3) / 2) * 5) / 2

@@ -85,8 +85,9 @@
                         :precision="precision"
                         :step="step"
                         :min="0"
-                        :max="formatDecimals(maxLiquidity) * 1"
+                        :max="maxLiquidityValue"
                         @change="onChangeLiquidity"
+                        @keyup.native="onInputLiquidity"
                     ></el-input-number>
                     <div style="height: 8px"></div>
                     <el-slider
@@ -94,7 +95,7 @@
                         :min="0"
                         :max="100"
                         :format-tooltip="formatPrecent"
-                        @input="precentChange"
+                        @change="precentChange"
                     ></el-slider>
                     <div style="height: 32px"></div>
                     <el-button class="btn-remove" type="danger" round @click="handleRemoveLiquidity">Remove</el-button>
@@ -163,6 +164,9 @@ export default {
             } else {
                 return '0'
             }
+        },
+        maxLiquidityValue() {
+            return this.formatDecimals(this.maxLiquidity) * 1
         }
     },
     watch: {
@@ -282,8 +286,18 @@ export default {
         formatPrecent(val) {
             return val + '%'
         },
+        onInputLiquidity(e) {
+            let value = e.target.value
+            if (value != parseFloat(value)) {
+                value = 0
+            } else if (value > this.maxLiquidityValue) {
+                value = this.maxLiquidityValue
+            } else if (value < 0) {
+                value = 0
+            }
+            this.precent = (value / this.formatDecimals(this.maxLiquidity)) * 100
+        },
         onChangeLiquidity(val) {
-            console.log(val)
             this.liquidity = val
             this.precent = (val / this.formatDecimals(this.maxLiquidity)) * 100
         },
