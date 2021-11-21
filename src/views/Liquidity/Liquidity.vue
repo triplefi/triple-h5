@@ -97,14 +97,7 @@
                         @input="precentChange"
                     ></el-slider>
                     <div style="height: 32px"></div>
-                    <el-button
-                        class="btn-remove"
-                        type="danger"
-                        round
-                        @click="handleRemoveLiquidity"
-                        :disabled="!liquidity"
-                        >Remove</el-button
-                    >
+                    <el-button class="btn-remove" type="danger" round @click="handleRemoveLiquidity">Remove</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -290,6 +283,7 @@ export default {
             return val + '%'
         },
         onChangeLiquidity(val) {
+            console.log(val)
             this.liquidity = val
             this.precent = (val / this.formatDecimals(this.maxLiquidity)) * 100
         },
@@ -297,6 +291,13 @@ export default {
             this.liquidity = this.formatDecimals((this.maxLiquidity * this.precent) / 100)
         },
         async handleRemoveLiquidity() {
+            if (!this.liquidity || parseFloat(this.liquidity) === 0) {
+                this.$message({
+                    type: 'error',
+                    message: 'Please enter an amount.'
+                })
+                return
+            }
             this.removeLoading = true
             const params = {
                 liquidity: this.toBN(this.liquidity * Math.pow(10, this.token0Decimals)),
