@@ -76,7 +76,7 @@ export default {
                     this.contract.methods.poolShortAmount().call()
                 ]).then((res) => {
                     this.totalPool = res[0]
-                    // this.$store.commit('setTotalPool', this.totalPool * 1)
+                    this.$store.commit('setTotalPool', this.totalPool * 1)
                     this.$store.commit('setPoolLongAmount', res[1] * 1)
                     this.$store.commit('setPoolShortAmount', res[2] * 1)
                 })
