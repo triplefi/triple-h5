@@ -6,7 +6,8 @@
 空仓（short)upl：空仓持仓量（Trader.shortAmount) _ (空仓开仓均价（Trader.shortPrice) - index price); 3.用户净值 Net value：
 账户净值=用户保证金（Trader.margin）+ 多仓 upl + 空仓 upl;
 4.User margin
-用户保证金 = Trader.margin 5.对冲池净值计算
+用户保证金 = Trader.margin 
+5.对冲池净值计算
 poolNet = totalPool + (poolLongAmount _ price + poolShortAmount _ poolShortPrice) - (poolLongAmount _ poolLongPrice + poolShortAmount _ price);
 用合约函数也可以得到此值：getPoolNet，区别是如果计算结果为小于等于 0 的数，返回错误。 6.百分比开仓功能:
 已占用保证金量:usedMargin = (Trader.longAmount*Trader.longPrice + Trader.shortAmount*Trader.shortPrice) / 杠杆率(leverage);

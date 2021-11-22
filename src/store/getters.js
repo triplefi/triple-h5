@@ -25,18 +25,26 @@ export default {
             return 0
         }
     },
-    //多仓,空仓偏移价格
+    //多仓,空仓偏移价格，[多仓偏移，空仓偏移]
     slidePrice(state) {
         const { poolLongAmount, poolShortAmount, price, poolNet, divConst, slideP, poolNetAmountRateLimitPrice } = state
         const rV = poolLongAmount - poolShortAmount // pool净头寸
-        const R = ((rV * price) / poolNet) * divConst || 0 //净头⼨⽐率
+        let R = poolNet ? ((rV * price) / poolNet) * divConst || 0 : 0 //净头⼨⽐率
         let slideRate = 0
-        if (R >= (poolNetAmountRateLimitPrice * 3) / 2) {
-            slideRate = poolNetAmountRateLimitPrice / 10 + (2 * R - 3 * poolNetAmountRateLimitPrice) / 5
-        } else if (R >= poolNetAmountRateLimitPrice) {
-            slideRate = (R - poolNetAmountRateLimitPrice) / 5
+        const absR = Math.abs(R)
+        if (absR >= (poolNetAmountRateLimitPrice * 3) / 2) {
+            slideRate = poolNetAmountRateLimitPrice / 10 + (2 * absR - 3 * poolNetAmountRateLimitPrice) / 5
+        } else if (absR >= poolNetAmountRateLimitPrice) {
+            slideRate = (absR - poolNetAmountRateLimitPrice) / 5
         }
-        return (price * (slideRate + slideP)) / divConst
+        console.log(R)
+        let slide = (price * (slideRate + slideP)) / divConst || 0 // 加入偏移计算
+        let slide0 = (price * slideP) / divConst || 0 // 不加入偏移计算
+        if (R > 0) {
+            return [slide, slide0]
+        } else {
+            return [slide0, slide]
+        }
     },
     // NetValue=longAmount*(price - openPrice) + shortAmount*(openPrice - price) + margin;
     NetValue(state) {
