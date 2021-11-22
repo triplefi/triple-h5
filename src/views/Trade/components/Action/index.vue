@@ -197,8 +197,16 @@ export default {
         }
     },
     computed: {
-        ...mapState(['deadline', 'tolerance', 'allowance', 'leverage', 'feeRate', 'divConst']),
-        ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin', 'slidePrice']),
+        ...mapState([
+            'deadline',
+            'tolerance',
+            'allowance',
+            'leverage',
+            'feeRate',
+            'divConst',
+            'poolNetAmountRateLimitOpen'
+        ]),
+        ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin', 'slidePrice', 'R']),
         r() {
             return (this.feeRate / this.divConst) * 100
         },
@@ -272,8 +280,8 @@ export default {
             this.precent2 = val
             this.amount2show = ((this.ShortMaxAmount * val) / 100) * this.step
         },
+        // 用户开多
         async handleOpenLong() {
-            console.log(this.deadlineTimestamp())
             if (!this.coinbase) {
                 this.$message({
                     type: 'error',
@@ -283,6 +291,13 @@ export default {
             }
             if (!this.allowance) {
                 return this.handleApprove()
+            }
+            console.log(this.R, this.poolNetAmountRateLimitOpen)
+            if (this.R <= -this.poolNetAmountRateLimitOpen) {
+                return this.$message({
+                    type: 'error',
+                    message: 'Total long position exceeds the limit. Please try again later.'
+                })
             }
             const params = {
                 priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
@@ -300,6 +315,7 @@ export default {
                     console.error(err)
                 })
         },
+        // 用户开空
         handleOpenShort() {
             if (!this.coinbase) {
                 this.$message({
@@ -310,6 +326,12 @@ export default {
             }
             if (!this.allowance) {
                 return this.handleApprove()
+            }
+            if (this.R >= this.poolNetAmountRateLimitOpen) {
+                return this.$message({
+                    type: 'error',
+                    message: 'Total short position exceeds the limit. Please try again later.'
+                })
             }
             const params = {
                 priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),

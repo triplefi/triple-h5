@@ -25,11 +25,19 @@ export default {
             return 0
         }
     },
-    //多仓,空仓偏移价格，[空仓偏移,多仓偏移]
-    slidePrice(state) {
-        const { poolLongAmount, poolShortAmount, price, poolNet, divConst, slideP, poolNetAmountRateLimitPrice } = state
+    //净头⼨⽐率
+    R(state) {
+        const { poolLongAmount, poolShortAmount, price, poolNet, divConst } = state
         const rV = poolLongAmount - poolShortAmount // pool净头寸
         let R = poolNet ? ((rV * price) / poolNet) * divConst || 0 : 0 //净头⼨⽐率
+        console.log(poolLongAmount, poolShortAmount, R)
+        return R
+    },
+    //多仓,空仓偏移价格，[空仓偏移,多仓偏移]
+    slidePrice(state, getters) {
+        const { price, divConst, slideP, poolNetAmountRateLimitPrice } = state
+        const R = getters.R
+        console.log(R)
         let slideRate = 0
         const absR = Math.abs(R)
         if (absR >= (poolNetAmountRateLimitPrice * 3) / 2) {
