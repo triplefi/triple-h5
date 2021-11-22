@@ -101,8 +101,9 @@ export default {
         .item {
             font-size: 20px;
             margin-bottom: 10px;
+            display: flex;
             .label {
-                width: 200px;
+                width: 240px;
             }
         }
     }

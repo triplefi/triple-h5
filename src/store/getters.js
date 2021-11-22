@@ -25,7 +25,7 @@ export default {
             return 0
         }
     },
-    //多仓,空仓偏移价格，[多仓偏移，空仓偏移]
+    //多仓,空仓偏移价格，[空仓偏移,多仓偏移]
     slidePrice(state) {
         const { poolLongAmount, poolShortAmount, price, poolNet, divConst, slideP, poolNetAmountRateLimitPrice } = state
         const rV = poolLongAmount - poolShortAmount // pool净头寸

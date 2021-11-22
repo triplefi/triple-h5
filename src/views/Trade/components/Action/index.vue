@@ -193,11 +193,11 @@ export default {
         ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin', 'slidePrice']),
         slidePriceLong() {
             //多仓偏移价格
-            return this.price + (this.slidePrice[0] || 0)
+            return this.price + (this.slidePrice[1] || 0)
         },
         slidePriceShort() {
             //空仓偏移价格
-            return this.price - (this.slidePrice[1] || 0)
+            return this.price - (this.slidePrice[0] || 0)
         },
         deadlineMinute() {
             return this.deadline / 60
@@ -273,7 +273,6 @@ export default {
             if (!this.allowance) {
                 return this.handleApprove()
             }
-            console.log(1 + this.tolerance / 100)
             const params = {
                 priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
                 amount: this.toBN(this.amount1),
