@@ -100,7 +100,6 @@ export default {
             // web3
             const web3 = new Web3(state.provider)
             const coinbase = await web3.eth.getCoinbase() // 链接的账户
-
             let balance
             if (coinbase) {
                 balance = await web3.eth.getBalance(coinbase) // 账户余额

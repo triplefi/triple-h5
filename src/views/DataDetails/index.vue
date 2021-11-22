@@ -1,5 +1,9 @@
 <template>
-    <div class="data-details">
+    <div v-loading="loading" class="data-details">
+        <el-tabs v-model="activeTab">
+            <el-tab-pane v-for="e in pairs" :key="e.trade_coin" :label="e.trade_coin" :name="e.trade_coin">
+            </el-tab-pane>
+        </el-tabs>
         <div class="content">
             <div class="item">
                 <div class="label">lp pool net</div>
@@ -34,17 +38,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { getTradePairs } from '@/api'
+import { mapState, mapActions } from 'vuex'
 export default {
     data() {
         return {
             poolLongPrice: 0,
-            poolShortPrice: 0
+            poolShortPrice: 0,
+            pairs: [],
+            activeTab: '',
+            loading: false
         }
     },
     mounted() {
+        this.getPairs()
         this.timeHandler = setInterval(() => {
-            this.getPoolPrice()
+            this.getIntervalPrice()
         }, 3000)
     },
     beforeDestroy() {
@@ -61,7 +70,8 @@ export default {
             'price',
             'poolLongAmount',
             'poolShortAmount',
-            'totalPool'
+            'totalPool',
+            'web3'
         ]),
         R() {
             const { poolLongAmount, poolShortAmount, poolNet, price, divConst } = this
@@ -84,14 +94,64 @@ export default {
             return Math.floor(netAmount * price)
         }
     },
+    watch: {
+        activeTab(val) {
+            const item = this.pairs.find((e) => e.trade_coin === val)
+            if (item) {
+                this.selectPair(item)
+            }
+        }
+    },
     methods: {
-        async getPoolPrice() {
-            const res = await Promise.all([
-                this.contract.methods.poolLongPrice().call(),
-                this.contract.methods.poolShortPrice().call()
-            ])
-            this.poolLongPrice = res[0]
-            this.poolShortPrice = res[1]
+        ...mapActions(['initContract']),
+        async getPairs() {
+            this.loading = true
+            const res = await getTradePairs()
+            if (res.result) {
+                this.pairs = res.data
+                this.activeTab = this.pairs[0].trade_coin
+            }
+            return this.pairs
+        },
+        async selectPair(item) {
+            this.loading = true
+            this.$store.commit('setContractAddress', item.contract)
+            this.$store.commit('setPairInfo', item)
+            if (this.web3) {
+                await this.initContract({ pairInfo: item })
+                this.getData()
+            }
+        },
+        async getData() {
+            if (!this.contract) {
+                return
+            }
+            const res = await Promise.all([this.contract.methods.getPoolNet().call()])
+            this.$store.commit('setPoolNet', res[0] * 1)
+            this.loading = false
+        },
+        async getIntervalPrice() {
+            if (!this.contract) {
+                return
+            }
+            try {
+                const res = await Promise.all([
+                    this.contract.methods.poolLongPrice().call(),
+                    this.contract.methods.poolShortPrice().call(),
+                    this.contract.methods.totalPool().call(),
+                    this.contract.methods.poolLongAmount().call(),
+                    this.contract.methods.poolShortAmount().call(),
+                    this.contract.methods.getLatestPrice().call()
+                ])
+                this.poolLongPrice = res[0]
+                this.poolShortPrice = res[1]
+                this.$store.commit('setTotalPool', res[2] * 1)
+                this.$store.commit('setPoolLongAmount', res[3] * 1)
+                this.$store.commit('setPoolShortAmount', res[4] * 1)
+                this.$store.commit('setPrice', res[5] * 1)
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 }
