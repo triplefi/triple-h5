@@ -16,10 +16,10 @@
                 />
             </div>
             <div class="curreny">
-                <div class="fs14b">ETH</div>
+                <!-- <div class="fs14b">ETH</div> -->
                 <div class="fs14b active">USDT</div>
-                <div class="fs14b">USDC</div>
-                <div class="fs14b">DAI</div>
+                <!-- <div class="fs14b">USDC</div>
+                <div class="fs14b">DAI</div> -->
             </div>
         </div>
         <div class="coins">

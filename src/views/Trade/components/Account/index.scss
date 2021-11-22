@@ -1,59 +1,59 @@
 .account {
-  padding: 24px;
-  height: 272px;
+    padding: 24px;
+    height: 272px;
 
-  > div {
-    margin-bottom: 8px;
-  }
-
-  .name {
-    width: 96px;
-    color: var(--COLOR-t2);
-  }
-
-  .transfer {
-    margin-left: 4px;
-    display: inline-block;
-    padding: 2px 8px;
-    height: 20px;
-    color: var(--COLOR-c5);
-    cursor: pointer;
-
-    &:hover {
-      background: #eeeff2;
-      border-radius: 5px;
-    }
-  }
-
-  .content-tab {
-    color: var(--COLOR-t2);
-
-    .value {
-      color: #fff;
+    > div {
+        margin-bottom: 8px;
     }
 
-    .btn-remove {
-      width: 100%;
+    .name {
+        width: 120px;
+        color: var(--COLOR-t2);
     }
 
-    .max {
-      display: inline-flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 8px;
-      height: 30px;
-      background: #282634;
-      border-radius: 28px;
-      color: #fff;
-      cursor: pointer;
+    .transfer {
+        margin-left: 4px;
+        display: inline-block;
+        padding: 2px 8px;
+        height: 20px;
+        color: var(--COLOR-c5);
+        cursor: pointer;
 
-      &:hover {
-        background: #2e2c3d;
-      }
+        &:hover {
+            background: #eeeff2;
+            border-radius: 5px;
+        }
     }
 
-    .available {
-      margin: 10px 0 25px;
+    .content-tab {
+        color: var(--COLOR-t2);
+
+        .value {
+            color: #fff;
+        }
+
+        .btn-remove {
+            width: 100%;
+        }
+
+        .max {
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 8px;
+            height: 30px;
+            background: #282634;
+            border-radius: 28px;
+            color: #fff;
+            cursor: pointer;
+
+            &:hover {
+                background: #2e2c3d;
+            }
+        }
+
+        .available {
+            margin: 10px 0 25px;
+        }
     }
-  }
 }

@@ -1,175 +1,191 @@
-.action {
-    height: 272px;
-    padding: 24px 0;
-    display: flex;
-    position: relative;
-
-    .set {
-        padding: 4px;
-        position: absolute;
-        width: 32px;
-        height: 32px;
-        right: 8px;
-        top: 8px;
-        background: #2e2c3d;
-        border-radius: 8px;
+.action-con {
+    .leverage-commission {
+        padding: 16px 32px 16px 32px;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        border: 1px solid transparent;
-
-        &:hover {
-            border-color: #fff;
-
-            svg {
-                opacity: 1;
-            }
-        }
-    }
-
-    .warn-tip {
-        padding: 4px 8px 4px 4px;
-        position: absolute;
-        height: 24px;
-        top: 10px;
-        margin-left: 50%;
-        transform: translateX(-50%);
-        background: #ffd62a;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 6px 12px rgba(0, 0, 0, 0.04);
-        border-radius: 48px;
-        animation: all 0.5s ease;
-
-        .icon-tip {
-            margin-right: 5px;
-            font-size: 16px;
-            fill: #1c2535;
-        }
-
-        span {
-            color: #1c2535;
-        }
-    }
-
-    .approve-mask {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, 0.87);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-        .el-button--primary {
-            padding: 12px 135px;
-        }
-    }
-
-    .line {
-        width: 0px;
-        height: 100%;
-        border-left: 1px dashed #282634;
-    }
-
-    .action-item {
-        padding: 8px 32px;
-
+        border-bottom: 1px dashed #282634;
         .label {
-            width: 76px;
+            color: var(--COLOR-t3);
+            margin-right: 10px;
         }
-
-        &.long .price {
-            color: var(--COLOR-c1);
-        }
-
-        &.short .price {
-            color: var(--COLOR-c3);
-        }
-
-        .precent {
-            margin: 16px 0 24px;
-            justify-content: space-between;
-
-            > div {
-                width: 64px;
-                height: 38px;
-                background: #1a1825;
-                border-radius: 43px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                color: var(--COLOR-t2);
-                font-weight: bold;
-
-                &:hover {
-                    background: var(--COLOR-bg4);
-                    border: 2px solid var(--COLOR-c5);
-                    color: #fff;
-                }
-
-                &.active {
-                    background: var(--COLOR-c5);
-                    color: #fff;
-                }
-            }
+        .value {
+            color: var(--COLOR-t1);
+            margin-right: 30px;
+            font-weight: bold;
         }
     }
+    .action {
+        height: 272px;
+        padding: 24px 0;
+        display: flex;
+        position: relative;
 
-    .content {
-        color: var(--COLOR-t2);
+        .set {
+            padding: 4px;
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            right: 8px;
+            top: 8px;
+            background: #2e2c3d;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid transparent;
 
-        .icon-question {
-            margin-left: 8px;
-            width: 14px;
-            height: 14px;
-        }
+            &:hover {
+                border-color: #fff;
 
-        .precent {
-            margin: 16px 0 24px;
-            justify-content: space-between;
-
-            > div {
-                width: 64px;
-                height: 38px;
-                background: #1a1825;
-                border-radius: 43px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                color: var(--COLOR-t2);
-                font-weight: bold;
-
-                &:hover {
-                    background: var(--COLOR-bg4);
-                    border: 2px solid var(--COLOR-c5);
-                    color: #fff;
-                }
-
-                &.active {
-                    background: var(--COLOR-c5);
-                    color: #fff;
+                svg {
+                    opacity: 1;
                 }
             }
         }
 
-        .min-input {
-            width: 144px;
+        .warn-tip {
+            padding: 4px 8px 4px 4px;
+            position: absolute;
+            height: 24px;
+            top: 10px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            background: #ffd62a;
+            box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 6px 12px rgba(0, 0, 0, 0.04);
+            border-radius: 48px;
+            animation: all 0.5s ease;
 
-            ::v-deep .el-input__inner {
-                text-align: center;
+            .icon-tip {
+                margin-right: 5px;
+                font-size: 16px;
+                fill: #1c2535;
+            }
+
+            span {
+                color: #1c2535;
             }
         }
 
-        .min {
-            margin-left: 8px;
+        .approve-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.87);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            .el-button--primary {
+                padding: 12px 135px;
+            }
         }
 
-        .value {
-            color: #fff;
+        .line {
+            width: 0px;
+            height: 100%;
+            border-left: 1px dashed #282634;
+        }
+
+        .action-item {
+            padding: 8px 32px;
+
+            .label {
+                width: 76px;
+            }
+
+            &.long .price {
+                color: var(--COLOR-c1);
+            }
+
+            &.short .price {
+                color: var(--COLOR-c3);
+            }
+
+            .precent {
+                margin: 16px 0 24px;
+                justify-content: space-between;
+
+                > div {
+                    width: 64px;
+                    height: 38px;
+                    background: #1a1825;
+                    border-radius: 43px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    color: var(--COLOR-t2);
+                    font-weight: bold;
+
+                    &:hover {
+                        background: var(--COLOR-bg4);
+                        border: 2px solid var(--COLOR-c5);
+                        color: #fff;
+                    }
+
+                    &.active {
+                        background: var(--COLOR-c5);
+                        color: #fff;
+                    }
+                }
+            }
+        }
+
+        .content {
+            color: var(--COLOR-t2);
+
+            .icon-question {
+                margin-left: 8px;
+                width: 14px;
+                height: 14px;
+            }
+
+            .precent {
+                margin: 16px 0 24px;
+                justify-content: space-between;
+
+                > div {
+                    width: 64px;
+                    height: 38px;
+                    background: #1a1825;
+                    border-radius: 43px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    color: var(--COLOR-t2);
+                    font-weight: bold;
+
+                    &:hover {
+                        background: var(--COLOR-bg4);
+                        border: 2px solid var(--COLOR-c5);
+                        color: #fff;
+                    }
+
+                    &.active {
+                        background: var(--COLOR-c5);
+                        color: #fff;
+                    }
+                }
+            }
+
+            .min-input {
+                width: 144px;
+
+                ::v-deep .el-input__inner {
+                    text-align: center;
+                }
+            }
+
+            .min {
+                margin-left: 8px;
+            }
+
+            .value {
+                color: #fff;
+            }
         }
     }
 }

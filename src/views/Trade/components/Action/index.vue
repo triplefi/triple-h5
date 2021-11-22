@@ -1,145 +1,152 @@
 <template>
-    <div class="flex action">
-        <div class="flex-1 action-item long">
-            <div class="flex flex-ac">
-                <div class="label btn13">Buy Price</div>
-                <h5 class="price">{{ pricePrecision(slidePriceLong) | formatMoney }}</h5>
-            </div>
-            <div style="height: 24px">
-                <!-- Max Amount: {{amountPrecision(LongMaxAmount)}} -->
-            </div>
-            <div class="flex flex-ac">
-                <div class="label btn13">Amount</div>
-                <el-input-number
-                    style="width: 100%"
-                    v-model="amount1show"
-                    :precision="precision"
-                    :step="step"
-                    :min="0"
-                    :max="amountPrecision(LongMaxAmount) * 1"
-                ></el-input-number>
-            </div>
-            <div class="flex">
-                <div class="label"></div>
-                <div class="flex-1">
-                    <div class="flex precent">
-                        <div
-                            v-for="item in precents"
-                            :key="item"
-                            class="fs14"
-                            @click="handlePrecent1(item)"
-                            :class="{ active: precent1 === item }"
-                        >
-                            {{ item }}%
-                        </div>
-                    </div>
-                    <el-button style="width: 100%" type="info" round @click="handleOpenLong"
-                        ><span style="font-weight: bold">LONG</span></el-button
-                    >
-                </div>
-            </div>
+    <div class="action-con">
+        <div class="leverage-commission">
+            <div class="label">Leverage:</div>
+            <div class="value">{{ leverage }}x</div>
+            <div class="label">Commission:</div>
+            <div class="value">{{ r | formatNum(3) }}%</div>
         </div>
-        <div class="line"></div>
-        <div class="flex-1 action-item short">
-            <div class="flex flex-ac">
-                <div class="label btn13">Sell Price</div>
-                <h5 class="price">{{ pricePrecision(slidePriceShort) | formatMoney }}</h5>
-            </div>
-            <div style="height: 24px">
-                <!-- Max Amount: {{amountPrecision(ShortMaxAmount)}} -->
-            </div>
-            <div class="flex flex-ac">
-                <div class="label btn13">Amount</div>
-                <el-input-number
-                    style="width: 100%"
-                    v-model="amount2show"
-                    :precision="precision"
-                    :step="step"
-                    :min="0"
-                    :max="amountPrecision(ShortMaxAmount) * 1"
-                ></el-input-number>
-            </div>
-            <div class="flex">
-                <div class="label"></div>
-                <div class="flex-1">
-                    <div class="flex precent">
-                        <div
-                            v-for="item in precents"
-                            :key="item"
-                            class="fs14"
-                            @click="handlePrecent2(item)"
-                            :class="{ active: precent2 === item }"
-                        >
-                            {{ item }}%
-                        </div>
-                    </div>
-                    <el-button style="width: 100%" type="danger" round @click="handleOpenShort"
-                        ><span style="font-weight: bold">SHORT</span></el-button
-                    >
-                </div>
-            </div>
-        </div>
-
-        <div class="set" @click="set">
-            <svg-icon icon-class="ic_Setting" class-name="s24 icon"></svg-icon>
-        </div>
-        <div class="flex flex-ac warn-tip" v-if="showTip">
-            <svg-icon icon-class="ic_16note" class-name="icon-tip"></svg-icon>
-            <span class="fs12">Information to note</span>
-        </div>
-        <div class="approve-mask" v-if="!allowance">
-            <el-button type="primary" round @click="handleApprove" :disabled="!coinbase">
-                <span style="font-weight: bold">Authorize</span>
-            </el-button>
-        </div>
-
-        <el-dialog title="Transaction Settings" :visible.sync="model" :show-header="false" width="375px">
-            <div class="content">
+        <div class="flex action">
+            <div class="flex-1 action-item long">
                 <div class="flex flex-ac">
-                    <span class="fs14 label">Slippage tolerance</span>
-                    <el-tooltip
-                        effect="dark"
-                        content="Text Demo - Your transaction will revert if the price changes unfavorably by more than this percentage."
-                        placement="top"
-                    >
-                        <svg-icon icon-class="ic_16qs" class-name="s16 icon-question"></svg-icon>
-                    </el-tooltip>
+                    <div class="label btn13">Buy Price</div>
+                    <h5 class="price">{{ pricePrecision(slidePriceLong) | formatMoney }}</h5>
                 </div>
-                <div class="flex precent">
-                    <div
-                        v-for="item in tolerances"
-                        :key="item"
-                        class="fs14"
-                        @click="changeTolerance(item)"
-                        :class="{ active: tolerance === item }"
-                    >
-                        {{ item }}%
-                    </div>
+                <div style="height: 24px">
+                    <!-- Max Amount: {{amountPrecision(LongMaxAmount)}} -->
                 </div>
                 <div class="flex flex-ac">
-                    <span class="fs14 label">Transaction deadline</span>
-                    <el-tooltip
-                        effect="dark"
-                        content="Text Demo - Your transaction will revert if the price changes unfavorably by more than this percentage."
-                        placement="top"
-                    >
-                        <svg-icon icon-class="ic_16qs" class-name="s16 icon-question"></svg-icon>
-                    </el-tooltip>
-                </div>
-                <div style="height: 16px"></div>
-                <div class="flex flex-ac">
+                    <div class="label btn13">Amount</div>
                     <el-input-number
-                        class="min-input"
-                        :value="deadlineMinute"
-                        :step="1"
-                        :precision="0"
-                        :min="1"
-                        :max="60"
-                        @change="changeDeadline"
+                        style="width: 100%"
+                        v-model="amount1show"
+                        :precision="precision"
+                        :step="step"
+                        :min="0"
+                        :max="amountPrecision(LongMaxAmount) * 1"
                     ></el-input-number>
-                    <span class="min">Minute</span>
                 </div>
-                <!-- <div style="height: 24px"></div>
+                <div class="flex">
+                    <div class="label"></div>
+                    <div class="flex-1">
+                        <div class="flex precent">
+                            <div
+                                v-for="item in precents"
+                                :key="item"
+                                class="fs14"
+                                @click="handlePrecent1(item)"
+                                :class="{ active: precent1 === item }"
+                            >
+                                {{ item }}%
+                            </div>
+                        </div>
+                        <el-button style="width: 100%" type="info" round @click="handleOpenLong"
+                            ><span style="font-weight: bold">LONG</span></el-button
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="flex-1 action-item short">
+                <div class="flex flex-ac">
+                    <div class="label btn13">Sell Price</div>
+                    <h5 class="price">{{ pricePrecision(slidePriceShort) | formatMoney }}</h5>
+                </div>
+                <div style="height: 24px">
+                    <!-- Max Amount: {{amountPrecision(ShortMaxAmount)}} -->
+                </div>
+                <div class="flex flex-ac">
+                    <div class="label btn13">Amount</div>
+                    <el-input-number
+                        style="width: 100%"
+                        v-model="amount2show"
+                        :precision="precision"
+                        :step="step"
+                        :min="0"
+                        :max="amountPrecision(ShortMaxAmount) * 1"
+                    ></el-input-number>
+                </div>
+                <div class="flex">
+                    <div class="label"></div>
+                    <div class="flex-1">
+                        <div class="flex precent">
+                            <div
+                                v-for="item in precents"
+                                :key="item"
+                                class="fs14"
+                                @click="handlePrecent2(item)"
+                                :class="{ active: precent2 === item }"
+                            >
+                                {{ item }}%
+                            </div>
+                        </div>
+                        <el-button style="width: 100%" type="danger" round @click="handleOpenShort"
+                            ><span style="font-weight: bold">SHORT</span></el-button
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="set" @click="set">
+                <svg-icon icon-class="ic_Setting" class-name="s24 icon"></svg-icon>
+            </div>
+            <div class="flex flex-ac warn-tip" v-if="showTip">
+                <svg-icon icon-class="ic_16note" class-name="icon-tip"></svg-icon>
+                <span class="fs12">Information to note</span>
+            </div>
+            <div class="approve-mask" v-if="!allowance">
+                <el-button type="primary" round @click="handleApprove" :disabled="!coinbase">
+                    <span style="font-weight: bold">Authorize</span>
+                </el-button>
+            </div>
+
+            <el-dialog title="Transaction Settings" :visible.sync="model" :show-header="false" width="375px">
+                <div class="content">
+                    <div class="flex flex-ac">
+                        <span class="fs14 label">Slippage tolerance</span>
+                        <el-tooltip
+                            effect="dark"
+                            content="Text Demo - Your transaction will revert if the price changes unfavorably by more than this percentage."
+                            placement="top"
+                        >
+                            <svg-icon icon-class="ic_16qs" class-name="s16 icon-question"></svg-icon>
+                        </el-tooltip>
+                    </div>
+                    <div class="flex precent">
+                        <div
+                            v-for="item in tolerances"
+                            :key="item"
+                            class="fs14"
+                            @click="changeTolerance(item)"
+                            :class="{ active: tolerance === item }"
+                        >
+                            {{ item }}%
+                        </div>
+                    </div>
+                    <div class="flex flex-ac">
+                        <span class="fs14 label">Transaction deadline</span>
+                        <el-tooltip
+                            effect="dark"
+                            content="Text Demo - Your transaction will revert if the price changes unfavorably by more than this percentage."
+                            placement="top"
+                        >
+                            <svg-icon icon-class="ic_16qs" class-name="s16 icon-question"></svg-icon>
+                        </el-tooltip>
+                    </div>
+                    <div style="height: 16px"></div>
+                    <div class="flex flex-ac">
+                        <el-input-number
+                            class="min-input"
+                            :value="deadlineMinute"
+                            :step="1"
+                            :precision="0"
+                            :min="1"
+                            :max="60"
+                            @change="changeDeadline"
+                        ></el-input-number>
+                        <span class="min">Minute</span>
+                    </div>
+                    <!-- <div style="height: 24px"></div>
         <div class="flex flex-bt">
           <div class="fs14 label">Switch style</div>
           <el-switch
@@ -158,8 +165,9 @@
           <span class="fs14 label">Price Impact</span>
           <span class="fs14 value">0.00%</span>
         </div> -->
-            </div>
-        </el-dialog>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -189,8 +197,11 @@ export default {
         }
     },
     computed: {
-        ...mapState(['deadline', 'tolerance', 'allowance']),
+        ...mapState(['deadline', 'tolerance', 'allowance', 'leverage', 'feeRate', 'divConst']),
         ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin', 'slidePrice']),
+        r() {
+            return (this.feeRate / this.divConst) * 100
+        },
         slidePriceLong() {
             //多仓偏移价格
             return this.price + (this.slidePrice[1] || 0)
