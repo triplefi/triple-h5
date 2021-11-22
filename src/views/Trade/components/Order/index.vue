@@ -70,9 +70,6 @@ export default {
         },
         step() {
             return Math.pow(10, this.amountDecimal)
-        },
-        deadlineTimestamp() {
-            return parseInt(new Date().getTime() / 1000) + this.deadline
         }
     },
     watch: {
@@ -86,6 +83,9 @@ export default {
     },
     methods: {
         ...mapActions(['closeLong', 'closeShort']),
+        deadlineTimestamp() {
+            return parseInt(new Date().getTime() / 1000) + this.deadline
+        },
         async setPosition(val) {
             this.list = []
             const { longAmount, longPrice, margin, shortAmount, shortPrice } = val
@@ -128,7 +128,7 @@ export default {
             const params = {
                 direction: row.direction,
                 amount: this.toBN(row.closeNum / this.step),
-                deadline: this.deadlineTimestamp
+                deadline: this.deadlineTimestamp()
             }
             if (row.direction > 0) {
                 const priceExp = this.toBN(Math.floor((1 - this.tolerance / 100) * this.price))

@@ -243,13 +243,13 @@ export default {
             } else {
                 return NeedMargin - this.canUseMargin
             }
-        },
-        deadlineTimestamp() {
-            return parseInt(new Date().getTime() / 1000) + this.deadline
         }
     },
     methods: {
         ...mapActions(['openLong', 'openShort']),
+        deadlineTimestamp() {
+            return parseInt(new Date().getTime() / 1000) + this.deadline
+        },
         set() {
             this.model = true
         },
@@ -262,6 +262,7 @@ export default {
             this.amount2show = ((this.ShortMaxAmount * val) / 100) * this.step
         },
         async handleOpenLong() {
+            console.log(this.deadlineTimestamp())
             if (!this.coinbase) {
                 this.$message({
                     type: 'error',
@@ -276,7 +277,7 @@ export default {
             const params = {
                 priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
                 amount: this.toBN(this.amount1),
-                deadline: this.deadlineTimestamp
+                deadline: this.deadlineTimestamp()
                 // rechargeAmount: this.toBN(this.LongRechargeAmount)
             }
             console.log(params)
@@ -303,7 +304,7 @@ export default {
             const params = {
                 priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),
                 amount: this.toBN(this.amount2),
-                deadline: this.deadlineTimestamp
+                deadline: this.deadlineTimestamp()
                 // rechargeAmount: this.toBN(this.ShortRechargeAmount)
             }
             console.log(params)
