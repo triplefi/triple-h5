@@ -9,10 +9,10 @@
                 <div class="label">lp pool unrealized P/L</div>
                 <div class="value">{{ unrealizedPL }}</div>
             </div>
-            <div class="item">
+            <!-- <div class="item">
                 <div class="label">lp pool usdt</div>
-                <div class="value">{{ poolUsdt }}</div>
-            </div>
+                <div class="value">{{ poolUsdt | formatMoney }}</div>
+            </div> -->
             <div class="item">
                 <div class="label">long amount</div>
                 <div class="value">{{ poolLongAmount }}</div>
@@ -23,11 +23,11 @@
             </div>
             <div class="item">
                 <div class="label">R</div>
-                <div class="value">{{ R }}</div>
+                <div class="value">{{ R | formatNum(3) }}%</div>
             </div>
             <div class="item">
                 <div class="label">pool used margin</div>
-                <div class="value">{{ usedMargin }}</div>
+                <div class="value">{{ usedMargin | formatMoney }}</div>
             </div>
         </div>
     </div>
@@ -76,7 +76,8 @@ export default {
             return Math.floor(netAmount * price)
         },
         poolUsdt() {
-            return this.poolNet * this.price
+            const { poolLongAmount, poolShortAmount, price } = this
+            return (poolLongAmount + poolShortAmount) * price
         }
     },
     methods: {

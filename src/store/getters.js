@@ -37,7 +37,6 @@ export default {
         } else if (absR >= poolNetAmountRateLimitPrice) {
             slideRate = (absR - poolNetAmountRateLimitPrice) / 5
         }
-        console.log(R)
         let slide = (price * (slideRate + slideP)) / divConst || 0 // 加入偏移计算
         let slide0 = (price * slideP) / divConst || 0 // 不加入偏移计算
         if (R > 0) {
