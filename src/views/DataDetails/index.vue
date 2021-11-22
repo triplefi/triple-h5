@@ -9,10 +9,10 @@
                 <div class="label">lp pool unrealized P/L</div>
                 <div class="value">{{ unrealizedPL }}</div>
             </div>
-            <!-- <div class="item">
+            <div class="item">
                 <div class="label">lp pool usdt</div>
-                <div class="value">{{ poolUsdt | formatMoney }}</div>
-            </div> -->
+                <div class="value">{{ totalPool | formatMoney }}</div>
+            </div>
             <div class="item">
                 <div class="label">long amount</div>
                 <div class="value">{{ poolLongAmount }}</div>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -53,8 +53,16 @@ export default {
         }
     },
     computed: {
-        ...mapState(['contract', 'poolNet', 'price', 'divConst', 'price', 'poolLongAmount', 'poolShortAmount']),
-        // ...mapGetters([]),
+        ...mapState([
+            'contract',
+            'poolNet',
+            'price',
+            'divConst',
+            'price',
+            'poolLongAmount',
+            'poolShortAmount',
+            'totalPool'
+        ]),
         R() {
             const { poolLongAmount, poolShortAmount, poolNet, price, divConst } = this
             const rV = poolLongAmount - poolShortAmount // pool净头寸
@@ -74,10 +82,6 @@ export default {
                 netAmount = totalAmount
             }
             return Math.floor(netAmount * price)
-        },
-        poolUsdt() {
-            const { poolLongAmount, poolShortAmount, price } = this
-            return (poolLongAmount + poolShortAmount) * price
         }
     },
     methods: {
