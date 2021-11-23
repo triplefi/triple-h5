@@ -34,10 +34,10 @@
                             :precision="precision"
                             :step="step"
                             :min="0"
-                            :max="amountPrecision(scope.row.amount) * 1"
+                            :max="amountPrecision(scope.row.maxNum) * 1"
                             placeholder="Amount"
                         ></el-input-number>
-                        <div class="fs12 all" @click="handleAll(scope.row)">All</div>
+                        <div class="fs12 all" @click="handleAll(scope.row)">Max</div>
                         <el-button class="btn-close" type="primary" size="small" round @click="handleClose(scope.row)"
                             >Close</el-button
                         >
@@ -69,7 +69,7 @@ export default {
     },
     computed: {
         ...mapState(['position', 'tolerance', 'poolNet']),
-        ...mapGetters(['symbol', 'slidePrice']),
+        ...mapGetters(['symbol', 'slidePrice', 'CloseMaxAmount']),
         slidePriceLong() {
             //多仓偏移价格
             return this.price + (this.slidePrice[1] || 0)
@@ -102,30 +102,35 @@ export default {
         async setPosition(val) {
             this.list = []
             const { longAmount, longPrice, margin, shortAmount, shortPrice } = val
+            const limit = this.CloseMaxAmount
             this.margin = margin
             if (longAmount * 1) {
+                const maxNum = Math.min(longAmount * 1, limit)
                 this.list.push({
                     pair: this.symbol,
                     direction: 1,
                     openPrice: longPrice * 1,
                     amount: longAmount * 1,
                     unrealizedPL: '',
-                    closeNum: ''
+                    closeNum: '',
+                    maxNum
                 })
             }
             if (shortAmount * 1) {
+                const maxNum = Math.min(shortAmount * 1, limit)
                 this.list.push({
                     pair: this.symbol,
                     direction: -1,
                     openPrice: shortPrice * 1,
                     amount: shortAmount * 1,
                     unrealizedPL: '',
-                    closeNum: ''
+                    closeNum: '',
+                    maxNum
                 })
             }
         },
         handleAll(row) {
-            row.closeNum = row.amount
+            row.closeNum = row.maxNum
         },
         directionFormatter(row) {
             return row.direction > 0 ? 'LONG' : 'SHORT'

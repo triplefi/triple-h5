@@ -196,7 +196,8 @@ export default {
             contract.methods.singleCloseLimitRate().call(),
             contract.methods.singleOpenLimitRate().call(),
             contract.methods.poolNetAmountRateLimitOpen().call(),
-            contract.methods.poolNetAmountRateLimitPrice().call()
+            contract.methods.poolNetAmountRateLimitPrice().call(),
+            contract.methods.getPoolNet().call()
         ])
         commit('setLeverage', constantRes[0] * 1)
         commit('setFeeRate', constantRes[1] * 1)
@@ -206,6 +207,7 @@ export default {
         commit('setSingleOpenLimitRate', constantRes[5] * 1)
         commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
         commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
+        commit('setPoolNet', constantRes[8] * 1)
 
         // token0
         // const token0Address = await contract.methods.token0().call(); // 获取token0address

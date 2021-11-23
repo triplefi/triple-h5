@@ -30,14 +30,12 @@ export default {
         const { poolLongAmount, poolShortAmount, price, poolNet, divConst } = state
         const rV = poolLongAmount - poolShortAmount // pool净头寸
         let R = poolNet ? ((rV * price) / poolNet) * divConst || 0 : 0 //净头⼨⽐率
-        console.log(poolLongAmount, poolShortAmount, R)
         return R
     },
     //多仓,空仓偏移价格，[空仓偏移,多仓偏移]
     slidePrice(state, getters) {
         const { price, divConst, slideP, poolNetAmountRateLimitPrice } = state
         const R = getters.R
-        console.log(R)
         let slideRate = 0
         const absR = Math.abs(R)
         if (absR >= (poolNetAmountRateLimitPrice * 3) / 2) {
@@ -116,6 +114,14 @@ export default {
         } else {
             return 0
         }
+    },
+    CloseMaxAmount(state) {
+        const { poolNet, singleCloseLimitRate, divConst, price } = state
+        console.log(poolNet, singleCloseLimitRate, divConst, price)
+        if (!price || !divConst) {
+            return 0
+        }
+        return (poolNet * singleCloseLimitRate) / divConst / price
     },
     canUseMargin(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
