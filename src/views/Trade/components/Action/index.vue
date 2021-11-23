@@ -197,15 +197,7 @@ export default {
         }
     },
     computed: {
-        ...mapState([
-            'deadline',
-            'tolerance',
-            'allowance',
-            'leverage',
-            'feeRate',
-            'divConst',
-            'poolNetAmountRateLimitOpen'
-        ]),
+        ...mapState(['tolerance', 'allowance', 'leverage', 'feeRate', 'divConst', 'poolNetAmountRateLimitOpen']),
         ...mapGetters(['LongMaxAmount', 'ShortMaxAmount', 'canUseMargin', 'slidePrice', 'R']),
         r() {
             return (this.feeRate / this.divConst) * 100
@@ -292,7 +284,6 @@ export default {
             if (!this.allowance) {
                 return this.handleApprove()
             }
-            console.log(this.R, this.poolNetAmountRateLimitOpen)
             if (this.R <= -this.poolNetAmountRateLimitOpen) {
                 return this.$message({
                     type: 'error',

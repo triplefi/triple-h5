@@ -44,47 +44,13 @@ export default {
     name: 'Current',
     data() {
         return {
-            newPrice: '',
-            indexPrice: '',
-            totalPool: '',
+            newPrice: ''
             // fundingRate: "",
-            interval: null
         }
     },
     computed: {
-        ...mapState(['contract', 'fundingRate']),
+        ...mapState(['contract', 'fundingRate', 'totalPool']),
         ...mapGetters(['NewPrice', 'symbol'])
-    },
-    mounted() {
-        this.interval = setInterval(async () => {
-            this.getPrice()
-        }, 3000)
-    },
-    watch: {
-        contract(n) {
-            n && this.getPrice()
-        }
-    },
-    methods: {
-        async getPrice() {
-            if (this.contract) {
-                const price = await this.contract.methods.getLatestPrice().call()
-                this.$store.commit('setPrice', price * 1)
-                Promise.all([
-                    this.contract.methods.totalPool().call(),
-                    this.contract.methods.poolLongAmount().call(),
-                    this.contract.methods.poolShortAmount().call()
-                ]).then((res) => {
-                    this.totalPool = res[0]
-                    this.$store.commit('setTotalPool', this.totalPool * 1)
-                    this.$store.commit('setPoolLongAmount', res[1] * 1)
-                    this.$store.commit('setPoolShortAmount', res[2] * 1)
-                })
-            }
-        }
-    },
-    beforeDestroy() {
-        this.interval && clearInterval(this.interval)
     }
 }
 </script>

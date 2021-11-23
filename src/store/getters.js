@@ -66,7 +66,7 @@ export default {
     LongMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleTradeLimitRate, slideP } = state
+            const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
             // 已占用保证金量:usedMargin = [(Trader.longAmount + Trader.shortAmount) * 当前价格（index price）] / 杠杆率(leverage);
             // const usedMargin = ((longAmount + shortAmount) * price) / leverage
             // 可用保证金canUseMargin = 用户净值（3的计算）- usedMargin
@@ -82,9 +82,9 @@ export default {
             const r = feeRate / divConst
             const xL = Math.floor(total / (openPrice / leverage + openPrice * r))
             // const x = xL || xS
-            // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleTradeLimitRate/divConst）/标准价格（合约函数getLatestPrice）
+            // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
-            let limitSAmount = Math.floor((poolNet * singleTradeLimitRate) / divConst / price)
+            let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / price)
             return Math.min(limitSAmount, xL)
         } else {
             return 0
@@ -93,7 +93,7 @@ export default {
     ShortMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleTradeLimitRate, slideP } = state
+            const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
             // 已占用保证金量:usedMargin = [(Trader.longAmount + Trader.shortAmount) * 当前价格（index price）] / 杠杆率(leverage);
             // const usedMargin = ((longAmount + shortAmount) * price) / leverage
             // // 可用保证金canUseMargin = 用户净值（3的计算）- usedMargin
@@ -109,9 +109,9 @@ export default {
             const openPrice = price * (1 - slideP / divConst)
             const xS = Math.floor(total / (openPrice / leverage + openPrice * r))
             // const x = xL || xS
-            // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleTradeLimitRate/divConst）/标准价格（合约函数getLatestPrice）
+            // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
-            let limitSAmount = Math.floor((poolNet * singleTradeLimitRate) / divConst / price)
+            let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / price)
             return Math.min(limitSAmount, xS)
         } else {
             return 0

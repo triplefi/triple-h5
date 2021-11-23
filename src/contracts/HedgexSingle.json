@@ -1031,7 +1031,20 @@
     },
     {
         "inputs": [],
-        "name": "singleTradeLimitRate",
+        "name": "singleCloseLimitRate",
+        "outputs": [
+            {
+                "internalType": "uint24",
+                "name": "",
+                "type": "uint24"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "singleOpenLimitRate",
         "outputs": [
             {
                 "internalType": "uint16",

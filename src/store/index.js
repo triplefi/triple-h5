@@ -34,7 +34,8 @@ const store = new Vuex.Store({
         poolNet: 0,
         feeRate: 1,
         divConst: 1,
-        singleTradeLimitRate: 1,
+        singleCloseLimitRate: 1,
+        singleOpenLimitRate: 1,
         slideP: 0,
         fundingRate: 0,
 
@@ -58,7 +59,9 @@ const store = new Vuex.Store({
         poolNetAmountRateLimitPrice: 0,
 
         poolLongAmount: 0,
-        poolShortAmount: 0
+        poolShortAmount: 0,
+        poolLongPrice: 0,
+        poolShortPrice: 0
     },
     mutations: {
         setReady(state, payload) {
@@ -130,8 +133,11 @@ const store = new Vuex.Store({
         setDivConst(state, payload) {
             state.divConst = payload
         },
-        setSingleTradeLimitRate(state, payload) {
-            state.singleTradeLimitRate = payload
+        setSingleOpenLimitRate(state, payload) {
+            state.singleOpenLimitRate = payload
+        },
+        setSingleCloseLimitRate(state, payload) {
+            state.singleCloseLimitRate = payload
         },
         setSlideP(state, payload) {
             state.slideP = payload
@@ -178,6 +184,12 @@ const store = new Vuex.Store({
         },
         setPoolShortAmount(state, payload) {
             state.poolShortAmount = payload
+        },
+        setPoolLongPrice(state, payload) {
+            state.poolLongPrice = payload
+        },
+        setPoolShortPrice(state, payload) {
+            state.poolShortPrice = payload
         }
     },
     actions: {

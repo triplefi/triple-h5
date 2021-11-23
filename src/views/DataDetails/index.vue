@@ -43,8 +43,6 @@ import { mapState, mapActions } from 'vuex'
 export default {
     data() {
         return {
-            poolLongPrice: 0,
-            poolShortPrice: 0,
             pairs: [],
             activeTab: '',
             loading: false
@@ -52,9 +50,6 @@ export default {
     },
     mounted() {
         this.getPairs()
-        this.timeHandler = setInterval(() => {
-            this.getIntervalPrice()
-        }, 3000)
     },
     beforeDestroy() {
         if (this.timeHandler) {
@@ -63,15 +58,13 @@ export default {
     },
     computed: {
         ...mapState([
-            'contract',
             'poolNet',
-            'price',
+            'poolLongPrice',
+            'poolShortPrice',
             'divConst',
-            'price',
             'poolLongAmount',
             'poolShortAmount',
-            'totalPool',
-            'web3'
+            'totalPool'
         ]),
         R() {
             const { poolLongAmount, poolShortAmount, poolNet, price, divConst } = this
@@ -129,29 +122,6 @@ export default {
             const res = await Promise.all([this.contract.methods.getPoolNet().call()])
             this.$store.commit('setPoolNet', res[0] * 1)
             this.loading = false
-        },
-        async getIntervalPrice() {
-            if (!this.contract) {
-                return
-            }
-            try {
-                const res = await Promise.all([
-                    this.contract.methods.poolLongPrice().call(),
-                    this.contract.methods.poolShortPrice().call(),
-                    this.contract.methods.totalPool().call(),
-                    this.contract.methods.poolLongAmount().call(),
-                    this.contract.methods.poolShortAmount().call(),
-                    this.contract.methods.getLatestPrice().call()
-                ])
-                this.poolLongPrice = res[0]
-                this.poolShortPrice = res[1]
-                this.$store.commit('setTotalPool', res[2] * 1)
-                this.$store.commit('setPoolLongAmount', res[3] * 1)
-                this.$store.commit('setPoolShortAmount', res[4] * 1)
-                this.$store.commit('setPrice', res[5] * 1)
-            } catch (error) {
-                console.log(error)
-            }
         }
     }
 }

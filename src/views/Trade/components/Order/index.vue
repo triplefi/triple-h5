@@ -19,6 +19,11 @@
                     {{ formatDecimals(getUnrealizedPL(scope.row)) | formatMoney }}
                 </template>
             </el-table-column>
+            <el-table-column label="Close Price">
+                <template slot-scope="scope">
+                    {{ pricePrecision(scope.row.direction > 0 ? slidePriceShort : slidePriceLong) | formatMoney }}
+                </template>
+            </el-table-column>
             <el-table-column width="340px">
                 <template slot-scope="scope">
                     <div class="flex flex-ac">
@@ -63,8 +68,16 @@ export default {
         }
     },
     computed: {
-        ...mapState(['position', 'tolerance', 'deadline']),
-        ...mapGetters(['symbol']),
+        ...mapState(['position', 'tolerance', 'poolNet']),
+        ...mapGetters(['symbol', 'slidePrice']),
+        slidePriceLong() {
+            //多仓偏移价格
+            return this.price + (this.slidePrice[1] || 0)
+        },
+        slidePriceShort() {
+            //空仓偏移价格
+            return this.price - (this.slidePrice[0] || 0)
+        },
         precision() {
             return Math.abs(this.amountDecimal)
         },
@@ -130,8 +143,9 @@ export default {
                 amount: this.toBN(row.closeNum / this.step),
                 deadline: this.deadlineTimestamp()
             }
+            const price = row.direction > 0 ? this.slidePriceShort : this.slidePriceLong
             if (row.direction > 0) {
-                const priceExp = this.toBN(Math.floor((1 - this.tolerance / 100) * this.price))
+                const priceExp = this.toBN(Math.floor((1 - this.tolerance / 100) * price))
                 params.priceExp = priceExp
                 console.log(params)
                 this.closeLong(params)
@@ -143,7 +157,7 @@ export default {
                         console.error(err)
                     })
             } else if (row.direction < 0) {
-                const priceExp = this.toBN(Math.floor((1 + this.tolerance / 100) * this.price))
+                const priceExp = this.toBN(Math.floor((1 + this.tolerance / 100) * price))
                 params.priceExp = priceExp
                 console.log(params)
                 this.closeShort(params)

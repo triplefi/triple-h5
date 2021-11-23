@@ -4,6 +4,7 @@ import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { Message } from 'element-ui'
 import { bus } from '@/utils/bus'
+let poolInterval = null
 export default {
     // Login, getProvider
     // 选择MetaMask钱包
@@ -73,7 +74,13 @@ export default {
             console.log('accountsChanged', accounts)
             try {
                 dispatch('resetApp')
-                await dispatch('metaMaskInit')
+                // await dispatch('metaMaskInit')
+                const wallet = localStorage.getItem('wallet')
+                if (wallet === 'MetaMask') {
+                    await dispatch('metaMaskInit')
+                } else if (wallet === 'WalletConnect') {
+                    await dispatch('walletConnectInit')
+                }
                 // await dispatch('initWeb3')
                 // dispatch('initContract', { notFirst: true })
                 bus.$emit('accountsChanged')
@@ -95,7 +102,7 @@ export default {
     // 多个WalletConnect 账户登录后，切换 MetaMask 无效，除非 WalletConnect 退出到只剩一个
     // MathWallet 插件开启后，比 MetaMask 更优先
 
-    async initWeb3({ state, commit }) {
+    async initWeb3({ state, commit, dispatch }) {
         try {
             // web3
             const web3 = new Web3(state.provider)
@@ -118,6 +125,14 @@ export default {
             commit('setWeb3', web3)
             commit('setCoinbase', coinbase)
             commit('setBalance', balance * 1)
+
+            // 开启pool池数据拉取
+            if (poolInterval) {
+                clearInterval(poolInterval)
+            }
+            poolInterval = setInterval(() => {
+                dispatch('getPoolData')
+            }, 3000)
             // commit("setChainId", chainId);
             // commit("setNetworkId", networkId);
             // console.log("blockNumber", blockNumber);
@@ -168,29 +183,29 @@ export default {
         const contract = new state.web3.eth.Contract(abi, contractAddress)
         const amountDecimal = await contract.methods.amountDecimal().call()
         const decimals = await contract.methods.decimals().call()
+        commit('setContract', contract)
         commit('setAmountDecimal', amountDecimal * 1)
         commit('setDecimals', decimals * 1)
         commit('setReady', true)
-        const leverage = await contract.methods.leverage().call()
-        const feeRate = await contract.methods.feeRate().call()
-        const divConst = await contract.methods.divConst().call()
-        const singleTradeLimitRate = await contract.methods.singleTradeLimitRate().call()
-        const slideP = await contract.methods.slideP().call()
-        commit('setContract', contract)
-        commit('setLeverage', leverage * 1)
-        commit('setFeeRate', feeRate * 1)
-        commit('setDivConst', divConst * 1)
-        commit('setSingleTradeLimitRate', singleTradeLimitRate * 1)
-        commit('setSlideP', slideP * 1)
 
-        // 读取poolNetAmountRateLimitOpen和poolNetAmountRateLimitPrice
-        Promise.all([
+        const constantRes = await Promise.all([
+            contract.methods.leverage().call(),
+            contract.methods.feeRate().call(),
+            contract.methods.divConst().call(),
+            contract.methods.slideP().call(),
+            contract.methods.singleCloseLimitRate().call(),
+            contract.methods.singleOpenLimitRate().call(),
             contract.methods.poolNetAmountRateLimitOpen().call(),
             contract.methods.poolNetAmountRateLimitPrice().call()
-        ]).then((res) => {
-            commit('setPoolNetAmountRateLimitOpen', res[0] * 1)
-            commit('setPoolNetAmountRateLimitPrice', res[1] * 1)
-        })
+        ])
+        commit('setLeverage', constantRes[0] * 1)
+        commit('setFeeRate', constantRes[1] * 1)
+        commit('setDivConst', constantRes[2] * 1)
+        commit('setSlideP', constantRes[3] * 1)
+        commit('setSingleCloseLimitRate', constantRes[4] * 1)
+        commit('setSingleOpenLimitRate', constantRes[5] * 1)
+        commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
+        commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
 
         // token0
         // const token0Address = await contract.methods.token0().call(); // 获取token0address
@@ -305,6 +320,30 @@ export default {
         commit('setToken0Balance', token0Balance * 1)
         dispatch('getPosition')
     },
+    // 获取pool动态数据
+    async getPoolData({ state, commit }) {
+        if (!state.contract) {
+            return
+        }
+        try {
+            const res = await Promise.all([
+                state.contract.methods.poolLongPrice().call(),
+                state.contract.methods.poolShortPrice().call(),
+                state.contract.methods.totalPool().call(),
+                state.contract.methods.poolLongAmount().call(),
+                state.contract.methods.poolShortAmount().call(),
+                state.contract.methods.getLatestPrice().call()
+            ])
+            commit('setPoolLongPrice', res[0] * 1)
+            commit('setPoolShortPrice', res[1] * 1)
+            commit('setTotalPool', res[2] * 1)
+            commit('setPoolLongAmount', res[3] * 1)
+            commit('setPoolShortAmount', res[4] * 1)
+            commit('setPrice', res[5] * 1)
+        } catch (error) {
+            console.log(error)
+        }
+    },
     // getFundingRate
     async getFundingRate({ state, commit }) {
         const [dailyInterestRateBase, divConst, poolLongAmount, poolShortAmount] = await Promise.all([
@@ -351,5 +390,11 @@ export default {
         commit('setBalance', 0)
         commit('setPosition', {})
         commit('setPrice', 0)
+
+        commit('setPoolLongPrice', 0)
+        commit('setPoolShortPrice', 0)
+        commit('setTotalPool', 0)
+        commit('setPoolLongAmount', 0)
+        commit('setPoolShortAmount', 0)
     }
 }
