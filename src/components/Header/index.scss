@@ -1,208 +1,208 @@
 .header {
-  height: 40px;
-  background: var(--COLOR-bg1);
-  display: flex;
-  align-items: center;
-  box-shadow: inset 0px -1px 0px #282634;
-
-  .logo {
-    width: 40px;
     height: 40px;
+    background: var(--COLOR-bg1);
     display: flex;
-    justify-content: center;
     align-items: center;
-    cursor: pointer;
+    box-shadow: inset 0px -1px 0px #282634;
 
-    svg {
-      width: 40px;
-      height: 40px;
+    .logo {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-1 {
+            display: inline-block;
+        }
+
+        .logo-2 {
+            display: none;
+        }
+
+        &:hover {
+            .logo-2 {
+                display: inline-block;
+            }
+
+            .logo-1 {
+                display: none;
+            }
+        }
     }
 
-    .logo-1 {
-      display: inline-block;
-    }
-
-    .logo-2 {
-      display: none;
-    }
-
-    &:hover {
-      .logo-2 {
-        display: inline-block;
-      }
-
-      .logo-1 {
-        display: none;
-      }
-    }
-  }
-
-  .tab {
-    width: 100px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-
-    &.router-link-active {
-      box-shadow: inset 0px -4px 0px #5f549e;
-    }
-
-    &:hover {
-      background: var(--COLOR-bg4);
-    }
-  }
-
-  .wallet {
-    margin-left: auto;
-    margin-right: 15px;
-    padding: 4px 16px;
-    // width: 115px;
-    height: 30px;
-    background: #5f549e;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .wallet2 {
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    height: 30px;
-    background: #f0edff;
-    border-radius: 8px;
-
-    > span {
-      padding: 0 8px;
-      color: #1c2535;
-    }
-
-    .address {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 4px 4px 8px;
-      // width: 123px;
-      height: 30px;
-      background: #5f549e;
-      border-radius: 8px;
-
-      .icon-wallet {
-        margin-left: 10px;
-        font-size: 24px;
-        float: right;
-      }
-    }
-  }
-
-  .fullscreen {
-    margin: 0 10px;
-    cursor: pointer;
-  }
-
-  .wallets {
-    color: #fff;
-
-    .wallet-item {
-      display: block;
-      margin: 16px 0;
-      height: 80px;
-      background: var(--COLOR-bg2);
-      border-radius: 78px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      cursor: pointer;
-      text-decoration: none;
-
-      h6 {
+    .tab {
+        width: 100px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: #fff;
-        font-family: "Poppins";
-      }
+        text-decoration: none;
 
-      &:hover {
-        background: var(--COLOR-bg4);
-      }
-
-      .icon {
-        position: absolute;
-        left: 32px;
-        top: 50%;
-        margin-top: -24px;
-        width: 48px;
-        height: 48px;
-      }
-
-      .close {
-        position: absolute;
-        right: 32px;
-        top: 50%;
-        margin-top: -12px;
-      }
-    }
-  }
-
-  .more {
-    position: relative;
-    margin-left: 10px;
-    margin-right: 5px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    &:hover {
-      background: var(--COLOR-bg2);
-      border: 2px solid var(--COLOR-c5);
-      .more-wrap {
-        display: block;
-      }
-    }
-    .icon-more {
-      color: #fff;
-    }
-    .more-wrap {
-      display: none;
-      padding-top: 10px;
-      position: absolute;
-      top: 28px;
-      right: 0;
-      animation: slideDown 0.3s ease;
-      @keyframes slideDown {
-        from {
-          opacity: 0;
-          top: 18px;
+        &.router-link-active {
+            box-shadow: inset 0px -4px 0px #5f549e;
         }
-        to {
-          opacity: 1;
-          top: 28px;
+
+        &:hover {
+            background: var(--COLOR-bg4);
         }
-      }
-      .more-list {
-        width: 150px;
-        background: var(--COLOR-bg2);
-        border: 2px solid var(--COLOR-c5);
+    }
+
+    .wallet {
+        margin-left: auto;
+        margin-right: 15px;
+        padding: 4px 16px;
+        // width: 115px;
+        height: 30px;
+        background: #5f549e;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .wallet2 {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        height: 30px;
+        background: #f0edff;
+        border-radius: 8px;
+
+        > span {
+            padding: 0 8px;
+            color: #1c2535;
+        }
+
+        .address {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 4px 4px 8px;
+            // width: 123px;
+            height: 30px;
+            background: #5f549e;
+            border-radius: 8px;
+
+            .icon-wallet {
+                margin-left: 10px;
+                font-size: 24px;
+                float: right;
+            }
+        }
+    }
+
+    .fullscreen {
+        margin: 0 10px;
+        cursor: pointer;
+    }
+
+    .wallets {
+        color: #fff;
+
+        .wallet-item {
+            display: block;
+            margin: 16px 0;
+            height: 80px;
+            background: var(--COLOR-bg2);
+            border-radius: 78px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+
+            h6 {
+                color: #fff;
+                font-family: 'Manrope', sans-serif;
+            }
+
+            &:hover {
+                background: var(--COLOR-bg4);
+            }
+
+            .icon {
+                position: absolute;
+                left: 32px;
+                top: 50%;
+                margin-top: -24px;
+                width: 48px;
+                height: 48px;
+            }
+
+            .close {
+                position: absolute;
+                right: 32px;
+                top: 50%;
+                margin-top: -12px;
+            }
+        }
+    }
+
+    .more {
+        position: relative;
+        margin-left: 10px;
+        margin-right: 5px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border-radius: 10px;
-        overflow: hidden;
-        .more-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 4px 8px;
-          height: 30px;
-          cursor: pointer;
-          text-decoration: none;
-          span {
-            color: var(--COLOR-t1);
-          }
-          &:hover {
-            background-color: var(--COLOR-c5);
-          }
+        &:hover {
+            background: var(--COLOR-bg2);
+            border: 2px solid var(--COLOR-c5);
+            .more-wrap {
+                display: block;
+            }
         }
-      }
+        .icon-more {
+            color: #fff;
+        }
+        .more-wrap {
+            display: none;
+            padding-top: 10px;
+            position: absolute;
+            top: 28px;
+            right: 0;
+            animation: slideDown 0.3s ease;
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    top: 18px;
+                }
+                to {
+                    opacity: 1;
+                    top: 28px;
+                }
+            }
+            .more-list {
+                width: 150px;
+                background: var(--COLOR-bg2);
+                border: 2px solid var(--COLOR-c5);
+                border-radius: 10px;
+                overflow: hidden;
+                .more-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 4px 8px;
+                    height: 30px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    span {
+                        color: var(--COLOR-t1);
+                    }
+                    &:hover {
+                        background-color: var(--COLOR-c5);
+                    }
+                }
+            }
+        }
     }
-  }
 }

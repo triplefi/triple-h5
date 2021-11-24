@@ -1,263 +1,262 @@
 // @import './normalize.css';
-@import "./theme.css";
+@import './theme.css';
 
 *,
 :after,
 :before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  min-width: 1200px;
+    min-width: 1200px;
 
-  // &::-webkit-scrollbar {
-  //   width: 0;
-  // }
+    // &::-webkit-scrollbar {
+    //   width: 0;
+    // }
 }
 
 html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: "Roboto Condensed", sans-serif;
-  /* font-family: 'IBM Plex Sans', sans-serif; */
-  color: #fff;
-  font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Manrope', sans-serif;
+    /* font-family: 'IBM Plex Sans', sans-serif; */
+    color: #fff;
+    font-size: 14px;
 }
 
 .page {
-  width: 100%;
-  overflow: auto;
+    width: 100%;
+    overflow: auto;
 }
 
 .flex {
-  display: flex;
+    display: flex;
 }
 
 .flex-1 {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .flex-ac {
-  align-items: center;
+    align-items: center;
 }
 
 .flex-bt {
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 // element-ui 覆盖
 
 .el-button {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .el-tooltip__popper {
-  padding: 10px;
-  background: #2e2c3d;
-  color: #fff;
-  font-size: 12px;
-  line-height: 16px;
-  max-width: 327px;
+    padding: 10px;
+    background: #2e2c3d;
+    color: #fff;
+    font-size: 12px;
+    line-height: 16px;
+    max-width: 327px;
 }
 
 .el-message {
-  top: 30px;
-  padding: 10px;
-  max-width: 500px;
-  justify-content: center;
+    top: 30px;
+    padding: 10px;
+    max-width: 500px;
+    justify-content: center;
 }
 
 .el-message--success {
-  background: #5f549e;
-  border-color: #5f549e;
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04),
-    0px 6px 12px rgba(0, 0, 0, 0.04);
-  border-radius: 4px;
+    background: #5f549e;
+    border-color: #5f549e;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 6px 12px rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
 }
 
 .el-message--success .el-message__content {
-  color: #fff;
-  font-size: 14px;
-  line-height: 22px;
-  text-align: center;
-  font-family: "Roboto Condensed";
+    color: #fff;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    font-family: 'Manrope', sans-serif;
 }
 
 .el-icon-success {
-  display: none;
+    display: none;
 }
 
 .el-dialog__wrapper {
-  .el-dialog {
-    background: #0a0911;
-    border: 1px solid #282634;
-    border-radius: 40px;
+    .el-dialog {
+        background: #0a0911;
+        border: 1px solid #282634;
+        border-radius: 40px;
 
-    .el-dialog__body {
-      padding: 30px 24px;
+        .el-dialog__body {
+            padding: 30px 24px;
+        }
     }
-  }
 
-  .el-dialog__title {
-    color: #fff;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 32px;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close {
-    padding: 5px;
-    background: var(--COLOR-bg3);
-    border-radius: 50%;
-    color: #fff;
-
-    &:hover {
-      background: #eeeff2;
-      color: #1c2535;
+    .el-dialog__title {
+        color: #fff;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 32px;
     }
-  }
+
+    .el-dialog__headerbtn .el-dialog__close {
+        padding: 5px;
+        background: var(--COLOR-bg3);
+        border-radius: 50%;
+        color: #fff;
+
+        &:hover {
+            background: #eeeff2;
+            color: #1c2535;
+        }
+    }
 }
 
 .el-input .el-input__inner {
-  border-radius: 50px;
-  background: #2e2c3d;
-  border-color: transparent;
-  color: #fff;
-  font-weight: bold;
-  font-family: "Roboto Condensed";
-  border-width: 2px;
+    border-radius: 50px;
+    background: #2e2c3d;
+    border-color: transparent;
+    color: #fff;
+    font-weight: bold;
+    font-family: 'Manrope', sans-serif;
+    border-width: 2px;
 
-  &::placeholder {
-    font-family: "Roboto Condensed";
-  }
+    &::placeholder {
+        font-family: 'Manrope', sans-serif;
+    }
 
-  &:focus {
-    background: transparent;
-    border-color: var(--COLOR-c5);
-  }
+    &:focus {
+        background: transparent;
+        border-color: var(--COLOR-c5);
+    }
 }
 
 .el-input-number {
-  // .el-input__inner {
-  //   color: #fff;
-  //   font-weight: bold;
-  //   font-size: 14px;
-  //   line-height: 22px;
-  // }
+    // .el-input__inner {
+    //   color: #fff;
+    //   font-weight: bold;
+    //   font-size: 14px;
+    //   line-height: 22px;
+    // }
 
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    background: transparent;
-    border-color: transparent;
+    .el-input-number__decrease,
+    .el-input-number__increase {
+        background: transparent;
+        border-color: transparent;
 
-    i {
-      color: #fff;
+        i {
+            color: #fff;
+        }
+
+        &.is-disabled i {
+            color: var(--COLOR-t2);
+        }
     }
-
-    &.is-disabled i {
-      color: var(--COLOR-t2);
-    }
-  }
 }
 
 .el-switch {
-  &.is-checked .el-switch__core::after {
-    margin-left: -28px !important;
-  }
-
-  .el-switch__core {
-    width: 51px;
-    height: 31px;
-    border-radius: 16px;
-
-    &::after {
-      top: 1px;
-      left: 1px;
-      width: 27px;
-      height: 27px;
+    &.is-checked .el-switch__core::after {
+        margin-left: -28px !important;
     }
-  }
+
+    .el-switch__core {
+        width: 51px;
+        height: 31px;
+        border-radius: 16px;
+
+        &::after {
+            top: 1px;
+            left: 1px;
+            width: 27px;
+            height: 27px;
+        }
+    }
 }
 
 .el-collapse {
-  border: none;
+    border: none;
 }
 
 .el-collapse-item__header {
-  background-color: transparent;
-  height: 56px;
-  padding: 0 16px;
-  background: #0a0911;
-  border-color: #2e2c3d;
+    background-color: transparent;
+    height: 56px;
+    padding: 0 16px;
+    background: #0a0911;
+    border-color: #2e2c3d;
 
-  &.is-active {
-    background: #2e2c3d;
-  }
+    &.is-active {
+        background: #2e2c3d;
+    }
 }
 
 .el-collapse-item__arrow {
-  color: #fff;
+    color: #fff;
 }
 
 .el-collapse-item__wrap {
-  background: #1a1825;
-  border: none;
+    background: #1a1825;
+    border: none;
 }
 
 .el-collapse-item__content {
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
 
 .el-slider {
-  .el-slider__runway {
-    margin: 0;
-    height: 24px;
-    background: #2e2c3d;
-    border-radius: 45px;
-  }
+    .el-slider__runway {
+        margin: 0;
+        height: 24px;
+        background: #2e2c3d;
+        border-radius: 45px;
+    }
 
-  .el-slider__bar {
-    height: 24px;
-    background: #2e2c3d;
-    border-radius: 45px;
-  }
+    .el-slider__bar {
+        height: 24px;
+        background: #2e2c3d;
+        border-radius: 45px;
+    }
 
-  .el-slider__button-wrapper {
-    top: -6px;
-  }
+    .el-slider__button-wrapper {
+        top: -6px;
+    }
 
-  .el-slider__button {
-    width: 24px;
-    height: 24px;
-  }
+    .el-slider__button {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 .el-tabs--card {
-  .el-tabs__header {
-    .el-tabs__nav {
-      width: 100%;
-      display: flex;
+    .el-tabs__header {
+        .el-tabs__nav {
+            width: 100%;
+            display: flex;
+        }
+        .el-tabs__item {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: var(--COLOR-t2);
+            &.is-active {
+                color: var(--COLOR-t1);
+                border-bottom-color: var(--COLOR-t2);
+            }
+        }
+        .el-tabs__nav,
+        .el-tabs__item {
+            border-color: var(--COLOR-t5);
+        }
     }
-    .el-tabs__item {
-      flex: 1;
-      text-align: center;
-      font-weight: bold;
-      color: var(--COLOR-t2);
-      &.is-active {
-        color: var(--COLOR-t1);
-        border-bottom-color: var(--COLOR-t2);
-      }
-    }
-    .el-tabs__nav,
-    .el-tabs__item {
-      border-color: var(--COLOR-t5);
-    }
-  }
 }
 
 .el-loading-mask {
-  background-color: var(--COLOR-bg1);
+    background-color: var(--COLOR-bg1);
 }
