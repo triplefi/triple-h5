@@ -7,15 +7,15 @@
         <div class="content">
             <div class="item">
                 <div class="label">lp pool net</div>
-                <div class="value">{{ poolNet }}</div>
+                <div class="value">{{ formatDecimals(poolNet) }}</div>
             </div>
             <div class="item">
                 <div class="label">lp pool unrealized P/L</div>
-                <div class="value">{{ unrealizedPL }}</div>
+                <div class="value">{{ formatDecimals(unrealizedPL) }}</div>
             </div>
             <div class="item">
                 <div class="label">lp pool usdt</div>
-                <div class="value">{{ totalPool | formatMoney }}</div>
+                <div class="value">{{ formatDecimals(totalPool) | formatMoney }}</div>
             </div>
             <div class="item">
                 <div class="label">long amount</div>
@@ -31,7 +31,7 @@
             </div>
             <div class="item">
                 <div class="label">pool used margin</div>
-                <div class="value">{{ usedMargin | formatMoney }}</div>
+                <div class="value">{{ formatDecimals(usedMargin) | formatMoney }}</div>
             </div>
         </div>
     </div>
