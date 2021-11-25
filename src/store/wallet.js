@@ -196,8 +196,7 @@ export default {
             contract.methods.singleCloseLimitRate().call(),
             contract.methods.singleOpenLimitRate().call(),
             contract.methods.poolNetAmountRateLimitOpen().call(),
-            contract.methods.poolNetAmountRateLimitPrice().call(),
-            contract.methods.getPoolNet().call()
+            contract.methods.poolNetAmountRateLimitPrice().call()
         ])
         commit('setLeverage', constantRes[0] * 1)
         commit('setFeeRate', constantRes[1] * 1)
@@ -207,7 +206,6 @@ export default {
         commit('setSingleOpenLimitRate', constantRes[5] * 1)
         commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
         commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
-        commit('setPoolNet', constantRes[8] * 1)
 
         // token0
         // const token0Address = await contract.methods.token0().call(); // 获取token0address
@@ -336,12 +334,23 @@ export default {
                 state.contract.methods.poolShortAmount().call(),
                 state.contract.methods.getLatestPrice().call()
             ])
-            commit('setPoolLongPrice', res[0] * 1)
-            commit('setPoolShortPrice', res[1] * 1)
-            commit('setTotalPool', res[2] * 1)
-            commit('setPoolLongAmount', res[3] * 1)
-            commit('setPoolShortAmount', res[4] * 1)
-            commit('setPrice', res[5] * 1)
+            const poolLongPrice = res[0] * 1
+            const poolShortPrice = res[1] * 1
+            const totalPool = res[2] * 1
+            const poolLongAmount = res[3] * 1
+            const poolShortAmount = res[4] * 1
+            const price = res[5] * 1
+            commit('setPoolLongPrice', poolLongPrice)
+            commit('setPoolShortPrice', poolShortPrice)
+            commit('setTotalPool', totalPool)
+            commit('setPoolLongAmount', poolLongAmount)
+            commit('setPoolShortAmount', poolShortAmount)
+            commit('setPrice', price)
+            const poolNet =
+                totalPool +
+                (poolLongAmount * price + poolShortAmount * poolShortPrice) -
+                (poolLongAmount * poolLongPrice + poolShortAmount * price)
+            commit('setPoolNet', poolNet)
         } catch (error) {
             console.log(error)
         }

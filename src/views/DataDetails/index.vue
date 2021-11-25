@@ -112,16 +112,9 @@ export default {
             this.$store.commit('setPairInfo', item)
             if (this.web3) {
                 await this.initContract({ pairInfo: item })
-                this.getData()
+                await this.$store.dispatch('getPoolData')
+                this.loading = false
             }
-        },
-        async getData() {
-            if (!this.contract) {
-                return
-            }
-            const res = await Promise.all([this.contract.methods.getPoolNet().call()])
-            this.$store.commit('setPoolNet', res[0] * 1)
-            this.loading = false
         }
     }
 }
