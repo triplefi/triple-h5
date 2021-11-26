@@ -6,6 +6,9 @@
         </router-link>
         <router-link class="tab btn14" to="/trade">Trade</router-link>
         <router-link class="tab btn14" to="/pool">Pool</router-link>
+        <!-- <el-button @click="handleGetTokens" type="primary" round size="mini" class="get-tokens-btn"
+            >Get free test tokens</el-button
+        > -->
         <!-- <router-link class="tab btn14" to="/about">Components</router-link> -->
         <div v-if="!coinbase" class="wallet btn14" @click="model = true">Connect Wallet</div>
         <div v-else class="wallet2 fs14" @click="model = true">
@@ -126,6 +129,9 @@ export default {
         },
         exitFull() {
             exitFull()
+        },
+        handleGetTokens() {
+            console.log(2)
         }
     }
 }

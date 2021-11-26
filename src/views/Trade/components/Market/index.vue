@@ -30,7 +30,7 @@
                 :key="item.trade_coin"
                 @click="!checkActive(item) && selectPair(item)"
             >
-                <img class="icon" :src="require(`@/assets/coin/coin_${item.trade_coin.toUpperCase()}.png`)" alt="" />
+                <img class="icon" :src="item.icon" alt="" />
                 <span class="btn13">{{ item.trade_coin.toUpperCase() }}</span>
                 <span class="fs13 code"></span>
                 <span class="btn13 price">${{ pricePrecision(item.index_price) | formatMoney }}</span>
@@ -85,7 +85,15 @@ export default {
         async getList() {
             const res = await getTradePairs()
             if (res.result) {
-                this.list = res.data
+                this.list = res.data.map((e) => {
+                    let icon = ''
+                    try {
+                        icon = require(`@/assets/coin/coin_${e.trade_coin.toUpperCase()}.png`)
+                    } catch (error) {
+                        icon = require(`@/assets/coin/coin.png`)
+                    }
+                    return { ...e, icon }
+                })
             }
             return this.list
         },
