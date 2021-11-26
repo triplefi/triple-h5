@@ -34,6 +34,10 @@
                 <div class="value">{{ formatDecimals(usedMargin) | formatMoney }}</div>
             </div>
         </div>
+        <div class="explosive-con">
+            <el-input v-model="explosiveAddress" placeholder="请输入爆仓地址"></el-input>
+            <el-button @click="handleExplosive" type="primary">确定爆仓</el-button>
+        </div>
     </div>
 </template>
 
@@ -45,10 +49,12 @@ export default {
         return {
             pairs: [],
             activeTab: '',
-            loading: false
+            loading: false,
+            explosiveAddress: ''
         }
     },
     mounted() {
+        this._initWeb3 = !!this.web3
         this.getPairs()
     },
     beforeDestroy() {
@@ -126,6 +132,32 @@ export default {
                 await this.$store.dispatch('getPoolData')
                 this.loading = false
             }
+        },
+        async handleExplosive() {
+            if (!this.explosiveAddress) {
+                return this.$message({
+                    type: 'error',
+                    message: '请输入爆仓地址'
+                })
+            }
+            if (!this.web3 || !this.contract) {
+                return this.$message({
+                    type: 'error',
+                    message: '合约初始化未完成'
+                })
+            }
+            try {
+                await this.contract.methods.explosive(this.explosiveAddress).call()
+                this.$message({
+                    type: 'success',
+                    message: '执行完成'
+                })
+            } catch (error) {
+                this.$message({
+                    type: 'error',
+                    message: error
+                })
+            }
         }
     }
 }
@@ -144,6 +176,13 @@ export default {
             .label {
                 width: 240px;
             }
+        }
+    }
+    .explosive-con {
+        padding: 20px 60px;
+        .el-input {
+            width: 300px;
+            margin-right: 30px;
         }
     }
 }
