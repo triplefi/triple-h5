@@ -19,11 +19,11 @@
             </div>
             <div class="item">
                 <div class="label">long amount</div>
-                <div class="value">{{ poolLongAmount }}</div>
+                <div class="value">{{ amountPrecision(poolLongAmount) }}</div>
             </div>
             <div class="item">
                 <div class="label">short amount</div>
-                <div class="value">{{ poolShortAmount }}</div>
+                <div class="value">{{ amountPrecision(poolShortAmount) }}</div>
             </div>
             <div class="item">
                 <div class="label">R</div>
@@ -64,11 +64,12 @@ export default {
             'divConst',
             'poolLongAmount',
             'poolShortAmount',
-            'totalPool'
+            'totalPool',
+            'pairInfo'
         ]),
         R() {
             const { poolLongAmount, poolShortAmount, poolNet, price, divConst } = this
-            const rV = poolLongAmount - poolShortAmount // pool净头寸
+            const rV = this.amountPrecision(poolLongAmount - poolShortAmount) // pool净头寸
             return poolNet ? ((rV * price) / poolNet) * divConst || 0 : 0 //净头⼨⽐率
         },
         unrealizedPL() {
@@ -93,6 +94,12 @@ export default {
             if (item) {
                 this.selectPair(item)
             }
+        },
+        web3(val) {
+            if (val && !this._initWeb3) {
+                this._initWeb3 = true
+                this.getData()
+            }
         }
     },
     methods: {
@@ -110,8 +117,12 @@ export default {
             this.loading = true
             this.$store.commit('setContractAddress', item.contract)
             this.$store.commit('setPairInfo', item)
-            if (this.web3) {
-                await this.initContract({ pairInfo: item })
+            this._isInitPairInfo = true
+            this.getData()
+        },
+        async getData() {
+            if (this._isInitPairInfo && this._initWeb3) {
+                await this.initContract({ pairInfo: this.pairInfo })
                 await this.$store.dispatch('getPoolData')
                 this.loading = false
             }
