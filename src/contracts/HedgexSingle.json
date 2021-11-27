@@ -312,6 +312,13 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "acceptFeeToSetter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -487,6 +494,11 @@
                 "internalType": "address",
                 "name": "account",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
             }
         ],
         "name": "detectSlide",
@@ -512,6 +524,11 @@
             {
                 "internalType": "address",
                 "name": "account",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
                 "type": "address"
             }
         ],
@@ -568,6 +585,32 @@
     },
     {
         "inputs": [],
+        "name": "feeTo",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "feeToSetter",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "feedPrice",
         "outputs": [
             {
@@ -610,6 +653,11 @@
             {
                 "internalType": "address",
                 "name": "account",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
                 "type": "address"
             }
         ],
@@ -1030,6 +1078,32 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "b",
+                "type": "bool"
+            }
+        ],
+        "name": "setFeeOn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_feeTo",
+                "type": "address"
+            }
+        ],
+        "name": "setFeeTo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "singleCloseLimitRate",
         "outputs": [
@@ -1218,6 +1292,19 @@
         "inputs": [
             {
                 "internalType": "address",
+                "name": "_feeToSetter",
+                "type": "address"
+            }
+        ],
+        "name": "transferFeeToSetter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
                 "name": "from",
                 "type": "address"
             },
@@ -1240,6 +1327,13 @@
                 "type": "bool"
             }
         ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "withdrawFee",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },

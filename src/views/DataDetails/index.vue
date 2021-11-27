@@ -35,8 +35,15 @@
             </div>
         </div>
         <div class="explosive-con">
-            <el-input v-model="explosiveAddress" placeholder="请输入爆仓地址"></el-input>
-            <el-button :loading="explosiveLoading" @click="handleExplosive" type="primary">确定爆仓</el-button>
+            <div>
+                <el-input v-model="explosiveAddress" placeholder="请输入爆仓地址"></el-input>
+            </div>
+            <div>
+                <el-input v-model="explosiveTo" placeholder="请输入奖励地址"></el-input>
+            </div>
+            <div>
+                <el-button :loading="explosiveLoading" @click="handleExplosive" type="primary">确定爆仓</el-button>
+            </div>
         </div>
     </div>
 </template>
@@ -51,6 +58,7 @@ export default {
             activeTab: '',
             loading: false,
             explosiveAddress: '',
+            explosiveTo: '',
             explosiveLoading: false
         }
     },
@@ -145,6 +153,12 @@ export default {
                     message: '请输入爆仓地址'
                 })
             }
+            if (!this.explosiveTo) {
+                return this.$message({
+                    type: 'error',
+                    message: '请输入奖励地址'
+                })
+            }
             if (!this.web3 || !this.contract) {
                 return this.$message({
                     type: 'error',
@@ -152,8 +166,11 @@ export default {
                 })
             }
             this.explosiveLoading = true
+            console.log(this.explosiveAddress, this.explosiveTo, '-----')
             try {
-                await this.contract.methods.explosive(this.explosiveAddress).send({ from: this.coinbase })
+                await this.contract.methods
+                    .explosive(this.explosiveAddress, this.explosiveTo)
+                    .send({ from: this.coinbase })
                 this.explosiveLoading = false
                 this.$message({
                     type: 'success',
@@ -188,6 +205,9 @@ export default {
     }
     .explosive-con {
         padding: 20px 60px;
+        div {
+            margin-bottom: 10px;
+        }
         .el-input {
             width: 300px;
             margin-right: 30px;
