@@ -92,6 +92,9 @@ export default {
             },
             immediate: true,
             deep: true
+        },
+        CloseMaxAmount() {
+            this.setPosition(this.position)
         }
     },
     methods: {

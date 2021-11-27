@@ -65,6 +65,9 @@ export default {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
             const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
+            if (!divConst || !price) {
+                return 0
+            }
             // 已占用保证金量:usedMargin = [(Trader.longAmount + Trader.shortAmount) * 当前价格（index price）] / 杠杆率(leverage);
             // const usedMargin = ((longAmount + shortAmount) * price) / leverage
             // 可用保证金canUseMargin = 用户净值（3的计算）- usedMargin
@@ -92,6 +95,9 @@ export default {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
             const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
+            if (!divConst || !price) {
+                return 0
+            }
             // 已占用保证金量:usedMargin = [(Trader.longAmount + Trader.shortAmount) * 当前价格（index price）] / 杠杆率(leverage);
             // const usedMargin = ((longAmount + shortAmount) * price) / leverage
             // // 可用保证金canUseMargin = 用户净值（3的计算）- usedMargin
