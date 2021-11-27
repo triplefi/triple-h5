@@ -135,6 +135,7 @@ export default {
                 await this.initContract({ pairInfo: this.pairInfo })
                 await this.$store.dispatch('getPoolData')
                 this.loading = false
+                this.explosiveLoading = false
             }
         },
         async handleExplosive() {

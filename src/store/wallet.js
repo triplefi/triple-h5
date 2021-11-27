@@ -82,7 +82,7 @@ export default {
                     await dispatch('walletConnectInit')
                 }
                 // await dispatch('initWeb3')
-                // await dispatch('initContract', { notFirst: true, pairInfo: state.pairInfo })
+                await dispatch('initContract', { notFirst: true, pairInfo: state.pairInfo })
                 bus.$emit('accountsChanged')
             } catch (error) {
                 console.log(error)
