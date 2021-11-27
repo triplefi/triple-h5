@@ -36,7 +36,7 @@
         </div>
         <div class="explosive-con">
             <el-input v-model="explosiveAddress" placeholder="请输入爆仓地址"></el-input>
-            <el-button @click="handleExplosive" type="primary">确定爆仓</el-button>
+            <el-button :loading="explosiveLoading" @click="handleExplosive" type="primary">确定爆仓</el-button>
         </div>
     </div>
 </template>
@@ -50,7 +50,8 @@ export default {
             pairs: [],
             activeTab: '',
             loading: false,
-            explosiveAddress: ''
+            explosiveAddress: '',
+            explosiveLoading: false
         }
     },
     mounted() {
@@ -146,8 +147,10 @@ export default {
                     message: '合约初始化未完成'
                 })
             }
+            this.explosiveLoading = true
             try {
-                await this.contract.methods.explosive(this.explosiveAddress).call()
+                await this.contract.methods.explosive(this.explosiveAddress).send({ from: this.coinbase })
+                this.explosiveLoading = false
                 this.$message({
                     type: 'success',
                     message: '执行完成'
@@ -157,6 +160,7 @@ export default {
                     type: 'error',
                     message: error
                 })
+                this.explosiveLoading = false
             }
         }
     }
