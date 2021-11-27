@@ -76,8 +76,7 @@ export default {
         ]),
         R() {
             const { poolLongAmount, poolShortAmount, poolNet, price, divConst } = this
-            const rV = this.amountPrecision(poolLongAmount - poolShortAmount) // pool净头寸
-            return poolNet ? ((rV * price) / poolNet) * divConst || 0 : 0 //净头⼨⽐率
+            return (((poolShortAmount - poolLongAmount) * price) / poolNet) * 100
         },
         unrealizedPL() {
             const { poolLongAmount, poolLongPrice, poolShortAmount, poolShortPrice, price } = this
@@ -113,12 +112,16 @@ export default {
         ...mapActions(['initContract']),
         async getPairs() {
             this.loading = true
-            const res = await getTradePairs()
-            if (res.result) {
-                this.pairs = res.data
-                this.activeTab = this.pairs[0].trade_coin
+            try {
+                const res = await getTradePairs()
+                if (res.result) {
+                    this.pairs = res.data
+                    this.activeTab = this.pairs[0].trade_coin
+                }
+            } catch (error) {
+                console.log(error)
+                this.getPairs()
             }
-            return this.pairs
         },
         async selectPair(item) {
             this.loading = true
