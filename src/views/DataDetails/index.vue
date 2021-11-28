@@ -45,6 +45,17 @@
                 <el-button :loading="explosiveLoading" @click="handleExplosive" type="primary">确定爆仓</el-button>
             </div>
         </div>
+        <div class="explosive-con">
+            <div>
+                <el-input v-model="detectSlideAddress" placeholder="请输入Account Address"></el-input>
+            </div>
+            <div>
+                <el-input v-model="detectSlideTo" placeholder="请输入To Address"></el-input>
+            </div>
+            <div>
+                <el-button :loading="detectSlideLoading" @click="handleDetectSlide" type="primary">测试利息</el-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -59,7 +70,10 @@ export default {
             loading: false,
             explosiveAddress: '',
             explosiveTo: '',
-            explosiveLoading: false
+            explosiveLoading: false,
+            detectSlideAddress: '',
+            detectSlideTo: '',
+            detectSlideLoading: false
         }
     },
     mounted() {
@@ -146,6 +160,7 @@ export default {
                 this.explosiveLoading = false
             }
         },
+        // 爆仓测试
         async handleExplosive() {
             if (!this.explosiveAddress) {
                 return this.$message({
@@ -182,6 +197,44 @@ export default {
                     message: error
                 })
                 this.explosiveLoading = false
+            }
+        },
+        // 利息测试
+        async handleDetectSlide() {
+            if (!this.detectSlideAddress) {
+                return this.$message({
+                    type: 'error',
+                    message: '请输入Account Address'
+                })
+            }
+            if (!this.detectSlideTo) {
+                return this.$message({
+                    type: 'error',
+                    message: '请输入To Address'
+                })
+            }
+            if (!this.web3 || !this.contract) {
+                return this.$message({
+                    type: 'error',
+                    message: '合约初始化未完成'
+                })
+            }
+            this.detectSlideLoading = true
+            try {
+                await this.contract.methods
+                    .detectSlide(this.detectSlideAddress, this.detectSlideTo)
+                    .send({ from: this.coinbase })
+                this.detectSlideLoading = false
+                this.$message({
+                    type: 'success',
+                    message: '执行完成'
+                })
+            } catch (error) {
+                this.$message({
+                    type: 'error',
+                    message: error
+                })
+                this.detectSlideLoading = false
             }
         }
     }
