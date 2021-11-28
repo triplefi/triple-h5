@@ -340,8 +340,9 @@ export default {
                 poolLongAmount,
                 poolShortPrice,
                 poolShortAmount,
-                leverage,
-                balanceOf
+                balanceOf,
+                divConst,
+                poolNetAmountRateLimitOpen
             ] = await Promise.all([
                 this.pcontract.methods.totalPool().call(),
                 this.pcontract.methods.totalSupply().call(),
@@ -350,8 +351,9 @@ export default {
                 this.pcontract.methods.poolLongAmount().call(),
                 this.pcontract.methods.poolShortPrice().call(),
                 this.pcontract.methods.poolShortAmount().call(),
-                this.pcontract.methods.leverage().call(),
-                this.pcontract.methods.balanceOf(this.coinbase).call()
+                this.pcontract.methods.balanceOf(this.coinbase).call(),
+                this.pcontract.methods.divConst().call(),
+                this.pcontract.methods.poolNetAmountRateLimitOpen().call()
             ])
             const net =
                 totalPool * 1 +
@@ -360,22 +362,22 @@ export default {
             if (net < 0) {
                 maxLiquidity = 0
             } else {
-                const usedMargin = Math.abs(poolLongAmount - poolShortAmount) * indexPrice
-                let canWithdraw = net - usedMargin
-                if (canWithdraw > net / leverage) {
-                    canWithdraw = net / leverage
+                let netAmount = Math.abs(poolLongAmount - poolShortAmount)
+                const totalAmount = (poolLongAmount * 1 + poolShortAmount * 1) / 3
+                if (netAmount < totalAmount) {
+                    netAmount = totalAmount
                 }
-                // 增加removeCoefficient(0.99)系数，提高下单成功率。2021.11.20 -daihanqiao
-                canWithdraw = canWithdraw * this.$store.state.removeCoefficient
-                if (canWithdraw > 0) {
-                    maxLiquidity = (canWithdraw * totalSupply) / net
-                    if (balanceOf < maxLiquidity) {
-                        maxLiquidity = balanceOf * 1
-                        // maxAmount = net * maxLiquidity / totalSupply
-                    }
-                } else {
+                const usedMargin = (netAmount * indexPrice * divConst) / poolNetAmountRateLimitOpen
+                const canWithdraw = net - usedMargin
+                maxLiquidity = (canWithdraw * totalSupply) / net - 2
+                if (maxLiquidity < 0) {
                     maxLiquidity = 0
+                } else if (maxLiquidity > balanceOf * 1) {
+                    maxLiquidity = balanceOf * 1
                 }
+                // console.log(
+                //     `net=${net},netAmount=${netAmount},totalAmount=${totalAmount},usedMargin=${usedMargin},canWithdraw=${canWithdraw},maxLiquidity=${maxLiquidity},balanceOf=${balanceOf}`
+                // )
             }
             this.maxLiquidity = maxLiquidity
         }
