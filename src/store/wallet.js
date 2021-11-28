@@ -179,6 +179,7 @@ export default {
         // contract
         // const contractAddress = '0xB21ceaec9B2259F28e839c87F8AeE35f835F3C7D'; // 合约地址
         const contractAddress = pairInfo.contract
+
         // commit('setContractAddress', contractAddress)
         const contract = new state.web3.eth.Contract(abi, contractAddress)
         const amountDecimal = await contract.methods.amountDecimal().call()
@@ -196,7 +197,8 @@ export default {
             contract.methods.singleCloseLimitRate().call(),
             contract.methods.singleOpenLimitRate().call(),
             contract.methods.poolNetAmountRateLimitOpen().call(),
-            contract.methods.poolNetAmountRateLimitPrice().call()
+            contract.methods.poolNetAmountRateLimitPrice().call(),
+            contract.methods.token0().call()
         ])
         commit('setLeverage', constantRes[0] * 1)
         commit('setFeeRate', constantRes[1] * 1)
@@ -208,8 +210,9 @@ export default {
         commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
 
         // token0
-        // const token0Address = await contract.methods.token0().call(); // 获取token0address
-        const token0Address = pairInfo.margin_address // 获取token0address
+        const token0Address = constantRes[8] // 获取token0address
+        console.log(token0Address, '000000000')
+        // const token0Address = pairInfo.margin_address // 获取token0address
         const token0 = new state.web3.eth.Contract(erc20abi, token0Address) // 生成token0合约对象
         const token0Decimals = await token0.methods.decimals().call() // token0精度
         commit('setToken0', token0)

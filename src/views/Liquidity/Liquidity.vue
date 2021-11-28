@@ -205,8 +205,7 @@ export default {
                     return {
                         token: item.trade_coin,
                         currency: item.margin_coin,
-                        contractAddress: item.contract,
-                        token0Address: item.margin_address
+                        contractAddress: item.contract
                     }
                 })
             }
@@ -243,7 +242,8 @@ export default {
             try {
                 this.loading = true
                 this.pcontract = new this.web3.eth.Contract(abi, this.curPair.contractAddress)
-                this.ptoken0 = new this.web3.eth.Contract(erc20abi, this.curPair.token0Address) // 生成token0合约对象
+                const token0Address = await this.pcontract.methods.token0().call()
+                this.ptoken0 = new this.web3.eth.Contract(erc20abi, token0Address) // 生成token0合约对象
                 // this.name = await this.pcontract.methods.name().call();
                 // this.symbol = await this.pcontract.methods.symbol().call();
                 const [balanceOf, totalSupply, totalPool, token0BalanceOf, token0Decimals] = await Promise.all([

@@ -6,9 +6,16 @@
         </router-link>
         <router-link class="tab btn14" to="/trade">Trade</router-link>
         <router-link class="tab btn14" to="/pool">Pool</router-link>
-        <!-- <el-button @click="handleGetTokens" type="primary" round size="mini" class="get-tokens-btn"
+        <el-button
+            v-if="!!coinbase"
+            :loading="getTokenLoading"
+            @click="handleGetTokens"
+            type="primary"
+            round
+            size="mini"
+            class="get-tokens-btn"
             >Get free test tokens</el-button
-        > -->
+        >
         <!-- <router-link class="tab btn14" to="/about">Components</router-link> -->
         <div v-if="!coinbase" class="wallet btn14" @click="model = true">Connect Wallet</div>
         <div v-else class="wallet2 fs14" @click="model = true">
@@ -91,12 +98,14 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { screenFull, exitFull, checkFull } from '@/utils/util'
+import { getTestCoin } from '@/api'
 export default {
     name: 'Header',
     data() {
         return {
             model: false,
             isFull: false,
+            getTokenLoading: false,
 
             links: {
                 FAQs: 'https://docs.triple.fi/',
@@ -130,8 +139,31 @@ export default {
         exitFull() {
             exitFull()
         },
-        handleGetTokens() {
-            console.log(2)
+        async handleGetTokens() {
+            this.getTokenLoading = true
+            try {
+                const res = await getTestCoin(this.coinbase)
+                this.getTokenLoading = false
+                console.log(res)
+                if (res.result) {
+                    this.$message({
+                        type: 'success',
+                        message: 'Succeeded! 0.1ETH and 10000USDT will be in your Rinkeby wallet soon.'
+                    })
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message:
+                            'Transaction failure. Your address has already recieved  maximum amount of free tokens.'
+                    })
+                }
+            } catch (error) {
+                this.getTokenLoading = false
+                this.$message({
+                    type: 'error',
+                    message: error
+                })
+            }
         }
     }
 }
