@@ -17,16 +17,10 @@
                             <div class="flex list-head">
                                 <div class="icons">
                                     <div class="icon icon-1">
-                                        <img
-                                            :src="require(`@/assets/coin/coin_${item.token.toUpperCase()}.png`)"
-                                            alt=""
-                                        />
+                                        <img :src="item.token.toUpperCase() | getCoinIcon" alt="" />
                                     </div>
                                     <div class="icon icon-2">
-                                        <img
-                                            :src="require(`@/assets/coin/coin_${item.currency.toUpperCase()}.png`)"
-                                            alt=""
-                                        />
+                                        <img :src="item.currency.toUpperCase() | getCoinIcon" alt="" />
                                     </div>
                                 </div>
                                 <div class="fs16b title">

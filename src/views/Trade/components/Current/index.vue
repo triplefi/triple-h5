@@ -2,10 +2,10 @@
     <div class="current">
         <div class="icons">
             <div class="icon icon-1">
-                <img :src="require(`@/assets/coin/coin_${tradeCoin}.png`)" alt="" />
+                <img :src="tradeCoin | getCoinIcon" alt="" />
             </div>
             <div class="icon icon-2">
-                <img :src="require(`@/assets/coin/coin_${marginCoin}.png`)" alt="" />
+                <img :src="marginCoin | getCoinIcon" alt="" />
             </div>
         </div>
         <h5>{{ symbol }}</h5>

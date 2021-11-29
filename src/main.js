@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import mixin from './components/mixin'
-import { formatDateTime, formatMoney, formatNum } from './utils/util'
+import { formatDateTime, formatMoney, formatNum, getCoinIcon } from './utils/util'
 
 import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
@@ -19,12 +19,13 @@ Vue.use(ElementUI)
 
 Vue.mixin(mixin)
 
-Vue.filter('formatDateTime', formatDateTime);
-Vue.filter('formatMoney', formatMoney);
-Vue.filter('formatNum', formatNum);
+Vue.filter('formatDateTime', formatDateTime)
+Vue.filter('formatMoney', formatMoney)
+Vue.filter('formatNum', formatNum)
+Vue.filter('getCoinIcon', getCoinIcon)
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: (h) => h(App)
 }).$mount('#app')

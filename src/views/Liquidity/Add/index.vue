@@ -12,7 +12,7 @@
                             >Select a token<i class="el-icon-arrow-down el-icon--right"></i
                         ></el-button>
                         <div v-else class="fs14b currency" @click="selectToken">
-                            <img class="icon-coin" :src="require(`@/assets/coin/coin_${token}.png`)" alt="" />
+                            <img class="icon-coin" :src="token | getCoinIcon" alt="" />
                             <span>{{ token }}</span>
                             <i class="el-icon-arrow-down"></i>
                         </div>
@@ -100,7 +100,7 @@
                     <div class="curreny-list">
                         <template v-if="currencys.length">
                             <div class="curreny-item" v-for="item in showList" :key="item" @click="checkCoin(item)">
-                                <img class="icon" :src="require(`@/assets/coin/coin_${item}.png`)" alt="" />
+                                <img class="icon" :src="item | getCoinIcon" alt="" />
                                 <div>
                                     <div class="fs14 code">{{ item }}</div>
                                     <div class="fs12 name">{{ item.toLowerCase() }}</div>
