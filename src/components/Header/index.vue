@@ -9,6 +9,7 @@
         <el-button
             v-if="!!coinbase"
             :loading="getTokenLoading"
+            :disabled="getTokenDisable"
             @click="handleGetTokens"
             type="primary"
             round
@@ -106,6 +107,7 @@ export default {
             model: false,
             isFull: false,
             getTokenLoading: false,
+            getTokenDisable: true,
 
             links: {
                 FAQs: 'https://docs.triple.fi/',
@@ -128,8 +130,16 @@ export default {
             return val
         }
     },
+    watch: {
+        coinbase() {
+            if (this.coinbase) {
+                this.calcGetTokensBtn()
+            }
+        }
+    },
     mounted() {
         checkFull(this)
+        this.calcGetTokensBtn()
     },
     methods: {
         ...mapActions(['metaMaskInit', 'walletConnectInit', 'disconnect']),
@@ -139,12 +149,18 @@ export default {
         exitFull() {
             exitFull()
         },
+        calcGetTokensBtn() {
+            const getTokensTime = window.localStorage.getItem(`${this.coinbase}-get-test-tokens`) || 0
+            const now = new Date().getTime()
+            this.getTokenDisable = now - getTokensTime <= 5 * 60 * 1000
+        },
         async handleGetTokens() {
             this.getTokenLoading = true
             try {
                 const res = await getTestCoin(this.coinbase)
                 this.getTokenLoading = false
-                console.log(res)
+                window.localStorage.setItem(`${this.coinbase}-get-test-tokens`, new Date().getTime())
+                this.getTokenDisable = true
                 if (res.result) {
                     this.$message({
                         type: 'success',

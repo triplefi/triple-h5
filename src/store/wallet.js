@@ -296,7 +296,7 @@ export default {
         )
     },
     // 获取持仓
-    async getPosition({ state, commit }) {
+    async getPosition({ state, commit, dispatch }) {
         const position = await state.contract.methods.traders(state.coinbase).call()
         const { longAmount, longPrice, margin, shortAmount, shortPrice } = position
         commit('setPosition', {
@@ -306,13 +306,7 @@ export default {
             shortAmount: shortAmount * 1,
             shortPrice: shortPrice * 1
         })
-        let poolNet
-        try {
-            poolNet = await state.contract.methods.getPoolNet().call() // 获取流动池净值
-        } catch (error) {
-            poolNet = 0
-        }
-        commit('setPoolNet', poolNet * 1)
+        dispatch('getPoolData')
     },
     // 更新数据
     async refreshData({ state, commit, dispatch }) {
