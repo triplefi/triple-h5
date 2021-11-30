@@ -1,43 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <link rel="icon" href="<%= BASE_URL %>favicon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=Roboto+Condensed:wght@300;400;700&display=swap"
+            rel="stylesheet"
+        />
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=Roboto+Condensed:wght@300;400;700&display=swap"
-    rel="stylesheet">
+        <!-- <%= htmlWebpackPlugin.options.title %> -->
+        <title>TripleFi | New Advanced DEFI Derivative platform</title>
+        <meta
+            name="description"
+            content="Triple is the new advanced DEFI derivative platform. We provide a wide range of perpetual contracts available to trade for cryptocurrency traders, and liquidity provider seeking for better returns with our new net-postition market making algorithm."
+        />
 
-  <!-- <%= htmlWebpackPlugin.options.title %> -->
-  <title>
-    TripleFi | New Advanced DEFI Derivative platform
-  </title>
-  <meta name="description"
-    content="Triple is the new advanced DEFI derivative platform. We provide a wide range of perpetual contracts available to trade for cryptocurrency traders, and liquidity provider seeking for better returns with our new net-postition market making algorithm.">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-VEG97GFRL1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || []
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+            gtag('js', new Date())
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VEG97GFRL1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+            gtag('config', 'G-VEG97GFRL1')
+        </script>
+    </head>
 
-    gtag('config', 'G-VEG97GFRL1');
-  </script>
-</head>
-
-<body>
-  <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-        Please enable it to continue.</strong>
-  </noscript>
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
-  <script src="<%= BASE_URL %>charting_library/charting_library/charting_library.min.js"></script>
-</body>
-
+    <body>
+        <noscript>
+            <strong
+                >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript
+                enabled. Please enable it to continue.</strong
+            >
+        </noscript>
+        <div id="app"></div>
+        <!-- built files will be auto injected -->
+        <script src="<%= BASE_URL %>charting_library/charting_library/charting_library.min.js"></script>
+    </body>
 </html>
