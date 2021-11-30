@@ -147,12 +147,35 @@
 }
 
 .cont_1 .buttons {
-    height: 40px;
-    width: 360px;
-    margin: 32px auto 83px;
+    height: 80px;
+    width: 460px;
+    margin: 32px auto 50px;
     /*display: flex;*/
     position: relative;
     z-index: 2;
+    a {
+        text-decoration: none;
+    }
+    .label {
+        font-size: 16px;
+        line-height: 40px;
+        font-weight: bold;
+        color: #5f549e;
+        position: relative;
+        &.trade {
+            cursor: pointer;
+        }
+        &.gray {
+            color: #878c9e;
+        }
+    }
+    .img {
+        width: 30px;
+        height: 30px;
+        right: -10px;
+        bottom: 5px;
+        position: absolute;
+    }
 }
 
 .active,
@@ -222,7 +245,7 @@
 .icon_4 {
     bottom: 00px;
     top: unset;
-    left: -210px;
+    left: -170px;
 }
 
 .icon_5 {

@@ -2,18 +2,12 @@
     <div class="market">
         <div class="title">
             <span class="btn14">Select Market</span>
-            <div class="line"></div>
+            <!-- <div class="line"></div> -->
         </div>
         <div class="search">
             <div class="search-input">
                 <svg-icon icon-class="ic_Search" class-name="icon-search"></svg-icon>
-                <input
-                    class="input fs14"
-                    type="text"
-                    placeholder="Search 67 Currency..."
-                    v-model="query"
-                    @input="handleSearch"
-                />
+                <input class="input fs14" type="text" placeholder="Search..." v-model="query" @input="handleSearch" />
             </div>
             <div class="curreny">
                 <!-- <div class="fs14b">ETH</div> -->

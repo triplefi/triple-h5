@@ -15,20 +15,23 @@
             <div class="fs12b value">${{ pricePrecision(price) | formatMoney }}</div>
         </div>
         <div class="item">
-            <div class="fs12 name">Triple Pool</div>
+            <div class="fs12 name">Liquidity Pool</div>
             <div class="fs12b value">
                 {{ formatDecimals(totalPool) | formatMoney }}
             </div>
         </div>
         <div class="item">
-            <div class="fs12 name">Funding Rate</div>
-            <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3) }}%</div>
+            <div class="fs12 name">Funding Rate / Next Funding</div>
+            <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3) }}% / {{ state }}</div>
         </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 // "1: getLatestPrice来获取价格
 // 2:
 // 3: totalPool对冲池总量
@@ -44,13 +47,44 @@ export default {
     name: 'Current',
     data() {
         return {
-            newPrice: ''
+            newPrice: '',
+            state: ''
             // fundingRate: "",
         }
     },
     computed: {
         ...mapState(['contract', 'fundingRate', 'totalPool']),
         ...mapGetters(['NewPrice', 'symbol'])
+    },
+    mounted() {
+        this.calcCountdown()
+        this.intervalHandler = setInterval(this.calcCountdown, 1000)
+    },
+    beforeDestroy() {
+        if (this.intervalHandler) {
+            clearInterval(this.intervalHandler)
+        }
+    },
+    methods: {
+        calcCountdown() {
+            const utcTimeStr = `${dayjs().add(1, 'd').utc().format('YYYY-MM-DD')} 00:00:00`
+            const utcNowStr = dayjs().utc().format('YYYY-MM-DD HH:mm:ss')
+            const utcTime = dayjs(utcTimeStr).utc().unix()
+            const nowTime = dayjs(utcNowStr).utc().unix()
+            const next = utcTime - nowTime
+            // utc时间0点-0点五分，为处理中
+            if (next <= 5 * 60) {
+                this.state = 'Proceeding'
+            } else {
+                let h = (parseInt(next / 3600) || 0) + ''
+                let m = parseInt((next % 3600) / 60) + ''
+                let s = parseInt((next % 3600) % 60) + ''
+                h = h.length === 1 ? `0${h}` : h
+                m = m.length === 1 ? `0${m}` : m
+                s = s.length === 1 ? `0${s}` : s
+                this.state = `${h}:${m}:${s}`
+            }
+        }
     }
 }
 </script>

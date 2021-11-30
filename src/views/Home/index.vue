@@ -781,17 +781,26 @@
                 </p>
                 <p></p>
                 <div class="buttons">
-                    <a
+                    <router-link to="/trade">
+                        <div class="label">Testnet Beta Version Available Now on: Rinkeby Testnet</div>
+                    </router-link>
+                    <div class="label gray">
+                        Mainnet available soon on: Binance Smart Chain
+                        <div>
+                            <img class="img" src="./img/logo.png" alt="" />
+                        </div>
+                    </div>
+                    <!-- <a
                         class="active"
                         target="_blank"
                         href="@/assets/pdf/Triple English Doc v1.1.pdf"
                         download="Triple English Doc v1.1.pdf"
                     >
                         document
-                    </a>
-                    <div class="unactive" style="margin-left: 32px">
+                    </a> -->
+                    <!-- <div class="unactive" style="margin-left: 32px">
                         <p @click="tip"><img src="./img/button_2.png" alt="" />Smart Contract</p>
-                    </div>
+                    </div> -->
                     <svg
                         width="78"
                         height="75"

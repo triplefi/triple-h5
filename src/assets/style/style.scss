@@ -63,6 +63,19 @@ html {
     max-width: 327px;
 }
 
+.el-message-box {
+    width: 570px;
+    background: #0a0911;
+    border: 1px solid #282634;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 6px 12px rgba(0, 0, 0, 0.04);
+    .el-message-box__headerbtn .el-message-box__close {
+        color: #fff;
+    }
+}
+.el-message-box__content {
+    color: #fff;
+}
+
 .el-message {
     top: 30px;
     padding: 10px;
