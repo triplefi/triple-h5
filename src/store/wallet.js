@@ -221,7 +221,7 @@ export default {
 
         if (state.coinbase) {
             dispatch('getPosition')
-            dispatch('getFundingRate')
+            // dispatch('getFundingRate')
             const token0Balance = await token0.methods.balanceOf(state.coinbase).call() // 用户lp数量
             const allowance = await token0.methods.allowance(state.coinbase, contractAddress).call() // 查询账户允许合约的消费限额
             commit('setToken0Balance', token0Balance * 1)
@@ -329,7 +329,8 @@ export default {
                 state.contract.methods.totalPool().call(),
                 state.contract.methods.poolLongAmount().call(),
                 state.contract.methods.poolShortAmount().call(),
-                state.contract.methods.getLatestPrice().call()
+                state.contract.methods.getLatestPrice().call(),
+                state.contract.methods.dailyInterestRateBase().call()
             ])
             const poolLongPrice = res[0] * 1
             const poolShortPrice = res[1] * 1
@@ -348,29 +349,45 @@ export default {
                 (poolLongAmount * price + poolShortAmount * poolShortPrice) -
                 (poolLongAmount * poolLongPrice + poolShortAmount * price)
             commit('setPoolNet', poolNet)
+
+            // 计算fundingRate
+            const dailyInterestRateBase = res[6] * 1
+            const divConst = state.divConst
+            if (divConst) {
+                const r0 = dailyInterestRateBase / divConst
+                let fundingRate
+                if (poolLongAmount * 1 > poolShortAmount * 1) {
+                    fundingRate = (-r0 * (poolLongAmount - poolShortAmount)) / poolLongAmount
+                } else if (poolShortAmount * 1 > poolLongAmount * 1) {
+                    fundingRate = (r0 * (poolShortAmount - poolLongAmount)) / poolShortAmount
+                } else {
+                    fundingRate = 0
+                }
+                commit('setFundingRate', fundingRate * 1)
+            }
         } catch (error) {
             console.log(error)
         }
     },
     // getFundingRate
-    async getFundingRate({ state, commit }) {
-        const [dailyInterestRateBase, divConst, poolLongAmount, poolShortAmount] = await Promise.all([
-            state.contract.methods.dailyInterestRateBase().call(),
-            state.contract.methods.divConst().call(),
-            state.contract.methods.poolLongAmount().call(),
-            state.contract.methods.poolShortAmount().call()
-        ])
-        const r0 = dailyInterestRateBase / divConst
-        let fundingRate
-        if (poolLongAmount * 1 > poolShortAmount * 1) {
-            fundingRate = (-r0 * (poolLongAmount - poolShortAmount)) / poolLongAmount
-        } else if (poolShortAmount * 1 > poolLongAmount * 1) {
-            fundingRate = (r0 * (poolShortAmount - poolLongAmount)) / poolShortAmount
-        } else {
-            fundingRate = 0
-        }
-        commit('setFundingRate', fundingRate * 1)
-    },
+    // async getFundingRate({ state, commit }) {
+    //     const [dailyInterestRateBase, divConst, poolLongAmount, poolShortAmount] = await Promise.all([
+    //         state.contract.methods.dailyInterestRateBase().call(),
+    //         state.contract.methods.divConst().call(),
+    //         state.contract.methods.poolLongAmount().call(),
+    //         state.contract.methods.poolShortAmount().call()
+    //     ])
+    //     const r0 = dailyInterestRateBase / divConst
+    //     let fundingRate
+    //     if (poolLongAmount * 1 > poolShortAmount * 1) {
+    //         fundingRate = (-r0 * (poolLongAmount - poolShortAmount)) / poolLongAmount
+    //     } else if (poolShortAmount * 1 > poolLongAmount * 1) {
+    //         fundingRate = (r0 * (poolShortAmount - poolLongAmount)) / poolShortAmount
+    //     } else {
+    //         fundingRate = 0
+    //     }
+    //     commit('setFundingRate', fundingRate * 1)
+    // },
     // async providerRequest({ state }, payload) {
     //   // const payload = {
     //   //   method: string;

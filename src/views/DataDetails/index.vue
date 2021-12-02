@@ -113,7 +113,7 @@ export default {
         },
         usedMargin() {
             const { poolLongAmount, poolShortAmount, price } = this
-            let netAmount = Math.abs(poolShortAmount - poolShortAmount)
+            let netAmount = Math.abs(poolLongAmount - poolShortAmount)
             const totalAmount = (poolLongAmount + poolShortAmount) / 3
             if (netAmount < totalAmount) {
                 netAmount = totalAmount
