@@ -38,7 +38,13 @@
                             placeholder="Amount"
                         ></el-input-number>
                         <div class="fs12 all" @click="handleAll(scope.row)">Max</div>
-                        <el-button class="btn-close" type="primary" size="small" round @click="handleClose(scope.row)"
+                        <el-button
+                            :disabled="scope.row.closeNum == 0"
+                            class="btn-close"
+                            type="primary"
+                            size="small"
+                            round
+                            @click="handleClose(scope.row)"
                             >Close</el-button
                         >
                     </div>

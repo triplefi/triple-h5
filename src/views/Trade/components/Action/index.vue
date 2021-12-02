@@ -40,7 +40,12 @@
                                 {{ item }}%
                             </div>
                         </div>
-                        <el-button style="width: 100%" type="info" round @click="handleOpenLong"
+                        <el-button
+                            :disabled="amount1 == 0"
+                            style="width: 100%"
+                            type="info"
+                            round
+                            @click="handleOpenLong"
                             ><span style="font-weight: bold">LONG</span></el-button
                         >
                     </div>
@@ -80,7 +85,12 @@
                                 {{ item }}%
                             </div>
                         </div>
-                        <el-button style="width: 100%" type="danger" round @click="handleOpenShort"
+                        <el-button
+                            :disabled="amount2 == 0"
+                            style="width: 100%"
+                            type="danger"
+                            round
+                            @click="handleOpenShort"
                             ><span style="font-weight: bold">SHORT</span></el-button
                         >
                     </div>
