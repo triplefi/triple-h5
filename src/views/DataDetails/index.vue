@@ -1,9 +1,14 @@
 <template>
     <div v-loading="loading" class="data-details">
-        <el-tabs v-model="activeTab">
-            <el-tab-pane v-for="e in pairs" :key="e.trade_coin" :label="e.trade_coin" :name="e.trade_coin">
-            </el-tab-pane>
-        </el-tabs>
+        <el-button-group>
+            <el-button
+                @click="activeTab = e.trade_coin"
+                v-for="e in pairs"
+                :key="e.trade_coin"
+                :type="activeTab === e.trade_coin ? 'primary' : ''"
+                >{{ e.trade_coin }}</el-button
+            >
+        </el-button-group>
         <div class="content">
             <div class="item">
                 <div class="label">lp pool net</div>
