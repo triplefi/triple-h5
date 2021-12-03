@@ -363,7 +363,7 @@ export default {
                 }
                 const usedMargin = (netAmount * indexPrice * divConst) / poolNetAmountRateLimitOpen
                 const canWithdraw = net - usedMargin
-                maxLiquidity = (canWithdraw * totalSupply) / net - 2
+                maxLiquidity = ((canWithdraw * totalSupply) / net) * 0.99
                 if (maxLiquidity < 0) {
                     maxLiquidity = 0
                 } else if (maxLiquidity > balanceOf * 1) {
