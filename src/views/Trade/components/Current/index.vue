@@ -22,7 +22,7 @@
         </div>
         <div class="item">
             <div class="fs12 name">Funding Rate / Next Funding</div>
-            <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3) }}% / {{ state }}</div>
+            <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3, true) }}% / {{ state }}</div>
         </div>
     </div>
 </template>
