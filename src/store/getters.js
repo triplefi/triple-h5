@@ -86,7 +86,7 @@ export default {
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / price)
-            return Math.min(limitSAmount, xL)
+            return Math.min(limitSAmount, xL) * state.limitCoefficient
         } else {
             return 0
         }
@@ -116,7 +116,7 @@ export default {
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / price)
-            return Math.min(limitSAmount, xS)
+            return Math.min(limitSAmount, xS) * state.limitCoefficient
         } else {
             return 0
         }
@@ -127,7 +127,7 @@ export default {
         if (!price || !divConst) {
             return 0
         }
-        return (poolNet * singleCloseLimitRate) / divConst / price
+        return ((poolNet * singleCloseLimitRate) / divConst / price) * state.limitCoefficient
     },
     canUseMargin(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {

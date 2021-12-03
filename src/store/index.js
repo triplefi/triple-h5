@@ -61,7 +61,9 @@ const store = new Vuex.Store({
         poolLongAmount: 0,
         poolShortAmount: 0,
         poolLongPrice: 0,
-        poolShortPrice: 0
+        poolShortPrice: 0,
+
+        limitCoefficient: 0.99
     },
     mutations: {
         setReady(state, payload) {

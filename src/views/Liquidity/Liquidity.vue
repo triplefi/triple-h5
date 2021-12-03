@@ -105,6 +105,7 @@ import { formatNum } from '@/utils/util'
 import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { getTradePairs } from '@/api'
+import { mapState } from 'vuex'
 export default {
     name: 'Pool',
     data() {
@@ -141,6 +142,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(['limitCoefficient']),
         precision() {
             return Math.abs(this.token0Decimals) || 2
         },
@@ -363,7 +365,7 @@ export default {
                 }
                 const usedMargin = (netAmount * indexPrice * divConst) / poolNetAmountRateLimitOpen
                 const canWithdraw = net - usedMargin
-                maxLiquidity = ((canWithdraw * totalSupply) / net) * 0.99
+                maxLiquidity = ((canWithdraw * totalSupply) / net) * this.limitCoefficient
                 if (maxLiquidity < 0) {
                     maxLiquidity = 0
                 } else if (maxLiquidity > balanceOf * 1) {
