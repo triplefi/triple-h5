@@ -333,7 +333,8 @@ export default {
                 state.contract.methods.poolLongAmount().call(),
                 state.contract.methods.poolShortAmount().call(),
                 state.contract.methods.getLatestPrice().call(),
-                state.contract.methods.dailyInterestRateBase().call()
+                state.contract.methods.dailyInterestRateBase().call(),
+                state.contract.methods.poolState().call()
             ])
             const poolLongPrice = res[0] * 1
             const poolShortPrice = res[1] * 1
@@ -341,16 +342,21 @@ export default {
             const poolLongAmount = res[3] * 1
             const poolShortAmount = res[4] * 1
             const price = res[5] * 1
+            const poolState = res[7] * 1
             commit('setPoolLongPrice', poolLongPrice)
             commit('setPoolShortPrice', poolShortPrice)
             commit('setTotalPool', totalPool)
             commit('setPoolLongAmount', poolLongAmount)
             commit('setPoolShortAmount', poolShortAmount)
             commit('setPrice', price)
-            const poolNet =
-                totalPool +
-                (poolLongAmount * price + poolShortAmount * poolShortPrice) -
-                (poolLongAmount * poolLongPrice + poolShortAmount * price)
+            commit('setPoolState', poolState)
+            let poolNet = totalPool
+            if (poolState !== 2) {
+                poolNet =
+                    totalPool +
+                    (poolLongAmount * price + poolShortAmount * poolShortPrice) -
+                    (poolLongAmount * poolLongPrice + poolShortAmount * price)
+            }
             commit('setPoolNet', poolNet)
 
             // 计算fundingRate

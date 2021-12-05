@@ -50,6 +50,8 @@ const store = new Vuex.Store({
         position: {}, // 持仓
         trades: [], // 成交记录
 
+        poolState: 1,
+
         deadline: 2 * 60,
         tolerance: 0.5, // 滑点
 
@@ -171,6 +173,9 @@ const store = new Vuex.Store({
         },
         setPrice(state, payload) {
             state.price = payload
+        },
+        setPoolState(state, payload) {
+            state.poolState = payload
         },
         setTotalPool(state, payload) {
             state.totalPool = payload
