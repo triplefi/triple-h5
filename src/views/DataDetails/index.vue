@@ -38,6 +38,10 @@
                 <div class="label">pool used margin</div>
                 <div class="value">{{ formatDecimals(usedMargin) | formatMoney }}</div>
             </div>
+            <div class="item">
+                <div class="label">lp pool maintenance margin</div>
+                <div class="value">{{ formatDecimals(keepMargin) | formatMoney }}</div>
+            </div>
         </div>
         <div class="explosive-con">
             <div>
@@ -119,6 +123,11 @@ export default {
                 netAmount = totalAmount
             }
             return Math.floor(netAmount * price)
+        },
+        keepMargin() {
+            const { poolLongAmount, poolShortAmount, price } = this
+            const value = (Math.abs(poolLongAmount - poolShortAmount) * price) / 5
+            return value
         }
     },
     watch: {
@@ -257,7 +266,7 @@ export default {
             margin-bottom: 10px;
             display: flex;
             .label {
-                width: 240px;
+                width: 300px;
             }
         }
     }

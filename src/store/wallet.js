@@ -179,6 +179,9 @@ export default {
         // contract
         // const contractAddress = '0xB21ceaec9B2259F28e839c87F8AeE35f835F3C7D'; // 合约地址
         const contractAddress = pairInfo.contract
+        if (!contractAddress) {
+            return
+        }
 
         // commit('setContractAddress', contractAddress)
         const contract = new state.web3.eth.Contract(abi, contractAddress)
