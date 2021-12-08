@@ -12,7 +12,7 @@
         <div class="content">
             <div class="item">
                 <div class="label">lp pool net</div>
-                <div class="value">{{ formatDecimals(poolNet) }}</div>
+                <div class="value">{{ formatDecimals(poolNet) | formatMoney }}</div>
             </div>
             <div class="item">
                 <div class="label">lp pool unrealized P/L</div>
