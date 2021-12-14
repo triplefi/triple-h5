@@ -17,7 +17,7 @@
         <div class="item">
             <div class="fs12 name">Liquidity Pool</div>
             <div class="fs12b value">
-                {{ formatDecimals(totalPool) | formatMoney }}
+                {{ formatDecimals(poolNet) | formatMoney }}
             </div>
         </div>
         <div class="item">
@@ -53,7 +53,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['contract', 'fundingRate', 'totalPool']),
+        ...mapState(['contract', 'fundingRate', 'poolNet']),
         ...mapGetters(['NewPrice', 'symbol'])
     },
     mounted() {
