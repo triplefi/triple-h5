@@ -107,11 +107,11 @@ export default {
             'poolState'
         ]),
         R() {
-            const { poolLongAmount, poolShortAmount, poolNet, price, divConst } = this
+            const { poolLongAmount, poolShortAmount, poolNet, price } = this
             return (((poolShortAmount - poolLongAmount) * price) / poolNet) * 100
         },
         unrealizedPL() {
-            if (this.poolState) {
+            if (this.poolState == 2) {
                 return 0
             }
             const { poolLongAmount, poolLongPrice, poolShortAmount, poolShortPrice, price } = this
