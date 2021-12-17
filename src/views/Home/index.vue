@@ -785,7 +785,7 @@
                         <div class="label">Testnet Beta Version Available Now on: Rinkeby Testnet</div>
                     </router-link>
                     <div class="label gray">
-                        Mainnet available soon on: Binance Smart Chain
+                        Mainnet available soon on polygon
                         <div>
                             <img class="img" src="./img/logo.png" alt="" />
                         </div>

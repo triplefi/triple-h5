@@ -167,13 +167,14 @@
         }
         &.gray {
             color: #878c9e;
+            margin-right: 105px;
         }
     }
     .img {
-        width: 30px;
-        height: 30px;
-        right: -10px;
-        bottom: 5px;
+        // width: 30px;
+        height: 20px;
+        right: -65px;
+        bottom: 10px;
         position: absolute;
     }
 }
