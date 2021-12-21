@@ -19,9 +19,10 @@
         </div>
         <div class="flex flex-ac">
             <div class="fs12 name">Liquidation Price</div>
-            <div class="fs12 value">
+            <div class="fs12 value" v-if="LiquidationPrice > 0">
                 {{ pricePrecision(LiquidationPrice) | formatMoney }}
             </div>
+            <div class="fs12 value" v-else>--</div>
         </div>
         <div class="flex flex-ac">
             <div class="fs12 name">Used Margin</div>

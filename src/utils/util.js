@@ -49,7 +49,7 @@ export const formatMoney = (num) => {
     if (Number(num) === 0) return num // 0.00...
     if (!num || !Number(num)) return 0
     let isNegative = false // 负数？
-    if (Number(num) < 1000) {
+    if (Math.abs(Number(num)) < 1000) {
         return num
     }
     if (Number(num) < 0) {
