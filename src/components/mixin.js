@@ -35,7 +35,7 @@ export default {
             return formatNum(val / Math.pow(10, Math.abs(this.amountDecimal * 1)), Math.abs(this.amountDecimal * 1))
         },
         toBN(val) {
-            return this.web3.utils.toBN(Number(val)).toString()
+            return this.web3.utils.toBN(val).toString()
         },
         async handleApprove() {
             const approve = '0xfffffffffffffffffffffffffffffffe'
