@@ -172,6 +172,7 @@
 </template>
 
 <script>
+import Big from 'big.js'
 import SvgIcon from '../../../../icons/SvgIcon.vue'
 import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
@@ -297,8 +298,10 @@ export default {
                     message: 'Total long position exceeds the limit. Please try again later.'
                 })
             }
+            const bigPriceExp = Big(this.tolerance).div(100).plus(1).times(this.slidePriceLong)
             const params = {
-                priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
+                priceExp: this.toBN(Math.floor(bigPriceExp)),
+                // priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
                 amount: this.toBN(this.amount1),
                 deadline: this.deadlineTimestamp()
                 // rechargeAmount: this.toBN(this.LongRechargeAmount)
@@ -338,8 +341,10 @@ export default {
                     message: 'Total short position exceeds the limit. Please try again later.'
                 })
             }
+            const bigPriceExp = Big(1).minus(Big(this.tolerance).div(100)).times(this.slidePriceShort)
             const params = {
-                priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),
+                priceExp: this.toBN(Math.floor(bigPriceExp)),
+                // priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),
                 amount: this.toBN(this.amount2),
                 deadline: this.deadlineTimestamp()
                 // rechargeAmount: this.toBN(this.ShortRechargeAmount)

@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import Big from 'big.js'
 import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     name: 'Order',
@@ -155,12 +156,15 @@ export default {
             }
             const params = {
                 direction: row.direction,
-                amount: this.toBN(row.closeNum / this.step),
+                amount: this.toBN(Big(row.closeNum).div(this.step)),
+                // amount: this.toBN(row.closeNum / this.step),
                 deadline: this.deadlineTimestamp()
             }
             const price = row.direction > 0 ? this.slidePriceShort : this.slidePriceLong
+            const toleranceExp = Big(this.tolerance).div(100)
             if (row.direction > 0) {
-                const priceExp = this.toBN(Math.floor((1 - this.tolerance / 100) * price))
+                const priceExp = this.toBN(Math.floor(Big(1).minus(toleranceExp).times(price)))
+                //  const priceExp = this.toBN(Math.floor((1 - this.tolerance / 100) * price))
                 params.priceExp = priceExp
                 console.log(params)
                 this.closeLong(params)
@@ -172,7 +176,8 @@ export default {
                         console.error(err)
                     })
             } else if (row.direction < 0) {
-                const priceExp = this.toBN(Math.floor((1 + this.tolerance / 100) * price))
+                const priceExp = this.toBN(Math.floor(Big(1).plus(toleranceExp).times(price)))
+                // const priceExp = this.toBN(Math.floor((1 + this.tolerance / 100) * price))
                 params.priceExp = priceExp
                 console.log(params)
                 this.closeShort(params)

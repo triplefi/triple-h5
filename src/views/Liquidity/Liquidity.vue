@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import Big from 'big.js'
 import { bus } from '@/utils/bus'
 import { formatNum } from '@/utils/util'
 import abi from '@/contracts/HedgexSingle.json'
@@ -309,8 +310,10 @@ export default {
                 return
             }
             this.removeLoading = true
+            let bigLiquidity = Big(this.liquidity).times(Math.pow(10, this.token0Decimals))
             const params = {
-                liquidity: this.toBN(this.liquidity * Math.pow(10, this.token0Decimals)),
+                liquidity: this.toBN(bigLiquidity),
+                //  liquidity: this.toBN(this.liquidity * Math.pow(10, this.token0Decimals)),
                 to: this.coinbase
             }
             try {

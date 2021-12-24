@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import Big from 'big.js'
 import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
     name: 'Account',
@@ -134,8 +135,10 @@ export default {
             }
         },
         async handleRechargeMargin() {
+            const bigAmount = Big(this.amount1).times(Math.pow(10, this.decimals))
             const params = {
-                amount: this.toBN(this.amount1 * Math.pow(10, this.decimals))
+                amount: this.toBN(bigAmount)
+                // amount: this.toBN(this.amount1 * Math.pow(10, this.decimals))
             }
             console.log(params)
             this.showTab = false
@@ -150,8 +153,10 @@ export default {
                 })
         },
         async handleWithdrawMargin() {
+            const bigAmount = Big(this.amount2).times(Math.pow(10, this.decimals))
             const params = {
-                amount: this.toBN(this.amount2 * Math.pow(10, this.decimals))
+                amount: this.toBN(bigAmount)
+                // amount: this.toBN(this.amount2 * Math.pow(10, this.decimals))
             }
             console.log(params)
             this.showTab = false
