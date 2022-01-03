@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import { bus } from '@/utils/bus'
 let poolInterval = null
 export default {
@@ -54,7 +54,6 @@ export default {
             dispatch('providerEvents')
             return dispatch('initWeb3')
         } catch (error) {
-            console.log(error.message)
             return Promise.reject()
         }
     },
@@ -169,71 +168,91 @@ export default {
         }
     },
     async initContract({ state, commit, dispatch }, payload = {}) {
-        commit('setReady', false)
-        commit('clearTrades')
-        let { notFirst, pairInfo } = payload
-        console.log('pairInfo', pairInfo)
-        pairInfo = pairInfo || {}
-        // commit('setPairInfo', pairInfo)
+        try {
+            commit('setReady', false)
+            commit('clearTrades')
+            let { notFirst, pairInfo } = payload
+            console.log('pairInfo', pairInfo)
+            pairInfo = pairInfo || {}
+            // commit('setPairInfo', pairInfo)
 
-        // contract
-        // const contractAddress = '0xB21ceaec9B2259F28e839c87F8AeE35f835F3C7D'; // 合约地址
-        const contractAddress = pairInfo.contract
-        if (!contractAddress) {
-            return
-        }
+            // contract
+            // const contractAddress = '0xB21ceaec9B2259F28e839c87F8AeE35f835F3C7D'; // 合约地址
+            const contractAddress = pairInfo.contract
+            if (!contractAddress) {
+                return
+            }
 
-        // commit('setContractAddress', contractAddress)
-        const contract = new state.web3.eth.Contract(abi, contractAddress)
-        const amountDecimal = await contract.methods.amountDecimal().call()
-        const decimals = await contract.methods.decimals().call()
-        commit('setContract', contract)
-        commit('setAmountDecimal', amountDecimal * 1)
-        commit('setDecimals', decimals * 1)
-        commit('setReady', true)
+            // commit('setContractAddress', contractAddress)
+            const contract = new state.web3.eth.Contract(abi, contractAddress)
+            const amountDecimal = await contract.methods.amountDecimal().call()
+            const decimals = await contract.methods.decimals().call()
+            commit('setContract', contract)
+            commit('setAmountDecimal', amountDecimal * 1)
+            commit('setDecimals', decimals * 1)
+            commit('setReady', true)
 
-        const constantRes = await Promise.all([
-            contract.methods.leverage().call(),
-            contract.methods.feeRate().call(),
-            contract.methods.divConst().call(),
-            contract.methods.slideP().call(),
-            contract.methods.singleCloseLimitRate().call(),
-            contract.methods.singleOpenLimitRate().call(),
-            contract.methods.poolNetAmountRateLimitOpen().call(),
-            contract.methods.poolNetAmountRateLimitPrice().call(),
-            contract.methods.token0().call()
-        ])
-        commit('setLeverage', constantRes[0] * 1)
-        commit('setFeeRate', constantRes[1] * 1)
-        commit('setDivConst', constantRes[2] * 1)
-        commit('setSlideP', constantRes[3] * 1)
-        commit('setSingleCloseLimitRate', constantRes[4] * 1)
-        commit('setSingleOpenLimitRate', constantRes[5] * 1)
-        commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
-        commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
+            const constantRes = await Promise.all([
+                contract.methods.leverage().call(),
+                contract.methods.feeRate().call(),
+                contract.methods.divConst().call(),
+                contract.methods.slideP().call(),
+                contract.methods.singleCloseLimitRate().call(),
+                contract.methods.singleOpenLimitRate().call(),
+                contract.methods.poolNetAmountRateLimitOpen().call(),
+                contract.methods.poolNetAmountRateLimitPrice().call(),
+                contract.methods.token0().call()
+            ])
+            commit('setLeverage', constantRes[0] * 1)
+            commit('setFeeRate', constantRes[1] * 1)
+            commit('setDivConst', constantRes[2] * 1)
+            commit('setSlideP', constantRes[3] * 1)
+            commit('setSingleCloseLimitRate', constantRes[4] * 1)
+            commit('setSingleOpenLimitRate', constantRes[5] * 1)
+            commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
+            commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
+            // token0
+            const token0Address = constantRes[8] // 获取token0address
+            console.log(token0Address, '000000000')
+            // const token0Address = pairInfo.margin_address // 获取token0address
+            const token0 = new state.web3.eth.Contract(erc20abi, token0Address) // 生成token0合约对象
+            const token0Decimals = await token0.methods.decimals().call() // token0精度
+            commit('setToken0', token0)
+            commit('setToken0Address', token0Address)
+            commit('setToken0Decimals', token0Decimals * 1)
 
-        // token0
-        const token0Address = constantRes[8] // 获取token0address
-        console.log(token0Address, '000000000')
-        // const token0Address = pairInfo.margin_address // 获取token0address
-        const token0 = new state.web3.eth.Contract(erc20abi, token0Address) // 生成token0合约对象
-        const token0Decimals = await token0.methods.decimals().call() // token0精度
-        commit('setToken0', token0)
-        commit('setToken0Address', token0Address)
-        commit('setToken0Decimals', token0Decimals * 1)
+            if (state.coinbase) {
+                dispatch('getPosition')
+                // dispatch('getFundingRate')
+                const token0Balance = await token0.methods.balanceOf(state.coinbase).call() // 用户lp数量
+                const allowance = await token0.methods.allowance(state.coinbase, contractAddress).call() // 查询账户允许合约的消费限额
+                commit('setToken0Balance', token0Balance * 1)
+                commit('setAllowance', allowance / Math.pow(10, token0Decimals))
+            }
 
-        if (state.coinbase) {
-            dispatch('getPosition')
-            // dispatch('getFundingRate')
-            const token0Balance = await token0.methods.balanceOf(state.coinbase).call() // 用户lp数量
-            const allowance = await token0.methods.allowance(state.coinbase, contractAddress).call() // 查询账户允许合约的消费限额
-            commit('setToken0Balance', token0Balance * 1)
-            commit('setAllowance', allowance / Math.pow(10, token0Decimals))
-        }
-
-        if (!notFirst) {
-            // networkId首次连接监听事件，只切换账户不需要（会重复监听）
-            dispatch('contractEvents')
+            if (!notFirst) {
+                // networkId首次连接监听事件，只切换账户不需要（会重复监听）
+                dispatch('contractEvents')
+            }
+        } catch (error) {
+            console.log(error)
+            MessageBox({
+                title: 'Wrong Network',
+                message: 'Please connect to the appropriate Ethereum network',
+                confirmButtonText: 'Confirm',
+                dangerouslyUseHTMLString: true
+            })
+            //             this.$alert(
+            //                 `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
+            // Welcome to use the Triple.Fi Beta version! Please follow the steps below,</br>
+            // 1. Switch your wallet to Ethereum Rinkeby Test Network.</br>
+            // 2. Get free test tokens on the top left corner.</br>
+            // 3. Click “Authorize” button and have fun trading!</br></br></div>`,
+            //                 {
+            //                     confirmButtonText: 'Confirm',
+            //                     dangerouslyUseHTMLString: true
+            //                 }
+            //             )
         }
     },
     contractEvents({ state, commit }) {
