@@ -111,10 +111,10 @@ export default {
 
             links: {
                 FAQs: 'https://docs.triple.fi/',
-                Twitter: 'https://twitter.com/triplefinance',
+                Twitter: 'https://twitter.com/TripleFi_',
                 Medium: 'https://triplefi.medium.com/',
                 Telegram: 'https://t.me/triplefi',
-                Discord: 'https://discord.gg/pyMNKCjf5r'
+                Discord: 'https://discord.com/invite/Ar6aDuCuxY'
             }
         }
     },

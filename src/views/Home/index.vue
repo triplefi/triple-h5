@@ -5750,7 +5750,7 @@
       </div> -->
             <div class="cont_5">
                 <div class="cont_5_icons">
-                    <a target="_blank" href="https://twitter.com/triplefinance">
+                    <a target="_blank" href="https://twitter.com/TripleFi_">
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 fill-rule="evenodd"
@@ -5780,7 +5780,7 @@
                             />
                         </svg>
                     </a>
-                    <a target="_blank" href="https://discord.gg/pyMNKCjf5r">
+                    <a target="_blank" href="https://discord.com/invite/Ar6aDuCuxY">
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 fill-rule="evenodd"
