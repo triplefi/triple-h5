@@ -18,6 +18,23 @@
             >Get free test tokens</el-button
         >
         <!-- <router-link class="tab btn14" to="/about">Components</router-link> -->
+        <!-- <div v-if="!coinbase" class="wallet btn14" @click="model = true">Ethereum</div> -->
+        <div class="ethereum-network">
+            <div class="flex flex-ac">
+                <svg-icon icon-class="ic_ethereum" class-name="ethereum-icon"></svg-icon>
+                Rinkeby
+            </div>
+            <div class="network-wrap">
+                <div class="network-list">
+                    <!-- <a :href="v" target="_blank" class="more-item" v-for="(v, k) in links" :key="k"> -->
+                    <div class="network-item">
+                        <svg-icon icon-class="ic_ethereum" class-name="fs16"></svg-icon>
+                        <span class="fs14">Rinkeby</span>
+                    </div>
+                    <!-- </a> -->
+                </div>
+            </div>
+        </div>
         <div v-if="!coinbase" class="wallet btn14" @click="model = true">Connect Wallet</div>
         <div v-else class="wallet2 fs14" @click="model = true">
             <span>{{ balance | formatBalance }} ETH</span>
