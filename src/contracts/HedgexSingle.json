@@ -114,6 +114,49 @@
         "anonymous": false,
         "inputs": [
             {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "total",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "la",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "lp",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "sa",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "sp",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "ep",
+                "type": "uint256"
+            }
+        ],
+        "name": "ExplosivePool",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
                 "indexed": true,
                 "internalType": "address",
                 "name": "account",
@@ -636,19 +679,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "foceCloseRewardGas",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -664,32 +694,6 @@
         "name": "forceCloseAccount",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "gasUsdPriceFeed",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getGasUsdPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -719,41 +723,41 @@
         "type": "function"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "getPoolPosition",
+        "outputs": [
             {
-                "internalType": "address",
-                "name": "_token0",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_feedPrice",
-                "type": "address"
+                "internalType": "int256",
+                "name": "",
+                "type": "int256"
             },
             {
                 "internalType": "uint256",
-                "name": "_feedPriceDecimal",
+                "name": "",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_minStartPool",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
                 "type": "uint256"
             },
             {
                 "internalType": "uint8",
-                "name": "_leverage",
+                "name": "",
                 "type": "uint8"
-            },
-            {
-                "internalType": "int8",
-                "name": "_amountDecimal",
-                "type": "int8"
             }
         ],
-        "name": "initialize",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
