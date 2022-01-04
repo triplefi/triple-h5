@@ -77,13 +77,9 @@
                 </div>
             </div>
         </div>
-        <svg-icon
-            v-if="!isFull"
-            icon-class="ic_Full1"
-            class-name="s24 fullscreen"
-            @click.native="screenFull"
-        ></svg-icon>
-        <svg-icon v-else icon-class="ic_Full2" class-name="s24 fullscreen" @click.native="exitFull"></svg-icon>
+        <div @click="screenFull">
+            <svg-icon :icon-class="`${isFull ? 'ic_Full2' : 'ic_Full1'}`" class-name="s24 fullscreen"></svg-icon>
+        </div>
 
         <el-dialog title="Select a Wallet" :visible.sync="model" :show-header="false" width="375px">
             <div class="wallets" @click.stop="model = false">
@@ -191,10 +187,11 @@ export default {
     methods: {
         ...mapActions(['metaMaskInit', 'walletConnectInit', 'disconnect']),
         screenFull() {
-            screenFull()
-        },
-        exitFull() {
-            exitFull()
+            if (this.isFull) {
+                exitFull()
+            } else {
+                screenFull()
+            }
         },
         calcGetTokensBtn() {
             const getTokensTime = window.localStorage.getItem(`${this.coinbase}-get-test-tokens`) || 0

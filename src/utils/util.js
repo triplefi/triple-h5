@@ -37,9 +37,13 @@ export const exitFull = () => {
 
 export const checkFull = (scope) => {
     window.addEventListener('resize', () => {
-        scope.isFull =
-            window.document.documentElement.clientWidth === window.screen.width &&
-            window.document.documentElement.clientHeight === window.screen.height
+        const isFull =
+            document.fullscreen ||
+            document.mozFullScreen ||
+            document.webkitIsFullScreen ||
+            document.msFullscreenElement ||
+            window.fullScreen
+        scope.isFull = isFull
     })
 }
 

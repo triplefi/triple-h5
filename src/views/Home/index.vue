@@ -5832,7 +5832,15 @@
             </div>
         </div>
         <div class="bottom">
-            <svg width="50" height="52" viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+                @click="goTop"
+                style="cursor: pointer"
+                width="50"
+                height="52"
+                viewBox="0 0 50 52"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
                 <path
                     d="M46.3559 38.3977V25.9795V13.4795L24.7405 1L3.125 13.5818V26V38.5L24.7405 51L46.3559 38.3977ZM10.8055 34.0401V25.9795V17.9804L24.7405 9.85843L38.6754 17.919V25.9795V33.9787L24.7405 42.1007L10.8055 34.0401Z"
                     fill="#5F549E"
@@ -5869,6 +5877,13 @@ export default {
             this.$message({
                 type: 'success',
                 message: 'The smart contract address will be released soon.'
+            })
+        },
+        goTop() {
+            this.$nextTick(() => {
+                document.body.scrollIntoView({
+                    behavior: 'smooth'
+                })
             })
         }
     }
