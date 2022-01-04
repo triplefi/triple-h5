@@ -105,7 +105,7 @@
                                     <div class="fs14 code">{{ item }}</div>
                                     <div class="fs12 name">{{ item.toLowerCase() }}</div>
                                 </div>
-                                <div class="fs16 value">0</div>
+                                <div class="fs16 value"></div>
                             </div>
                         </template>
                         <div class="fs16 no-data" v-else>No results found.</div>

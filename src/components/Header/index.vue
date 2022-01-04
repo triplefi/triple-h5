@@ -21,27 +21,39 @@
         <!-- <div v-if="!coinbase" class="wallet btn14" @click="model = true">Ethereum</div> -->
         <div class="ethereum-network">
             <div class="flex flex-ac">
-                <svg-icon icon-class="ic_ethereum" class-name="ethereum-icon"></svg-icon>
-                Rinkeby
+                <svg-icon :icon-class="curNetwork.icon" class-name="ethereum-icon"></svg-icon>
+                {{ curNetwork.label }}
             </div>
             <div class="network-wrap">
                 <div class="network-list">
-                    <!-- <a :href="v" target="_blank" class="more-item" v-for="(v, k) in links" :key="k"> -->
-                    <div class="network-item">
-                        <svg-icon icon-class="ic_ethereum" class-name="fs16"></svg-icon>
-                        <span class="fs14">Rinkeby</span>
+                    <div
+                        :class="`network-item ${item.type === networkType ? 'active' : ''}`"
+                        v-for="item in networkTypeList"
+                        :key="item.type"
+                    >
+                        <svg-icon :icon-class="item.icon" :style="`font-size:${item.size}`"></svg-icon>
+                        <span class="fs14">{{ item.label }}</span>
                     </div>
-                    <!-- </a> -->
                 </div>
             </div>
         </div>
-        <div v-if="!coinbase" class="wallet btn14" @click="model = true">Connect Wallet</div>
-        <div v-else class="wallet2 fs14" @click="model = true">
-            <span>{{ balance | formatBalance }} ETH</span>
-            <div class="address">
-                <span>{{ coinbase | formatCoinbase }}</span>
-                <svg-icon v-if="wallet === 'MetaMask'" icon-class="ic_metamask" class-name="icon-wallet"></svg-icon>
-                <svg-icon v-if="wallet === 'WalletConnect'" icon-class="ic_wallet" class-name="icon-wallet"></svg-icon>
+        <div class="network-error" v-if="isNetworkError" @click="model = true">
+            <svg-icon icon-class="ic_wrongNetwork" class="network-error-icon" />
+            Wrong Network
+        </div>
+        <div v-else>
+            <div v-if="!coinbase" class="wallet btn14" @click="model = true">Connect Wallet</div>
+            <div v-else class="wallet2 fs14" @click="model = true">
+                <span>{{ balance | formatBalance }} ETH</span>
+                <div class="address">
+                    <span>{{ coinbase | formatCoinbase }}</span>
+                    <svg-icon v-if="wallet === 'MetaMask'" icon-class="ic_metamask" class-name="icon-wallet"></svg-icon>
+                    <svg-icon
+                        v-if="wallet === 'WalletConnect'"
+                        icon-class="ic_wallet"
+                        class-name="icon-wallet"
+                    ></svg-icon>
+                </div>
             </div>
         </div>
         <!-- <svg-icon
@@ -132,11 +144,29 @@ export default {
                 Medium: 'https://triplefi.medium.com/',
                 Telegram: 'https://t.me/triplefi',
                 Discord: 'https://discord.com/invite/Ar6aDuCuxY'
-            }
+            },
+            networkTypeList: [
+                {
+                    type: 'rinkeby',
+                    label: 'Rinkeby',
+                    icon: 'ic_rinkeby',
+                    size: 18
+                },
+                {
+                    type: 'matic',
+                    label: 'Polygon(Matic)',
+                    icon: 'ic_matic',
+                    size: 16
+                }
+            ]
         }
     },
     computed: {
-        ...mapState(['coinbase', 'balance', 'wallet', 'isMetaMask'])
+        ...mapState(['coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'networkType']),
+        curNetwork() {
+            const info = this.networkTypeList.find((e) => e.type === this.networkType)
+            return info || this.networkTypeList[0]
+        }
     },
     filters: {
         formatCoinbase(val) {

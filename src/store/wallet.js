@@ -118,12 +118,16 @@ export default {
             }
             web3.eth.defaultAccount = coinbase
             // const chainId = await web3.eth.getChainId();
-            // const networkId = await web3.eth.net.getId();
+            // const networkId = await web3.eth.net.getId()
+            const networkType = await web3.eth.net.getNetworkType()
+            console.log(networkType)
+            // console.log(networkId, '-----')
             // const blockNumber = await web3.eth.getBlockNumber();
 
             commit('setWeb3', web3)
             commit('setCoinbase', coinbase)
             commit('setBalance', balance * 1)
+            commit('setNetworkType', networkType)
 
             // 开启pool池数据拉取
             if (poolInterval) {
@@ -234,7 +238,9 @@ export default {
                 // networkId首次连接监听事件，只切换账户不需要（会重复监听）
                 dispatch('contractEvents')
             }
+            commit('setNetworkError', false)
         } catch (error) {
+            commit('setNetworkError', true)
             console.log(error)
             MessageBox({
                 title: 'Wrong Network',

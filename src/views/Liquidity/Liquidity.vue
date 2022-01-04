@@ -4,8 +4,8 @@
             <h6>Your liquidity</h6>
             <div class="top">
                 <div class="fs12 warn">
-                    Pool providers earn a 0.3% fee on all trades proportional to their share of the pool. Fees are added
-                    to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+                    Pool providers earn a 0.045% fee on all trades proportional to their share of the pool. Fees are
+                    added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
                 </div>
                 <el-button type="primary" round @click="handleAdd">Add Liquidity</el-button>
             </div>
