@@ -40,7 +40,7 @@
                                 {{ item }}%
                             </div>
                         </div>
-                        <el-button style="width: 100%" type="info" round @click="handleOpenLong"
+                        <el-button :loading="longLoading" style="width: 100%" type="info" round @click="handleOpenLong"
                             ><span style="font-weight: bold">LONG</span></el-button
                         >
                     </div>
@@ -80,7 +80,12 @@
                                 {{ item }}%
                             </div>
                         </div>
-                        <el-button style="width: 100%" type="danger" round @click="handleOpenShort"
+                        <el-button
+                            :loading="shortLoading"
+                            style="width: 100%"
+                            type="danger"
+                            round
+                            @click="handleOpenShort"
                             ><span style="font-weight: bold">SHORT</span></el-button
                         >
                     </div>
@@ -194,7 +199,9 @@ export default {
             st: false,
 
             model: false,
-            showTip: false
+            showTip: false,
+            longLoading: false,
+            shortLoading: false
         }
     },
     computed: {
@@ -257,6 +264,51 @@ export default {
             }
         }
     },
+    watch: {
+        longLoading(v) {
+            if (v) {
+                window.sessionStorage.setItem('longLoading', new Date().getTime())
+                const self = this
+                self.longTimeHandler = setTimeout(() => {
+                    self.longLoading = false
+                }, 10000)
+            } else {
+                window.sessionStorage.setItem('longLoading', null)
+                clearTimeout(this.longTimeHandler)
+            }
+        },
+        shortLoading(v) {
+            if (v) {
+                window.sessionStorage.setItem('shortLoading', new Date().getTime())
+                const self = this
+                self.shortTimeHandler = setTimeout(() => {
+                    self.shortLoading = false
+                }, 10000)
+            } else {
+                window.sessionStorage.setItem('shortLoading', null)
+                clearTimeout(this.shortTimeHandler)
+            }
+        }
+    },
+    mounted() {
+        const now = new Date().getTime()
+        const longLoading = window.sessionStorage.getItem('longLoading')
+        if (!longLoading || now - longLoading >= 10000) {
+            this.longLoading = false
+        } else {
+            this.longLoading = true
+        }
+        const shortLoading = window.sessionStorage.getItem('shortLoading')
+        if (!shortLoading || now - shortLoading >= 10000) {
+            this.shortLoading = false
+        } else {
+            this.shortLoading = true
+        }
+    },
+    beforeDestroy() {
+        clearTimeout(this.longTimeHandler)
+        clearTimeout(this.shortTimeHandler)
+    },
     methods: {
         ...mapActions(['openLong', 'openShort']),
         deadlineTimestamp() {
@@ -298,6 +350,7 @@ export default {
                     message: 'Total long position exceeds the limit. Please try again later.'
                 })
             }
+            this.longLoading = true
             const bigPriceExp = Big(this.tolerance).div(100).plus(1).times(this.slidePriceLong)
             const params = {
                 priceExp: this.toBN(Math.floor(bigPriceExp)),
@@ -310,9 +363,11 @@ export default {
             this.openLong(params)
                 .then((res) => {
                     console.log(res)
+                    this.longLoading = false
                     this.refreshData()
                 })
                 .catch((err) => {
+                    this.longLoading = false
                     console.error(err)
                 })
         },
@@ -341,6 +396,7 @@ export default {
                     message: 'Total short position exceeds the limit. Please try again later.'
                 })
             }
+            this.shortLoading = true
             const bigPriceExp = Big(1).minus(Big(this.tolerance).div(100)).times(this.slidePriceShort)
             const params = {
                 priceExp: this.toBN(Math.floor(bigPriceExp)),
@@ -353,9 +409,11 @@ export default {
             this.openShort(params)
                 .then((res) => {
                     console.log(res)
+                    this.shortLoading = false
                     this.refreshData()
                 })
                 .catch((err) => {
+                    this.shortLoading = false
                     console.error(err)
                 })
         },

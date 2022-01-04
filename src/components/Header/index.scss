@@ -85,6 +85,7 @@
             position: absolute;
             top: 28px;
             left: -2px;
+            z-index: 10000;
             animation: slideDown 0.3s ease;
             @keyframes slideDown {
                 from {
