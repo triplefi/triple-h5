@@ -52,12 +52,12 @@ export const getUserExplosive = ({ addr }) => {
     })
 }
 
-// 获取用户自己的利息收取记录
-export const getUserInterest = ({ addr }) => {
+// 获取用户利息收取记录
+export const getAccountInterest = ({ contract, account, count }) => {
     return request({
-        url: '/api/contract/interest',
+        url: '/api/account/interest',
         method: 'get',
-        params: { addr }
+        params: { contract, account, count }
     })
 }
 

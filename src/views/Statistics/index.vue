@@ -12,47 +12,62 @@
         <div class="content">
             <div class="item">
                 <div class="label">总多仓数量</div>
-                <div class="value">{{ totalInfo.longAmount || '' }}</div>
+                <div class="value">{{ totalInfo.longAmount || '0' }}</div>
             </div>
             <div class="item">
                 <div class="label">总空仓数量</div>
-                <div class="value">{{ totalInfo.shortAmount || '' }}</div>
+                <div class="value">{{ totalInfo.shortAmount || '0' }}</div>
             </div>
             <div class="item">
                 <div class="label">总仓持仓人数</div>
-                <div class="value">{{ totalInfo.totalNum || '' }}</div>
+                <div class="value">{{ totalInfo.totalNum || '0' }}</div>
             </div>
             <div class="item">
                 <div class="label">多仓持仓人数</div>
-                <div class="value">{{ totalInfo.longNum || '' }}</div>
+                <div class="value">{{ totalInfo.longNum || '0' }}</div>
             </div>
             <div class="item">
                 <div class="label">空仓持仓人数</div>
-                <div class="value">{{ totalInfo.shortNum || '' }}</div>
+                <div class="value">{{ totalInfo.shortNum || '0' }}</div>
             </div>
-            <el-table :data="tableData" style="width: 100%">
+            <el-table :data="posTableData" style="width: 100%">
                 <el-table-column prop="address" label="用户地址"> </el-table-column>
-                <el-table-column prop="longAmount" label="多仓数量"> </el-table-column>
-                <el-table-column prop="shortAmount" label="空仓数量"> </el-table-column>
+                <el-table-column prop="direction" label="开仓方向"> </el-table-column>
+                <el-table-column prop="amount" label="开仓数量"> </el-table-column>
+                <el-table-column prop="price" label="开仓价格"> </el-table-column>
                 <el-table-column prop="unrealizedPL" label="unrealized P/L"> </el-table-column>
             </el-table>
             <el-pagination
-                :currentPage.sync="currentPage"
+                :currentPage.sync="posPage"
+                :pageSize="pageSize"
+                v-if="posAddressList.length"
+                layout="prev, pager, next"
+                :total="posAddressList.length"
+            >
+            </el-pagination>
+            <!-- <div style="height: 40px"></div>
+            <el-table :data="interestTableData" style="width: 100%">
+                <el-table-column prop="date" label="日期"> </el-table-column>
+                <el-table-column prop="longAmount" label="多单数量"> </el-table-column>
+                <el-table-column prop="shortAmount" label="空单数量"> </el-table-column>
+            </el-table>
+            <el-pagination
+                :currentPage.sync="interestPage"
                 :pageSize="pageSize"
                 v-if="addressList.length"
                 layout="prev, pager, next"
                 :total="addressList.length"
             >
-            </el-pagination>
+            </el-pagination> -->
         </div>
     </div>
 </template>
 
 <script>
-import { getTradePairs } from '@/api'
+import { getTradePairs, getAllAccount, getAccountInterest } from '@/api'
 import { mapState, mapActions } from 'vuex'
-import { getAllAccount } from '@/api'
 import { formatMoney } from '@/utils/util'
+import dayjs from 'dayjs'
 export default {
     data() {
         return {
@@ -60,10 +75,13 @@ export default {
             activeTab: '',
             loading: false,
             addressList: [],
-            tableData: [],
+            posTableData: [],
             pageSize: 10,
-            currentPage: 1,
+            posPage: 1,
             totalInfo: {}
+
+            // interestTableData:[],
+            // interestPage: 1,
         }
     },
     mounted() {
@@ -84,44 +102,91 @@ export default {
                 this.getData()
             }
         },
-        currentPage(v) {
+        posPage() {
             this.getAddressDetail()
         }
     },
     computed: {
-        ...mapState(['pairInfo'])
+        ...mapState(['pairInfo']),
+        posAddressList() {
+            return this.addressList.filter((e) => e.Lposition || e.Sposition)
+        }
     },
     methods: {
         ...mapActions(['initContract']),
         async getAllAccount(contract) {
             const res = await getAllAccount(contract)
-            this.addressList = res.data.filter((e) => e.Lposition || e.Sposition)
+            this.addressList = res.data
             this.getAddressDetail()
         },
         formatNum(v) {
             return formatMoney(this.amountPrecision(v * 1))
         },
         async getAddressDetail() {
-            const startIndex = (this.currentPage - 1) * this.pageSize
-            const curList = this.addressList.slice(startIndex, startIndex + this.pageSize)
+            const startIndex = (this.posPage - 1) * this.pageSize
+            const curList = this.posAddressList.slice(startIndex, startIndex + this.pageSize)
             console.log(curList)
             const res = await Promise.all(
                 curList.map((e) => {
                     return this.contract.methods.traders(e.Account).call()
                 })
             )
-            this.tableData = res.map((e, i) => {
-                const { longAmount, longPrice, shortAmount, shortPrice } = e
-
-                const longUpl = longAmount * (this.price - longPrice)
-                const shortUpl = shortAmount * (shortPrice - this.price)
-                const unrealizedPL = longUpl + shortUpl
-                return {
-                    address: curList[i].Account,
-                    longAmount: this.formatNum(longAmount),
-                    shortAmount: this.formatNum(shortAmount),
-                    unrealizedPL: formatMoney(this.formatDecimals(unrealizedPL))
+            const tableData = []
+            res.forEach((e, i) => {
+                let { longAmount, longPrice, shortAmount, shortPrice } = e
+                longAmount = longAmount * 1
+                shortAmount = shortAmount * 1
+                if (longAmount > 0) {
+                    const obj = {
+                        address: curList[i].Account,
+                        direction: '多',
+                        amount: this.formatNum(longAmount),
+                        unrealizedPL: formatMoney(this.formatDecimals(longAmount * (this.price - longPrice))),
+                        price: formatMoney(this.pricePrecision(longPrice))
+                    }
+                    tableData.push(obj)
                 }
+                if (shortAmount > 0) {
+                    const obj = {
+                        address: curList[i].Account,
+                        direction: '空',
+                        amount: this.formatNum(shortAmount),
+                        unrealizedPL: formatMoney(this.formatDecimals(shortAmount * (shortPrice - this.price))),
+                        price: formatMoney(this.pricePrecision(shortPrice))
+                    }
+                    tableData.push(obj)
+                }
+            })
+            this.posTableData = tableData
+        },
+        async getAccountInterest(contract) {
+            const res = await Promise.all(
+                this.addressList.map((e) => {
+                    return getAccountInterest({
+                        contract,
+                        account: e.Account,
+                        count: 10
+                    })
+                })
+            )
+            console.log(res, '+++++++++++++++++++++++++++')
+            const dic = {}
+            res.forEach(({ data }) => {
+                data.forEach(async (d) => {
+                    const { amount, block, direction, price } = d
+                    const { timestamp } = await this.web3.eth.getBlock(block)
+                    const date = dayjs(timestamp * 1000).format('YYYY-MM-DD')
+                    dic[date] = dic[date] || {
+                        date,
+                        longAmount: 0,
+                        shortAmount: 0
+                    }
+                    if (direction > 0) {
+                        dic[date].longAmount += amount
+                    } else {
+                        dic[date].shortAmount += amount
+                    }
+                })
             })
         },
         async getPairs() {
@@ -150,14 +215,14 @@ export default {
                 this.loading = false
                 await this.getAllAccount(this.pairInfo.contract)
                 const totalRes = await this.contract.methods.getPoolPosition().call()
-                console.log(totalRes)
                 this.totalInfo = {
                     longAmount: this.formatNum(totalRes[1]),
                     shortAmount: this.formatNum(totalRes[3]),
-                    longNum: this.addressList.filter((e) => e.Lposition).length,
-                    shortNum: this.addressList.filter((e) => e.Sposition).length,
-                    totalNum: this.addressList.length
+                    longNum: this.addressList.filter((e) => !!e.Lposition).length,
+                    shortNum: this.addressList.filter((e) => !!e.Sposition).length,
+                    totalNum: this.posAddressList.length
                 }
+                // this.getAccountInterest(this.pairInfo.contract)
             }
         }
     }
