@@ -11,13 +11,39 @@
         </el-button-group>
         <div class="content">
             <div class="item">
+                <div class="label">总多仓数量</div>
+                <div class="value">{{ totalInfo.longAmount || '' }}</div>
+            </div>
+            <div class="item">
+                <div class="label">总空仓数量</div>
+                <div class="value">{{ totalInfo.shortAmount || '' }}</div>
+            </div>
+            <div class="item">
+                <div class="label">总仓持仓人数</div>
+                <div class="value">{{ totalInfo.totalNum || '' }}</div>
+            </div>
+            <div class="item">
                 <div class="label">多仓持仓人数</div>
-                <div class="value">{{ formatDecimals(poolNet) | formatMoney }}</div>
+                <div class="value">{{ totalInfo.longNum || '' }}</div>
             </div>
             <div class="item">
                 <div class="label">空仓持仓人数</div>
-                <div class="value">{{ formatDecimals(unrealizedPL) }}</div>
+                <div class="value">{{ totalInfo.shortNum || '' }}</div>
             </div>
+            <el-table :data="tableData" style="width: 100%">
+                <el-table-column prop="address" label="用户地址"> </el-table-column>
+                <el-table-column prop="longAmount" label="多仓数量"> </el-table-column>
+                <el-table-column prop="shortAmount" label="空仓数量"> </el-table-column>
+                <el-table-column prop="unrealizedPL" label="unrealized P/L"> </el-table-column>
+            </el-table>
+            <el-pagination
+                :currentPage.sync="currentPage"
+                :pageSize="pageSize"
+                v-if="addressList.length"
+                layout="prev, pager, next"
+                :total="addressList.length"
+            >
+            </el-pagination>
         </div>
     </div>
 </template>
@@ -25,69 +51,26 @@
 <script>
 import { getTradePairs } from '@/api'
 import { mapState, mapActions } from 'vuex'
+import { getAllAccount } from '@/api'
+import { formatMoney } from '@/utils/util'
 export default {
     data() {
         return {
             pairs: [],
             activeTab: '',
             loading: false,
-            explosiveAddress: '',
-            explosiveTo: '',
-            explosiveLoading: false,
-            detectSlideAddress: '',
-            detectSlideTo: '',
-            detectSlideLoading: false
+            addressList: [],
+            tableData: [],
+            pageSize: 10,
+            currentPage: 1,
+            totalInfo: {}
         }
     },
     mounted() {
         this._initWeb3 = !!this.web3
         this.getPairs()
     },
-    beforeDestroy() {
-        if (this.timeHandler) {
-            clearInterval(this.timeHandler)
-        }
-    },
-    computed: {
-        ...mapState([
-            'poolNet',
-            'poolLongPrice',
-            'poolShortPrice',
-            'divConst',
-            'poolLongAmount',
-            'poolShortAmount',
-            'totalPool',
-            'pairInfo',
-            'poolState'
-        ]),
-        R() {
-            const { poolLongAmount, poolShortAmount, poolNet, price } = this
-            return (((poolShortAmount - poolLongAmount) * price) / poolNet) * 100
-        },
-        unrealizedPL() {
-            if (this.poolState == 2) {
-                return 0
-            }
-            const { poolLongAmount, poolLongPrice, poolShortAmount, poolShortPrice, price } = this
-            const longUpl = poolLongAmount * (price - poolLongPrice)
-            const shortUpl = poolShortAmount * (poolShortPrice - price)
-            return longUpl + shortUpl
-        },
-        usedMargin() {
-            const { poolLongAmount, poolShortAmount, price } = this
-            let netAmount = Math.abs(poolLongAmount - poolShortAmount)
-            const totalAmount = (poolLongAmount + poolShortAmount) / 3
-            if (netAmount < totalAmount) {
-                netAmount = totalAmount
-            }
-            return Math.floor(netAmount * price)
-        },
-        keepMargin() {
-            const { poolLongAmount, poolShortAmount, price } = this
-            const value = (Math.abs(poolLongAmount - poolShortAmount) * price) / 5
-            return value
-        }
-    },
+    beforeDestroy() {},
     watch: {
         activeTab(val) {
             const item = this.pairs.find((e) => e.trade_coin === val)
@@ -100,43 +83,47 @@ export default {
                 this._initWeb3 = true
                 this.getData()
             }
+        },
+        currentPage(v) {
+            this.getAddressDetail()
         }
+    },
+    computed: {
+        ...mapState(['pairInfo'])
     },
     methods: {
         ...mapActions(['initContract']),
-        // contractEvents(){
-        //     state.contract.getPastEvents(
-        //     'ExplosivePool',
-        //     {
-        //         fromBlock: 0,
-        //         toBlock: 'latest'
-        //     },
-        //     (err, event) => {
-        //         if (err) {
-        //             console.log(err)
-        //         } else {
-        //             console.log('PastTrades', event)
-        //             if (event.length) {
-        //                 const _list = event.map((item) => {
-        //                     const { amount, direction, price } = item.returnValues
-        //                     return {
-        //                         amount,
-        //                         direction,
-        //                         price,
-        //                         blockNumber: item.blockNumber,
-        //                         transactionHash: item.transactionHash
-        //                     }
-        //                 })
-        //                 _list.forEach(async (item) => {
-        //                     const block = await state.web3.eth.getBlock(item.blockNumber)
-        //                     item.time = block.timestamp * 1000
-        //                     commit('setTrade', item)
-        //                 })
-        //             }
-        //         }
-        //     }
-        // )
-        // },
+        async getAllAccount(contract) {
+            const res = await getAllAccount(contract)
+            this.addressList = res.data.filter((e) => e.Lposition || e.Sposition)
+            this.getAddressDetail()
+        },
+        formatNum(v) {
+            return formatMoney(this.amountPrecision(v * 1))
+        },
+        async getAddressDetail() {
+            const startIndex = (this.currentPage - 1) * this.pageSize
+            const curList = this.addressList.slice(startIndex, startIndex + this.pageSize)
+            console.log(curList)
+            const res = await Promise.all(
+                curList.map((e) => {
+                    return this.contract.methods.traders(e.Account).call()
+                })
+            )
+            this.tableData = res.map((e, i) => {
+                const { longAmount, longPrice, shortAmount, shortPrice } = e
+
+                const longUpl = longAmount * (this.price - longPrice)
+                const shortUpl = shortAmount * (shortPrice - this.price)
+                const unrealizedPL = longUpl + shortUpl
+                return {
+                    address: curList[i].Account,
+                    longAmount: this.formatNum(longAmount),
+                    shortAmount: this.formatNum(shortAmount),
+                    unrealizedPL: formatMoney(this.formatDecimals(unrealizedPL))
+                }
+            })
+        },
         async getPairs() {
             this.loading = true
             try {
@@ -161,14 +148,17 @@ export default {
             if (this._isInitPairInfo && this._initWeb3) {
                 await this.initContract({ pairInfo: this.pairInfo })
                 this.loading = false
-                this.timeHandler = setInterval(() => {
-                    this.getOrderList()
-                }, 3000)
+                await this.getAllAccount(this.pairInfo.contract)
+                const totalRes = await this.contract.methods.getPoolPosition().call()
+                console.log(totalRes)
+                this.totalInfo = {
+                    longAmount: this.formatNum(totalRes[1]),
+                    shortAmount: this.formatNum(totalRes[3]),
+                    longNum: this.addressList.filter((e) => e.Lposition).length,
+                    shortNum: this.addressList.filter((e) => e.Sposition).length,
+                    totalNum: this.addressList.length
+                }
             }
-        },
-        async getOrderList() {
-            const res = await this.contract.methods.getPoolPosition().call()
-            console.log(res)
         }
     }
 }
@@ -185,7 +175,7 @@ export default {
             margin-bottom: 10px;
             display: flex;
             .label {
-                width: 300px;
+                width: 200px;
             }
         }
     }

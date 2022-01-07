@@ -69,3 +69,12 @@ export const getTestCoin = (address) => {
         params: { user: address }
     })
 }
+
+// 获取所有用户地址
+export const getAllAccount = (contract) => {
+    return request({
+        url: '/api/account',
+        method: 'get',
+        params: { contract }
+    })
+}
