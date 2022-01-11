@@ -4,8 +4,10 @@
             <h6>Your liquidity</h6>
             <div class="top">
                 <div class="fs12 warn">
-                    Pool providers earn a 0.045% fee on all trades proportional to their share of the pool. Fees are
-                    added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+                    Liquidity provider will gain return from four parts, which are trading fees, funding fees, spread
+                    and P/L from the traders. The gain will be realized in real time and available to be claimed by
+                    withdrawing your liquidity.
+                    <a target="blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
                 </div>
                 <el-button type="primary" round @click="handleAdd">Add Liquidity</el-button>
             </div>
@@ -72,7 +74,10 @@
                         <span class="fs14">Available LP</span>
                         <span class="fs14 value">{{ formatDecimals(maxLiquidity) | formatMoney }}</span>
                     </div>
-                    <div style="height: 29px"></div>
+                    <div class="tips">
+                        Because of the open position in this trading pair, you cannot withdraw all the LP tokens.
+                        <a target="blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
+                    </div>
                     <el-input-number
                         style="width: 100%"
                         v-model="liquidity"

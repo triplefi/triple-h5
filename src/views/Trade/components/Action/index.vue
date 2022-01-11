@@ -8,23 +8,30 @@
         </div>
         <div class="flex action">
             <div class="flex-1 action-item long">
-                <div class="flex flex-ac">
-                    <div class="label btn13">Buy Price</div>
-                    <h5 class="price">{{ pricePrecision(slidePriceLong) | formatMoney }}</h5>
+                <div class="flex flex-ac flex-bt">
+                    <div class="flex flex-ac">
+                        <div class="label btn13">Buy Price</div>
+                        <div class="price">{{ pricePrecision(slidePriceLong) | formatMoney }}</div>
+                    </div>
+                    <div class="unit">{{ marginCoin }}</div>
                 </div>
                 <div style="height: 24px">
                     <!-- Max Amount: {{amountPrecision(LongMaxAmount)}} -->
                 </div>
-                <div class="flex flex-ac">
-                    <div class="label btn13">Amount</div>
-                    <el-input-number
-                        style="width: 100%"
-                        v-model="amount1show"
-                        :precision="precision"
-                        :step="step"
-                        :min="0"
-                        :max="amountPrecision(LongMaxAmount) * 1"
-                    ></el-input-number>
+                <div class="flex flex-ac flex-bt">
+                    <div class="flex flex-ac">
+                        <div class="label btn13">Amount</div>
+                        <el-input-number
+                            class="input-number"
+                            :controls="false"
+                            v-model="amount1show"
+                            :precision="precision"
+                            :step="step"
+                            :min="0"
+                            :max="amountPrecision(LongMaxAmount) * 1"
+                        ></el-input-number>
+                    </div>
+                    <div class="unit">{{ tradeCoin }}</div>
                 </div>
                 <div class="flex">
                     <div class="label"></div>
@@ -48,23 +55,30 @@
             </div>
             <div class="line"></div>
             <div class="flex-1 action-item short">
-                <div class="flex flex-ac">
-                    <div class="label btn13">Sell Price</div>
-                    <h5 class="price">{{ pricePrecision(slidePriceShort) | formatMoney }}</h5>
+                <div class="flex flex-ac flex-bt">
+                    <div class="flex flex-ac">
+                        <div class="label btn13">Sell Price</div>
+                        <div class="price">{{ pricePrecision(slidePriceShort) | formatMoney }}</div>
+                    </div>
+                    <div class="unit">{{ marginCoin }}</div>
                 </div>
                 <div style="height: 24px">
                     <!-- Max Amount: {{amountPrecision(ShortMaxAmount)}} -->
                 </div>
-                <div class="flex flex-ac">
-                    <div class="label btn13">Amount</div>
-                    <el-input-number
-                        style="width: 100%"
-                        v-model="amount2show"
-                        :precision="precision"
-                        :step="step"
-                        :min="0"
-                        :max="amountPrecision(ShortMaxAmount) * 1"
-                    ></el-input-number>
+                <div class="flex flex-ac flex-bt">
+                    <div class="flex flex-ac">
+                        <div class="label btn13">Amount</div>
+                        <el-input-number
+                            class="input-number"
+                            :controls="false"
+                            v-model="amount2show"
+                            :precision="precision"
+                            :step="step"
+                            :min="0"
+                            :max="amountPrecision(ShortMaxAmount) * 1"
+                        ></el-input-number>
+                    </div>
+                    <div class="unit">{{ tradeCoin }}</div>
                 </div>
                 <div class="flex">
                     <div class="label"></div>
@@ -103,6 +117,10 @@
                 <el-button type="primary" round @click="handleApprove" :disabled="!coinbase">
                     <span style="font-weight: bold">Authorize</span>
                 </el-button>
+                <div style="margin-top: 20px; text-align: center">
+                    Please authorize TripleFi to connect to your wallet first. <br />Then you can start trading. USDT is
+                    used as margin asset.
+                </div>
             </div>
 
             <el-dialog title="Transaction Settings" :visible.sync="model" :show-header="false" width="375px">
@@ -429,4 +447,9 @@ export default {
 
 <style lang="scss" scoped>
 @import './index.scss';
+</style>
+<style lang="scss">
+.action-con .action-item .input-number .el-input__inner {
+    text-align: left;
+}
 </style>
