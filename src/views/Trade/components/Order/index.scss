@@ -13,9 +13,9 @@
 
     .btn-close {
         margin-left: auto;
-        width: 127px;
         background: var(--COLOR-bg4);
         border-color: transparent;
+        width: 110px;
 
         &:hover {
             background: var(--COLOR-bg3);
@@ -27,6 +27,20 @@
     }
 
     .a-table {
+        .close-price-label {
+            padding-left: 14px;
+            text-align: left;
+            width: 150px;
+            box-sizing: border-box;
+        }
+        .close-input-con {
+            border: 1px solid #282634;
+            padding: 3px 3px 3px 15px;
+            border-radius: 50px;
+            .close-price {
+                width: 120px;
+            }
+        }
         &.el-table {
             background-color: transparent;
 

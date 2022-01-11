@@ -19,12 +19,42 @@
                     {{ formatDecimals(getUnrealizedPL(scope.row)) | formatMoney }}
                 </template>
             </el-table-column>
-            <el-table-column label="Est. Close Price">
+            <el-table-column width="450px">
+                <template slot="header">
+                    <div class="flex flex-ac flex-bt">
+                        <div class="close-price-label">Est. Close Price</div>
+                        <div class="close-price-label">Close Amount</div>
+                        <div class="close-price-label"></div>
+                    </div>
+                </template>
                 <template slot-scope="scope">
-                    {{ pricePrecision(scope.row.direction > 0 ? slidePriceShort : slidePriceLong) | formatMoney }}
+                    <div class="close-input-con flex flex-ac flex-bt">
+                        <div class="close-price">
+                            {{
+                                pricePrecision(scope.row.direction > 0 ? slidePriceShort : slidePriceLong) | formatMoney
+                            }}
+                        </div>
+                        <div class="flex flex-ac">
+                            <el-input-number
+                                :controls="false"
+                                size="small"
+                                style="width: 120px"
+                                v-model="scope.row.closeNum"
+                                :precision="precision"
+                                :step="step"
+                                :min="0"
+                                :max="amountPrecision(scope.row.maxNum) * 1"
+                                placeholder="Amount"
+                            ></el-input-number>
+                            <div class="fs12 all" @click="handleAll(scope.row)">Max</div>
+                        </div>
+                        <el-button class="btn-close" type="primary" size="small" round @click="handleClose(scope.row)"
+                            >Close</el-button
+                        >
+                    </div>
                 </template>
             </el-table-column>
-            <el-table-column width="340px">
+            <!-- <el-table-column width="340px">
                 <template slot-scope="scope">
                     <div class="flex flex-ac">
                         <el-input-number
@@ -43,7 +73,7 @@
                         >
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
     </div>
 </template>
