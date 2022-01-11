@@ -7,7 +7,7 @@
                     Liquidity provider will gain return from four parts, which are trading fees, funding fees, spread
                     and P/L from the traders. The gain will be realized in real time and available to be claimed by
                     withdrawing your liquidity.
-                    <a target="blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
+                    <a target="_blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
                 </div>
                 <el-button type="primary" round @click="handleAdd">Add Liquidity</el-button>
             </div>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="tips">
                         Because of the open position in this trading pair, you cannot withdraw all the LP tokens.
-                        <a target="blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
+                        <a target="_blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
                     </div>
                     <el-input-number
                         style="width: 100%"

@@ -4,7 +4,7 @@
             <div class="head flex flex-ac flex-bt">
                 <svg-icon icon-class="TripleLogo" class-name="icon-logo"></svg-icon>
                 <div class="flex">
-                    <a target="blank" href="https://docs.triple.fi/">
+                    <a target="_blank" href="https://docs.triple.fi/">
                         <el-button type="text" round>FAQs</el-button>
                     </a>
                     <router-link to="/trade">

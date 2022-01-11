@@ -11,17 +11,54 @@
         <h5>{{ symbol }}</h5>
         <h5 class="price">${{ pricePrecision(NewPrice) | formatMoney }}</h5>
         <div class="item">
-            <div class="fs12 name">Index Price</div>
+            <el-tooltip effect="dark" placement="top">
+                <div slot="content">
+                    Index price is a combined source of price feed. Index price is directly related to buy and sell
+                    price.
+                    <a
+                        style="color: #5f549e; font-weight: blod"
+                        target="_blank"
+                        href="https://docs.triple.fi/general/how-is-price-determined"
+                        >Learn More</a
+                    >
+                </div>
+                <div style="cursor: help" class="fs12 name">Index Price</div>
+            </el-tooltip>
             <div class="fs12b value">${{ pricePrecision(price) | formatMoney }}</div>
         </div>
         <div class="item">
-            <div class="fs12 name">Liquidity Pool</div>
+            <el-tooltip effect="dark" placement="top">
+                <div slot="content">
+                    Liquidity pool shows the amount of USDT that is currently in the liquidity pool of this trading
+                    pair. You can add or withdraw liquidity from the Pool page. Liquidity pool determines the max net
+                    position amount of this trading pair.
+                    <a
+                        style="color: #5f549e; font-weight: blod"
+                        target="_blank"
+                        href="https://docs.triple.fi/trading/what-is-the-amount-limit"
+                        >Learn More</a
+                    >
+                </div>
+                <div style="cursor: help" class="fs12 name">Liquidity Pool</div>
+            </el-tooltip>
             <div class="fs12b value">
                 {{ formatDecimals(poolNet) | formatMoney }}
             </div>
         </div>
         <div class="item">
-            <div class="fs12 name">Funding Rate / Next Funding</div>
+            <el-tooltip effect="dark" placement="top">
+                <div slot="content">
+                    Funding rate will be collected by the liquidity pool every 24 hours depends on the amount of long
+                    and short position in this trading pair.
+                    <a
+                        style="color: #5f549e; font-weight: blod"
+                        target="_blank"
+                        href="https://docs.triple.fi/trading/what-is-funding-rate"
+                        >Learn More</a
+                    >
+                </div>
+                <div style="cursor: help" class="fs12 name">Funding Rate / Next Funding</div>
+            </el-tooltip>
             <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3, true) }}% / {{ state }}</div>
         </div>
     </div>
