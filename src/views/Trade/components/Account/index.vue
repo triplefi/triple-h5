@@ -18,7 +18,7 @@
             <div class="fs12 value">{{ formatDecimals(NetValue) | formatMoney }}</div>
         </div>
         <div class="flex flex-ac">
-            <div class="fs12 name">Liquidation Price</div>
+            <div class="fs12 name">Est. Liquidation Price</div>
             <div class="fs12 value" v-if="LiquidationPrice > 0">
                 {{ pricePrecision(LiquidationPrice) | formatMoney }}
             </div>

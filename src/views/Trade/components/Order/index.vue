@@ -19,7 +19,7 @@
                     {{ formatDecimals(getUnrealizedPL(scope.row)) | formatMoney }}
                 </template>
             </el-table-column>
-            <el-table-column label="Close Price">
+            <el-table-column label="Est. Close Price">
                 <template slot-scope="scope">
                     {{ pricePrecision(scope.row.direction > 0 ? slidePriceShort : slidePriceLong) | formatMoney }}
                 </template>

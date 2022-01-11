@@ -129,7 +129,7 @@
                         <span class="fs14 label">Slippage tolerance</span>
                         <el-tooltip
                             effect="dark"
-                            content="Text Demo - Your transaction will revert if the price changes unfavorably by more than this percentage."
+                            content="Your transaction will revert if the price changes unfavorably by more than this percentage."
                             placement="top"
                         >
                             <svg-icon icon-class="ic_16qs" class-name="s16 icon-question"></svg-icon>
@@ -150,7 +150,7 @@
                         <span class="fs14 label">Transaction deadline</span>
                         <el-tooltip
                             effect="dark"
-                            content="Text Demo - Your transaction will revert if the price changes unfavorably by more than this percentage."
+                            content="Your transaction will revert if it is pending for more than this period of time."
                             placement="top"
                         >
                             <svg-icon icon-class="ic_16qs" class-name="s16 icon-question"></svg-icon>
