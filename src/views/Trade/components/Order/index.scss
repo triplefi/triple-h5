@@ -18,11 +18,13 @@
         width: 110px;
 
         &:hover {
-            background: var(--COLOR-bg3);
+            // background: var(--COLOR-c5);
+            opacity: 0.8;
         }
 
         &:active {
-            background: var(--COLOR-bg2);
+            // background: var(--COLOR-c5);
+            opacity: 0.8;
         }
     }
 
