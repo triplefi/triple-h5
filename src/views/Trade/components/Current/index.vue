@@ -22,7 +22,7 @@
                         >Learn More</a
                     >
                 </div>
-                <div style="cursor: help" class="fs12 name">Index Price</div>
+                <div class="cursor-help fs12 name">Index Price</div>
             </el-tooltip>
             <div class="fs12b value">${{ pricePrecision(price) | formatMoney }}</div>
         </div>
@@ -39,7 +39,7 @@
                         >Learn More</a
                     >
                 </div>
-                <div style="cursor: help" class="fs12 name">Liquidity Pool</div>
+                <div class="cursor-help fs12 name">Liquidity Pool</div>
             </el-tooltip>
             <div class="fs12b value">
                 {{ formatDecimals(poolNet) | formatMoney }}
@@ -57,7 +57,7 @@
                         >Learn More</a
                     >
                 </div>
-                <div style="cursor: help" class="fs12 name">Funding Rate / Next Funding</div>
+                <div class="cursor-help fs12 name">Funding Rate / Next Funding</div>
             </el-tooltip>
             <div class="fs12b value">{{ (fundingRate * 100) | formatNum(3, true) }}% / {{ state }}</div>
         </div>

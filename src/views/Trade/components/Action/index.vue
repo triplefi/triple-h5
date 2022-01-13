@@ -8,7 +8,7 @@
         </div>
         <div class="flex action">
             <div class="flex-1 action-item long">
-                <div class="flex flex-ac flex-bt">
+                <div class="flex flex-ac flex-bt action-item-pr">
                     <div class="flex flex-ac">
                         <div class="label btn13">Buy Price</div>
                         <div class="price">{{ pricePrecision(slidePriceLong) | formatMoney }}</div>
@@ -18,11 +18,11 @@
                 <div style="height: 24px">
                     <!-- Max Amount: {{amountPrecision(LongMaxAmount)}} -->
                 </div>
-                <div class="flex flex-ac flex-bt">
-                    <div class="flex flex-ac">
+                <div class="action-item-pr">
+                    <div style="width: 100%" class="flex flex-ac">
                         <div class="label btn13">Amount</div>
                         <el-input-number
-                            class="input-number"
+                            class="input-number flex-1"
                             :controls="false"
                             v-model="amount1show"
                             :precision="precision"
@@ -31,7 +31,7 @@
                             :max="amountPrecision(LongMaxAmount) * 1"
                         ></el-input-number>
                     </div>
-                    <div class="unit">{{ tradeCoin }}</div>
+                    <div class="unit amount-unit">{{ tradeCoin }}</div>
                 </div>
                 <div class="flex">
                     <div class="label"></div>
@@ -55,7 +55,7 @@
             </div>
             <div class="line"></div>
             <div class="flex-1 action-item short">
-                <div class="flex flex-ac flex-bt">
+                <div class="flex flex-ac flex-bt action-item-pr">
                     <div class="flex flex-ac">
                         <div class="label btn13">Sell Price</div>
                         <div class="price">{{ pricePrecision(slidePriceShort) | formatMoney }}</div>
@@ -65,11 +65,11 @@
                 <div style="height: 24px">
                     <!-- Max Amount: {{amountPrecision(ShortMaxAmount)}} -->
                 </div>
-                <div class="flex flex-ac flex-bt">
-                    <div class="flex flex-ac">
+                <div class="action-item-pr">
+                    <div style="width: 100%" class="flex flex-ac">
                         <div class="label btn13">Amount</div>
                         <el-input-number
-                            class="input-number"
+                            class="input-number flex-1"
                             :controls="false"
                             v-model="amount2show"
                             :precision="precision"
@@ -78,7 +78,7 @@
                             :max="amountPrecision(ShortMaxAmount) * 1"
                         ></el-input-number>
                     </div>
-                    <div class="unit">{{ tradeCoin }}</div>
+                    <div class="unit amount-unit">{{ tradeCoin }}</div>
                 </div>
                 <div class="flex">
                     <div class="label"></div>

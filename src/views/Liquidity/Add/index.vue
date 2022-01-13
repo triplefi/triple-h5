@@ -56,7 +56,7 @@
                         round
                         @click="handleApprove"
                         :disabled="!coinbase"
-                        >Authorize</el-button
+                        >Approve</el-button
                     >
                     <el-button class="btn-enter" type="primary" round @click="handleAddLiquidity" :disabled="!allowance"
                         >Supply</el-button

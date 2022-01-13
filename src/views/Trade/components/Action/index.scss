@@ -96,17 +96,28 @@
 
         .action-item {
             padding: 8px 32px;
-
             .label {
                 width: 76px;
             }
             .price {
                 font-size: 16px;
                 font-weight: bold;
+                padding-left: 16px;
+            }
+            .action-item-pr {
+                position: relative;
             }
             .unit {
                 color: var(--COLOR-t2);
-                margin-left: 30px;
+                padding-left: 30px;
+                position: absolute;
+                right: 16px;
+                top: 2px;
+                font-size: 12px;
+                text-align: right;
+                &.amount-unit {
+                    top: 12px;
+                }
             }
 
             &.long .price {
