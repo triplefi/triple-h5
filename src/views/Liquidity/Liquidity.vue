@@ -74,7 +74,7 @@
                         <span class="fs14">Available LP</span>
                         <span class="fs14 value">{{ formatDecimals(maxLiquidity) | formatMoney }}</span>
                     </div>
-                    <div style="height: 24px" v-if="maxLiquidity >= balanceOf"></div>
+                    <div style="height: 24px" v-if="maxLiquidity >= balanceOf || !isRequestMaxLiquidity"></div>
                     <div class="tips" v-else>
                         Because of the open position in this trading pair, you cannot withdraw all the LP tokens.
                         <a target="_blank" href="https://docs.triple.fi/liquidity-pool/why-invest-the-lp">Learn More</a>
@@ -130,6 +130,7 @@ export default {
             removeLoading: false,
             liquidity: 0,
             maxLiquidity: 0,
+            isRequestMaxLiquidity: false,
             precent: 0,
 
             pcontract: null,
@@ -177,6 +178,8 @@ export default {
             if (!n) {
                 this.liquidity = ''
                 this.precent = 0
+                this.maxLiquidity = 0
+                this.isRequestMaxLiquidity = false
             }
         },
         curPair(n) {
@@ -385,6 +388,7 @@ export default {
                 // )
             }
             this.maxLiquidity = maxLiquidity
+            this.isRequestMaxLiquidity = true
         }
     }
 }
