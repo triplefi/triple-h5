@@ -1,5 +1,6 @@
 <template>
     <div class="account">
+        <div class="account-title">Account -USDT</div>
         <div class="flex flex-ac">
             <div class="fs12 name">Wallet</div>
             <div class="fs12 value">

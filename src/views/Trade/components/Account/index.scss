@@ -1,6 +1,10 @@
 .account {
     padding: 24px;
     height: 272px;
+    .account-title {
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
 
     > div {
         margin-bottom: 8px;
