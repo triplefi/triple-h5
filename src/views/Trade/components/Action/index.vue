@@ -115,12 +115,9 @@
             </div>
             <div class="approve-mask" v-if="!allowance">
                 <el-button type="primary" round @click="handleApprove" :disabled="!coinbase">
-                    <span style="font-weight: bold">Authorize</span>
+                    <span style="font-weight: bold">Approve</span>
                 </el-button>
-                <div style="margin-top: 20px; text-align: center">
-                    Please authorize TripleFi to connect to your wallet first. <br />Then you can start trading. USDT is
-                    used as margin asset.
-                </div>
+                <div class="approve-tips">Please approve the use of USDT to start trading.</div>
             </div>
 
             <el-dialog title="Transaction Settings" :visible.sync="model" :show-header="false" width="375px">

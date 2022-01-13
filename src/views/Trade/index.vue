@@ -50,7 +50,7 @@ export default {
 Welcome to use the Triple.Fi Beta version! Please follow the steps below,</br>
 1. Switch your wallet to Ethereum Rinkeby Test Network.</br>
 2. Get free test tokens on the top left corner.</br>
-3. Click “Authorize” button and have fun trading!</br></br></div>`,
+3. Click “Approve” button and have fun trading!</br></br></div>`,
                 {
                     confirmButtonText: 'Confirm',
                     dangerouslyUseHTMLString: true
