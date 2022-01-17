@@ -3,7 +3,7 @@
         <el-button-group>
             <el-button
                 @click="activeTab = e.trade_coin"
-                v-for="e in pairs"
+                v-for="e in pairList"
                 :key="e.trade_coin"
                 :type="activeTab === e.trade_coin ? 'primary' : ''"
                 >{{ e.trade_coin }}</el-button
@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import { getTradePairs } from '@/api'
 import { mapState, mapActions } from 'vuex'
 export default {
     data() {
@@ -87,7 +86,7 @@ export default {
     },
     mounted() {
         this._initWeb3 = !!this.web3
-        this.getPairs()
+        this.getPariList()
     },
     beforeDestroy() {
         if (this.timeHandler) {
@@ -104,7 +103,8 @@ export default {
             'poolShortAmount',
             'totalPool',
             'pairInfo',
-            'poolState'
+            'poolState',
+            'pairList'
         ]),
         R() {
             const { poolLongAmount, poolShortAmount, poolNet, price } = this
@@ -135,8 +135,11 @@ export default {
         }
     },
     watch: {
+        pairList(val) {
+            this.activeTab = val[0]?.trade_coin || ''
+        },
         activeTab(val) {
-            const item = this.pairs.find((e) => e.trade_coin === val)
+            const item = this.pairList.find((e) => e.trade_coin === val)
             if (item) {
                 this.selectPair(item)
             }
@@ -149,20 +152,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['initContract']),
-        async getPairs() {
-            this.loading = true
-            try {
-                const res = await getTradePairs()
-                if (res.result) {
-                    this.pairs = res.data
-                    this.activeTab = this.pairs[0].trade_coin
-                }
-            } catch (error) {
-                console.log(error)
-                this.getPairs()
-            }
-        },
+        ...mapActions(['initContract', 'getPariList']),
         async selectPair(item) {
             this.loading = true
             this.$store.commit('setContractAddress', item.contract)

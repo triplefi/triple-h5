@@ -77,11 +77,16 @@ export default {
     methods: {
         ...mapActions(['initContract']),
         async getList() {
-            const res = await getTradePairs()
-            if (res.result) {
-                this.list = res.data
+            try {
+                const res = await getTradePairs()
+                if (res.result) {
+                    this.list = res.data
+                }
+                return this.list
+            } catch (error) {
+                console.log(error)
+                this.getList()
             }
-            return this.list
         },
         init() {
             let pairInfo = localStorage.getItem('pairInfo')

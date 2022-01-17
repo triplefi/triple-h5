@@ -4,6 +4,7 @@ import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { Message, MessageBox } from 'element-ui'
 import { bus } from '@/utils/bus'
+import { getTradePairs } from '@/api'
 let poolInterval = null
 export default {
     // Login, getProvider
@@ -88,7 +89,8 @@ export default {
             }
         })
         state.provider.on('chainChanged', (chainId) => {
-            console.log('chainChanged', chainId)
+            console.log('chainChanged', parseInt(chainId, 10))
+            window.localStorage.setItem('curChainId', parseInt(chainId, 10))
             window.location.reload()
         })
         state.provider.on('disconnect', (code, reason) => {
@@ -105,6 +107,10 @@ export default {
         try {
             // web3
             const web3 = new Web3(state.provider)
+            const chainId = await web3.eth.getChainId()
+            commit('setChainId', chainId)
+            window.localStorage.setItem('curChainId', chainId)
+            console.log(chainId, '========')
             const coinbase = await web3.eth.getCoinbase() // 链接的账户
             let balance
             if (coinbase) {
@@ -117,17 +123,13 @@ export default {
                 })
             }
             web3.eth.defaultAccount = coinbase
-            // const chainId = await web3.eth.getChainId();
             // const networkId = await web3.eth.net.getId()
-            const networkType = await web3.eth.net.getNetworkType()
-            console.log(networkType)
             // console.log(networkId, '-----')
             // const blockNumber = await web3.eth.getBlockNumber();
 
             commit('setWeb3', web3)
             commit('setCoinbase', coinbase)
             commit('setBalance', balance * 1)
-            commit('setNetworkType', networkType)
 
             // 开启pool池数据拉取
             if (poolInterval) {
@@ -401,6 +403,16 @@ export default {
             }
         } catch (error) {
             console.log(error)
+        }
+    },
+    // 获取交易对
+    async getPariList({ commit, dispatch }) {
+        try {
+            const res = await getTradePairs()
+            let list = res.result ? res.data : []
+            commit('setPairList', list)
+        } catch (error) {
+            dispatch('getPariList')
         }
     },
     // getFundingRate

@@ -225,15 +225,20 @@ export default {
             return formatNum(val / Math.pow(10, this.token0Decimals), this.token0Decimals * 1)
         },
         async getPairsInfo() {
-            const res = await getTradePairs()
-            if (res.result) {
-                this.list = res.data.map((item) => {
-                    return {
-                        token: item.trade_coin,
-                        currency: item.margin_coin,
-                        contractAddress: item.contract
-                    }
-                })
+            try {
+                const res = await getTradePairs()
+                if (res.result) {
+                    this.list = res.data.map((item) => {
+                        return {
+                            token: item.trade_coin,
+                            currency: item.margin_coin,
+                            contractAddress: item.contract
+                        }
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+                this.getPairsInfo()
             }
         },
         handleChange(i) {

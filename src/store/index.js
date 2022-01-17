@@ -20,7 +20,6 @@ const store = new Vuex.Store({
         balance: 0,
         chainId: '',
         networkId: '',
-        networkType: '',
 
         pairInfo: {
             trade_coin: 'eth',
@@ -68,7 +67,9 @@ const store = new Vuex.Store({
 
         limitCoefficient: 0.99,
 
-        isNetworkError: false
+        isNetworkError: false,
+        pairList: [],
+        curPairCoin: ''
     },
     mutations: {
         setReady(state, payload) {
@@ -94,9 +95,6 @@ const store = new Vuex.Store({
         },
         setNetworkId(state, payload) {
             state.networkId = payload
-        },
-        setNetworkType(state, payload) {
-            state.networkType = payload
         },
         setWeb3(state, payload) {
             state.web3 = payload
@@ -206,6 +204,15 @@ const store = new Vuex.Store({
         },
         setNetworkError(state, payload) {
             state.isNetworkError = payload
+        },
+        setPairList(state, payload) {
+            if (payload && payload.length > 0 && JSON.stringify(state.pairList) !== JSON.stringify(payload)) {
+                state.curPairCoin = payload[0].trade_coin
+            }
+            state.pairList = payload || []
+        },
+        setCurPairCoin(state, payload) {
+            state.curPairCoin = payload || ''
         }
     },
     actions: {

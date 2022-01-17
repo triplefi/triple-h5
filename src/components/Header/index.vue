@@ -27,9 +27,9 @@
             <div class="network-wrap">
                 <div class="network-list">
                     <div
-                        :class="`network-item ${item.type === networkType ? 'active' : ''}`"
+                        :class="`network-item ${item.id === chainId ? 'active' : ''}`"
                         v-for="item in networkTypeList"
-                        :key="item.type"
+                        :key="item.id"
                     >
                         <svg-icon :icon-class="item.icon" :style="`font-size:${item.size}`"></svg-icon>
                         <span class="fs14">{{ item.label }}</span>
@@ -144,6 +144,7 @@ export default {
             networkTypeList: [
                 {
                     type: 'rinkeby',
+                    id: 4,
                     label: 'Rinkeby',
                     icon: 'ic_rinkeby',
                     size: 18
@@ -152,15 +153,16 @@ export default {
                     type: 'matic',
                     label: 'Polygon(Matic)',
                     icon: 'ic_matic',
+                    id: 80001,
                     size: 16
                 }
             ]
         }
     },
     computed: {
-        ...mapState(['coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'networkType']),
+        ...mapState(['coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'chainId']),
         curNetwork() {
-            const info = this.networkTypeList.find((e) => e.type === this.networkType)
+            const info = this.networkTypeList.find((e) => e.id === this.chainId)
             return info || this.networkTypeList[0]
         }
     },
