@@ -2,10 +2,10 @@
     <div v-loading="loading" class="data-details">
         <el-button-group>
             <el-button
-                @click="activeTab = e.trade_coin"
-                v-for="e in pairs"
+                @click="setPairCoin(e)"
+                v-for="e in pairList"
                 :key="e.trade_coin"
-                :type="activeTab === e.trade_coin ? 'primary' : ''"
+                :type="tradeCoin === e.trade_coin ? 'primary' : ''"
                 >{{ e.trade_coin }}</el-button
             >
         </el-button-group>
@@ -64,41 +64,26 @@
 </template>
 
 <script>
-import { getTradePairs, getAllAccount, getAccountInterest } from '@/api'
+import { getAllAccount, getAccountInterest } from '@/api'
 import { mapState, mapActions } from 'vuex'
 import { formatMoney } from '@/utils/util'
 import dayjs from 'dayjs'
 export default {
     data() {
         return {
-            pairs: [],
-            activeTab: '',
             loading: false,
             addressList: [],
             posTableData: [],
             pageSize: 10,
             posPage: 1,
             totalInfo: {}
-
             // interestTableData:[],
             // interestPage: 1,
         }
     },
-    mounted() {
-        this._initWeb3 = !!this.web3
-        this.getPairs()
-    },
-    beforeDestroy() {},
     watch: {
-        activeTab(val) {
-            const item = this.pairs.find((e) => e.trade_coin === val)
-            if (item) {
-                this.selectPair(item)
-            }
-        },
-        web3(val) {
-            if (val && !this._initWeb3) {
-                this._initWeb3 = true
+        contract(v) {
+            if (v) {
                 this.getData()
             }
         },
@@ -107,13 +92,13 @@ export default {
         }
     },
     computed: {
-        ...mapState(['pairInfo']),
+        ...mapState(['pairInfo', 'pairList']),
         posAddressList() {
             return this.addressList.filter((e) => e.Lposition || e.Sposition)
         }
     },
     methods: {
-        ...mapActions(['initContract']),
+        ...mapActions(['setPairCoin']),
         async getAllAccount(contract) {
             const res = await getAllAccount(contract)
             this.addressList = res.data
@@ -125,7 +110,6 @@ export default {
         async getAddressDetail() {
             const startIndex = (this.posPage - 1) * this.pageSize
             const curList = this.posAddressList.slice(startIndex, startIndex + this.pageSize)
-            console.log(curList)
             const res = await Promise.all(
                 curList.map((e) => {
                     return this.contract.methods.traders(e.Account).call()
@@ -169,7 +153,6 @@ export default {
                     })
                 })
             )
-            console.log(res, '+++++++++++++++++++++++++++')
             const dic = {}
             res.forEach(({ data }) => {
                 data.forEach(async (d) => {
@@ -189,41 +172,18 @@ export default {
                 })
             })
         },
-        async getPairs() {
-            this.loading = true
-            try {
-                const res = await getTradePairs()
-                if (res.result) {
-                    this.pairs = res.data
-                    this.activeTab = this.pairs[0].trade_coin
-                }
-            } catch (error) {
-                console.log(error)
-                this.getPairs()
-            }
-        },
-        async selectPair(item) {
-            this.loading = true
-            this.$store.commit('setContractAddress', item.contract)
-            this.$store.commit('setPairInfo', item)
-            this._isInitPairInfo = true
-            this.getData()
-        },
         async getData() {
-            if (this._isInitPairInfo && this._initWeb3) {
-                await this.initContract({ pairInfo: this.pairInfo })
-                this.loading = false
-                await this.getAllAccount(this.pairInfo.contract)
-                const totalRes = await this.contract.methods.getPoolPosition().call()
-                this.totalInfo = {
-                    longAmount: this.formatNum(totalRes[1]),
-                    shortAmount: this.formatNum(totalRes[3]),
-                    longNum: this.addressList.filter((e) => !!e.Lposition).length,
-                    shortNum: this.addressList.filter((e) => !!e.Sposition).length,
-                    totalNum: this.posAddressList.length
-                }
-                // this.getAccountInterest(this.pairInfo.contract)
+            this.loading = false
+            await this.getAllAccount(this.pairInfo.contract)
+            const totalRes = await this.contract.methods.getPoolPosition().call()
+            this.totalInfo = {
+                longAmount: this.formatNum(totalRes[1]),
+                shortAmount: this.formatNum(totalRes[3]),
+                longNum: this.addressList.filter((e) => !!e.Lposition).length,
+                shortNum: this.addressList.filter((e) => !!e.Sposition).length,
+                totalNum: this.posAddressList.length
             }
+            // this.getAccountInterest(this.pairInfo.contract)
         }
     }
 }

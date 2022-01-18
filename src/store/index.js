@@ -68,15 +68,11 @@ const store = new Vuex.Store({
         limitCoefficient: 0.99,
 
         isNetworkError: false,
-        pairList: [],
-        curPairCoin: ''
+        pairList: []
     },
     mutations: {
         setReady(state, payload) {
             state.ready = payload
-        },
-        setPairInfo(state, payload) {
-            state.pairInfo = payload
         },
         setCoinbase(state, payload) {
             state.coinbase = payload
@@ -206,13 +202,10 @@ const store = new Vuex.Store({
             state.isNetworkError = payload
         },
         setPairList(state, payload) {
-            if (payload && payload.length > 0 && JSON.stringify(state.pairList) !== JSON.stringify(payload)) {
-                state.curPairCoin = payload[0].trade_coin
-            }
             state.pairList = payload || []
         },
-        setCurPairCoin(state, payload) {
-            state.curPairCoin = payload || ''
+        setPairInfo(state, payload) {
+            state.pairInfo = payload
         }
     },
     actions: {

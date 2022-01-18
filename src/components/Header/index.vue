@@ -162,7 +162,8 @@ export default {
     computed: {
         ...mapState(['coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'chainId']),
         curNetwork() {
-            const info = this.networkTypeList.find((e) => e.id === this.chainId)
+            const info = this.networkTypeList.find((e) => e.id == this.chainId)
+            console.log(this.chainId, info)
             return info || this.networkTypeList[0]
         }
     },

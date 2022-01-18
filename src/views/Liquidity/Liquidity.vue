@@ -107,23 +107,16 @@
 
 <script>
 import Big from 'big.js'
-import { bus } from '@/utils/bus'
 import { formatNum } from '@/utils/util'
 import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
-import { getTradePairs } from '@/api'
 import { mapState } from 'vuex'
 export default {
     name: 'Pool',
     data() {
         return {
             activeName: '',
-            list: [
-                // {
-                //   token: "eth",
-                //   currency: "usdt"
-                // }
-            ],
+            list: [],
             curPair: {},
 
             removeModel: false,
@@ -150,7 +143,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['limitCoefficient']),
+        ...mapState(['limitCoefficient', 'pairList']),
         precision() {
             return Math.abs(this.token0Decimals) || 2
         },
@@ -186,17 +179,19 @@ export default {
             if (n) {
                 this.getContractInfo()
             }
+        },
+        coinbase(v) {
+            if (v) {
+                this.getPairsInfo()
+            }
+        },
+        pairList: {
+            immediate: true,
+            handler() {
+                this.getPairsInfo()
+            }
         }
         // 交易对改变，合约改变
-    },
-    created() {
-        this.getPairsInfo()
-        bus.$on('accountsChanged', () => {
-            this.getPairsInfo()
-        })
-    },
-    beforeDestroy() {
-        bus.$off('accountsChanged')
     },
     methods: {
         formatDecimals(val) {
@@ -205,17 +200,14 @@ export default {
         },
         async getPairsInfo() {
             try {
-                const res = await getTradePairs()
-                if (res.result) {
-                    const newList = await this.getAllContractInfo(res.data)
-                    this.list = newList.map((item) => {
-                        return {
-                            token: item.trade_coin,
-                            currency: item.margin_coin,
-                            contractAddress: item.contract
-                        }
-                    })
-                }
+                const newList = await this.getAllContractInfo(this.pairList)
+                this.list = newList.map((item) => {
+                    return {
+                        token: item.trade_coin,
+                        currency: item.margin_coin,
+                        contractAddress: item.contract
+                    }
+                })
             } catch (error) {
                 console.log(error)
                 this.getPairsInfo()
@@ -235,7 +227,6 @@ export default {
         // 获取全部合约信息，用于过滤空资产item
         async getAllContractInfo(list) {
             if (!this.coinbase) {
-                this.tipsCoinBaseError()
                 return []
             }
             const getContract = async (contractAddress) => {
@@ -247,7 +238,6 @@ export default {
         },
         async getContractInfo() {
             if (!this.coinbase) {
-                this.tipsCoinBaseError()
                 return
             }
             try {

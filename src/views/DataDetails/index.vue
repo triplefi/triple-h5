@@ -2,10 +2,10 @@
     <div v-loading="loading" class="data-details">
         <el-button-group>
             <el-button
-                @click="activeTab = e.trade_coin"
+                @click="setPairCoin(e)"
                 v-for="e in pairList"
                 :key="e.trade_coin"
-                :type="activeTab === e.trade_coin ? 'primary' : ''"
+                :type="tradeCoin === e.trade_coin ? 'primary' : ''"
                 >{{ e.trade_coin }}</el-button
             >
         </el-button-group>
@@ -69,12 +69,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
     data() {
         return {
-            pairs: [],
-            activeTab: '',
             loading: false,
             explosiveAddress: '',
             explosiveTo: '',
@@ -83,10 +81,6 @@ export default {
             detectSlideTo: '',
             detectSlideLoading: false
         }
-    },
-    mounted() {
-        this._initWeb3 = !!this.web3
-        this.getPariList()
     },
     beforeDestroy() {
         if (this.timeHandler) {
@@ -135,38 +129,18 @@ export default {
         }
     },
     watch: {
-        pairList(val) {
-            this.activeTab = val[0]?.trade_coin || ''
-        },
-        activeTab(val) {
-            const item = this.pairList.find((e) => e.trade_coin === val)
-            if (item) {
-                this.selectPair(item)
-            }
-        },
-        web3(val) {
-            if (val && !this._initWeb3) {
-                this._initWeb3 = true
+        contract(v) {
+            if (v) {
                 this.getData()
             }
         }
     },
     methods: {
-        ...mapActions(['initContract', 'getPariList']),
-        async selectPair(item) {
-            this.loading = true
-            this.$store.commit('setContractAddress', item.contract)
-            this.$store.commit('setPairInfo', item)
-            this._isInitPairInfo = true
-            this.getData()
-        },
+        ...mapActions(['setPairCoin']),
         async getData() {
-            if (this._isInitPairInfo && this._initWeb3) {
-                await this.initContract({ pairInfo: this.pairInfo })
-                await this.$store.dispatch('getPoolData')
-                this.loading = false
-                this.explosiveLoading = false
-            }
+            await this.$store.dispatch('getPoolData')
+            this.loading = false
+            this.explosiveLoading = false
         },
         // 爆仓测试
         async handleExplosive() {

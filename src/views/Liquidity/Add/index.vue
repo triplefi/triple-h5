@@ -123,6 +123,7 @@ import { formatNum } from '@/utils/util'
 import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { getTradePairs } from '@/api'
+import { mapState } from 'vuex'
 export default {
     name: 'PoolAdd',
     data() {
@@ -167,6 +168,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(['pairList']),
         precision() {
             return Math.abs(this.token0Decimals) || 2
         },
@@ -198,6 +200,12 @@ export default {
         },
         coinbase(n) {
             n && this.checkCanFatch()
+        },
+        pairList: {
+            immediate: true,
+            handler() {
+                this.getPairsInfo()
+            }
         }
         // 交易对改变，合约改变
     },
@@ -205,11 +213,6 @@ export default {
         const { token, currency } = this.$route.params
         this.token = token ? token.toUpperCase() : ''
         this.currency = currency ? currency.toUpperCase() : ''
-
-        this.getPairsInfo()
-        bus.$on('accountsChanged', () => {
-            this.getPairsInfo()
-        })
     },
     beforeUpdate() {
         const { token, currency } = this.$route.params
@@ -226,16 +229,13 @@ export default {
         },
         async getPairsInfo() {
             try {
-                const res = await getTradePairs()
-                if (res.result) {
-                    this.list = res.data.map((item) => {
-                        return {
-                            token: item.trade_coin,
-                            currency: item.margin_coin,
-                            contractAddress: item.contract
-                        }
-                    })
-                }
+                this.list = this.pairList.map((item) => {
+                    return {
+                        token: item.trade_coin,
+                        currency: item.margin_coin,
+                        contractAddress: item.contract
+                    }
+                })
             } catch (error) {
                 console.log(error)
                 this.getPairsInfo()

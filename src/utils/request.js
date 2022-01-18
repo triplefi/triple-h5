@@ -9,7 +9,6 @@ service.interceptors.request.use(
     (config) => {
         // TODO，网络支持多以后可以做成配置化
         const curChainId = window.localStorage.getItem('curChainId')
-        console.log(curChainId, '-------------')
         if (curChainId == 80001) {
             config.url = config.url.replace('/api/', '/matic/api/')
         }

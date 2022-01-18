@@ -18,7 +18,13 @@ export default {
         Header
     },
     methods: {
-        ...mapActions(['metaMaskInit', 'walletConnectInit'])
+        ...mapActions(['metaMaskInit', 'walletConnectInit']),
+        tipsCoinBaseError() {
+            this.$message({
+                type: 'error',
+                message: 'Please connect wallet first.'
+            })
+        }
     },
     async mounted() {
         const wallet = localStorage.getItem('wallet')
@@ -26,6 +32,8 @@ export default {
             await this.metaMaskInit()
         } else if (wallet === 'WalletConnect') {
             await this.walletConnectInit()
+        } else {
+            this.tipsCoinBaseError()
         }
         this.initWeb3 = true
     }
@@ -36,5 +44,6 @@ export default {
 #app {
     min-height: 100vh;
     width: 100%;
+    background: var(--COLOR-bg1);
 }
 </style>

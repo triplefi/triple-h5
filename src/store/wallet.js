@@ -82,6 +82,7 @@ export default {
                     await dispatch('walletConnectInit')
                 }
                 // await dispatch('initWeb3')
+                await dispatch('getPairsList')
                 await dispatch('initContract', { notFirst: true, pairInfo: state.pairInfo })
                 bus.$emit('accountsChanged')
             } catch (error) {
@@ -107,10 +108,11 @@ export default {
         try {
             // web3
             const web3 = new Web3(state.provider)
+            commit('setWeb3', web3)
             const chainId = await web3.eth.getChainId()
             commit('setChainId', chainId)
             window.localStorage.setItem('curChainId', chainId)
-            console.log(chainId, '========')
+            await dispatch('getPairsList')
             const coinbase = await web3.eth.getCoinbase() // 链接的账户
             let balance
             if (coinbase) {
@@ -126,8 +128,6 @@ export default {
             // const networkId = await web3.eth.net.getId()
             // console.log(networkId, '-----')
             // const blockNumber = await web3.eth.getBlockNumber();
-
-            commit('setWeb3', web3)
             commit('setCoinbase', coinbase)
             commit('setBalance', balance * 1)
 
@@ -406,14 +406,33 @@ export default {
         }
     },
     // 获取交易对
-    async getPariList({ commit, dispatch }) {
+    async getPairsList({ commit, dispatch }) {
         try {
             const res = await getTradePairs()
             let list = res.result ? res.data : []
+            let pairInfo = {}
+            try {
+                pairInfo = window.localStorage.getItem('curPairInfo')
+                pairInfo = JSON.parse(pairInfo) || {}
+            } catch (error) {
+                pairInfo = {}
+            }
+            console.log(pairInfo, '==========================')
+            const findInfo = list.find((e) => e.trade_coin === pairInfo.trade_coin)
+            pairInfo = findInfo || list[0] || {}
+            dispatch('setPairCoin', pairInfo)
             commit('setPairList', list)
         } catch (error) {
-            dispatch('getPariList')
+            console.log(error)
+            dispatch('getPairsList')
         }
+    },
+    // 设置交易对
+    async setPairCoin({ commit, dispatch }, info) {
+        window.localStorage.setItem('curPairInfo', JSON.stringify(info))
+        commit('setPairInfo', info)
+        dispatch('initContract', { pairInfo: info })
+        commit('setContractAddress', info.contract)
     },
     // getFundingRate
     // async getFundingRate({ state, commit }) {
