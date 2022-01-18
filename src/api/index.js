@@ -78,3 +78,12 @@ export const getAllAccount = (contract) => {
         params: { contract }
     })
 }
+
+// 用户交易记录
+export const getAccountTrade = ({ contract, account, count }) => {
+    return request({
+        url: '/api/account/trade',
+        method: 'get',
+        params: { contract, account, count }
+    })
+}

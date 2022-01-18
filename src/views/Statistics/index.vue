@@ -5,7 +5,7 @@
                 @click="setPairCoin(e)"
                 v-for="e in pairList"
                 :key="e.trade_coin"
-                :type="tradeCoin === e.trade_coin ? 'primary' : ''"
+                :type="tradeCoinLower === e.trade_coin ? 'primary' : ''"
                 >{{ e.trade_coin }}</el-button
             >
         </el-button-group>
@@ -38,6 +38,7 @@
                 <el-table-column prop="unrealizedPL" label="unrealized P/L"> </el-table-column>
             </el-table>
             <el-pagination
+                background
                 :currentPage.sync="posPage"
                 :pageSize="pageSize"
                 v-if="posAddressList.length"
@@ -45,26 +46,41 @@
                 :total="posAddressList.length"
             >
             </el-pagination>
-            <!-- <div style="height: 40px"></div>
-            <el-table :data="interestTableData" style="width: 100%">
-                <el-table-column prop="date" label="日期"> </el-table-column>
-                <el-table-column prop="longAmount" label="多单数量"> </el-table-column>
-                <el-table-column prop="shortAmount" label="空单数量"> </el-table-column>
+            <div style="height: 60px"></div>
+            <div class="item">用户交易历史记录</div>
+            <el-table :data="showTradeList" style="width: 100%">
+                <el-table-column prop="time" label="交易时间"> </el-table-column>
+                <el-table-column prop="direction" label="开仓方向">
+                    <template slot-scope="scope">
+                        {{ scope.row.direction == 1 ? '多' : '空' }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="amount" label="开仓数量">
+                    <template slot-scope="scope">
+                        {{ amountPrecision(scope.row.amount) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="price" label="开仓价格">
+                    <template slot-scope="scope">
+                        {{ formatDecimals(scope.row.price) | formatMoney }}
+                    </template>
+                </el-table-column>
             </el-table>
             <el-pagination
-                :currentPage.sync="interestPage"
-                :pageSize="pageSize"
-                v-if="addressList.length"
+                background
+                :currentPage.sync="tradePage"
+                :pageSize="tradePageSize"
+                v-if="tradeList.length"
                 layout="prev, pager, next"
-                :total="addressList.length"
+                :total="tradeList.length"
             >
-            </el-pagination> -->
+            </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
-import { getAllAccount, getAccountInterest } from '@/api'
+import { getAllAccount, getAccountInterest, getAccountTrade } from '@/api'
 import { mapState, mapActions } from 'vuex'
 import { formatMoney } from '@/utils/util'
 import dayjs from 'dayjs'
@@ -76,9 +92,13 @@ export default {
             posTableData: [],
             pageSize: 10,
             posPage: 1,
-            totalInfo: {}
+            totalInfo: {},
             // interestTableData:[],
             // interestPage: 1,
+
+            tradePageSize: 10,
+            tradePage: 1,
+            tradeList: []
         }
     },
     watch: {
@@ -95,6 +115,12 @@ export default {
         ...mapState(['pairInfo', 'pairList']),
         posAddressList() {
             return this.addressList.filter((e) => e.Lposition || e.Sposition)
+        },
+        tradeCoinLower() {
+            return (this.tradeCoin || '').toLocaleLowerCase()
+        },
+        showTradeList() {
+            return this.tradeList.slice((this.tradePage - 1) * this.tradePageSize, this.tradePage * this.tradePageSize)
         }
     },
     methods: {
@@ -172,6 +198,28 @@ export default {
                 })
             })
         },
+        async getAccountTrade(contract) {
+            const res = await getAccountTrade({
+                contract,
+                count: 200,
+                account: this.coinbase
+            })
+            if (res.result) {
+                let list = []
+                res.data.forEach(async (d) => {
+                    const { amount, block, direction, price } = d
+                    const { timestamp } = await this.web3.eth.getBlock(block)
+                    const time = dayjs(timestamp * 1000).format('YYYY-MM-DD HH:mm')
+                    list.push({
+                        amount,
+                        time,
+                        direction,
+                        price
+                    })
+                })
+                this.tradeList = list
+            }
+        },
         async getData() {
             this.loading = false
             await this.getAllAccount(this.pairInfo.contract)
@@ -184,6 +232,7 @@ export default {
                 totalNum: this.posAddressList.length
             }
             // this.getAccountInterest(this.pairInfo.contract)
+            this.getAccountTrade(this.pairInfo.contract)
         }
     }
 }

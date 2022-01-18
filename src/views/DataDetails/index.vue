@@ -5,7 +5,7 @@
                 @click="setPairCoin(e)"
                 v-for="e in pairList"
                 :key="e.trade_coin"
-                :type="tradeCoin === e.trade_coin ? 'primary' : ''"
+                :type="tradeCoinLower === e.trade_coin ? 'primary' : ''"
                 >{{ e.trade_coin }}</el-button
             >
         </el-button-group>
@@ -126,6 +126,9 @@ export default {
             const { poolLongAmount, poolShortAmount, price } = this
             const value = (Math.abs(poolLongAmount - poolShortAmount) * price) / 5
             return value
+        },
+        tradeCoinLower() {
+            return (this.tradeCoin || '').toLocaleLowerCase()
         }
     },
     watch: {
