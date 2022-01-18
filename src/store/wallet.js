@@ -242,14 +242,16 @@ export default {
             }
             commit('setNetworkError', false)
         } catch (error) {
-            commit('setNetworkError', true)
-            console.log(error)
-            MessageBox({
-                title: 'Wrong Network',
-                message: 'Please connect to the appropriate Ethereum network',
-                confirmButtonText: 'Confirm',
-                dangerouslyUseHTMLString: true
-            })
+            if (state.chainId) {
+                commit('setNetworkError', true)
+                console.log(error)
+                MessageBox({
+                    title: 'Wrong Network',
+                    message: 'Please connect to the appropriate Ethereum network',
+                    confirmButtonText: 'Confirm',
+                    dangerouslyUseHTMLString: true
+                })
+            }
             //             this.$alert(
             //                 `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
             // Welcome to use the Triple.Fi Beta version! Please follow the steps below,</br>

@@ -18,7 +18,7 @@ export default {
         Header
     },
     methods: {
-        ...mapActions(['metaMaskInit', 'walletConnectInit']),
+        ...mapActions(['metaMaskInit', 'walletConnectInit', 'getPairsList']),
         tipsCoinBaseError() {
             this.$message({
                 type: 'error',
@@ -33,6 +33,7 @@ export default {
         } else if (wallet === 'WalletConnect') {
             await this.walletConnectInit()
         } else {
+            await this.getPairsList()
             this.tipsCoinBaseError()
         }
         this.initWeb3 = true

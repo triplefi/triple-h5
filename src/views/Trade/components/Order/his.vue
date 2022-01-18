@@ -1,7 +1,7 @@
 <template>
     <div class="order">
         <el-table class="a-table" :data="tradeList" empty-text="No Data">
-            <el-table-column prop="time" label="交易时间"> </el-table-column>
+            <el-table-column prop="time" label="Time"> </el-table-column>
             <el-table-column prop="direction" label="Direction">
                 <template slot-scope="scope">
                     {{ getDirection(scope.row.direction) }}
@@ -14,7 +14,12 @@
             </el-table-column>
             <el-table-column prop="price" label="Price">
                 <template slot-scope="scope">
-                    {{ formatDecimals(scope.row.price) | formatMoney }}
+                    {{ pricePrecision(scope.row.price) | formatMoney }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="fee" label="Fee">
+                <template slot-scope="scope">
+                    {{ pricePrecision(scope.row.fee) | formatMoney }}
                 </template>
             </el-table-column>
         </el-table>
@@ -31,6 +36,7 @@
 </template>
 
 <script>
+import Big from 'big.js'
 import dayjs from 'dayjs'
 import { getAccountTrade } from '@/api'
 import { mapState } from 'vuex'
@@ -44,7 +50,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['pairInfo']),
+        ...mapState(['pairInfo', 'feeRate', 'divConst', 'amountDecimal']),
         tradeList() {
             return this.list.slice((this.page - 1) * this.pageSize, this.page * this.pageSize)
         }
@@ -91,11 +97,19 @@ export default {
                     const { amount, block, direction, price } = d
                     const { timestamp } = await this.web3.eth.getBlock(block)
                     const time = dayjs(timestamp * 1000).format('YYYY-MM-DD HH:mm')
+                    console.log(amount, Math.pow(10, this.amountDecimal), '---', this.feeRate, this.divConst, price)
                     list.push({
                         amount,
                         time,
                         direction,
-                        price
+                        price,
+                        fee: String(
+                            Big(amount)
+                                .times(Math.pow(10, this.amountDecimal))
+                                .times(price)
+                                .times(this.feeRate || 0)
+                                .div(this.divConst || 1)
+                        )
                     })
                 })
                 this.list = list
