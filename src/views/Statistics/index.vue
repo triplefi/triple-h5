@@ -47,7 +47,7 @@
             >
             </el-pagination>
             <div style="height: 60px"></div>
-            <div class="item">用户交易历史记录</div>
+            <!-- <div class="item">用户交易历史记录</div>
             <el-table :data="showTradeList" style="width: 100%">
                 <el-table-column prop="time" label="交易时间"> </el-table-column>
                 <el-table-column prop="direction" label="开仓方向">
@@ -74,7 +74,7 @@
                 layout="prev, pager, next"
                 :total="tradeList.length"
             >
-            </el-pagination>
+            </el-pagination> -->
         </div>
     </div>
 </template>
@@ -102,9 +102,12 @@ export default {
         }
     },
     watch: {
-        contract(v) {
-            if (v) {
-                this.getData()
+        contract: {
+            immediate: true,
+            handler(v) {
+                if (v) {
+                    this.getData()
+                }
             }
         },
         posPage() {
@@ -232,7 +235,7 @@ export default {
                 totalNum: this.posAddressList.length
             }
             // this.getAccountInterest(this.pairInfo.contract)
-            this.getAccountTrade(this.pairInfo.contract)
+            // this.getAccountTrade(this.pairInfo.contract)
         }
     }
 }

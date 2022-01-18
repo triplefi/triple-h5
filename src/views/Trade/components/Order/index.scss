@@ -1,8 +1,18 @@
 .order {
     padding: 0 24px;
 
+    .title-con {
+        display: flex;
+    }
     .title {
-        margin: 16px 0 12px;
+        margin: 16px 30px 12px 0;
+        color: var(--COLOR-t2);
+        cursor: pointer;
+        &.active {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--COLOR-t1);
+        }
     }
 
     .all {
@@ -84,6 +94,23 @@
             ::v-deep td {
                 padding: 6px 0;
             }
+        }
+    }
+    .a-pagination {
+        ::v-deep .btn-prev,
+        ::v-deep .el-pager,
+        ::v-deep .btn-next,
+        ::v-deep li {
+            background: transparent;
+        }
+        ::v-deep .btn-prev:disabled,
+        ::v-deep .btn-next:disabled {
+            color: #303133;
+        }
+        ::v-deep .btn-prev,
+        ::v-deep .number.active,
+        ::v-deep .btn-next {
+            color: #fff;
         }
     }
 }

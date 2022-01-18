@@ -132,9 +132,12 @@ export default {
         }
     },
     watch: {
-        contract(v) {
-            if (v) {
-                this.getData()
+        contract: {
+            immediate: true,
+            handler(v) {
+                if (v) {
+                    this.getData()
+                }
             }
         }
     },

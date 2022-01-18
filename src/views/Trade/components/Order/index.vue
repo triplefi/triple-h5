@@ -1,7 +1,10 @@
 <template>
     <div class="order">
-        <div class="fs14b title">Position</div>
-        <el-table class="a-table" :data="list" empty-text="No Data">
+        <div class="title-con">
+            <div class="fs14b title" :class="{ active: curActive === 1 }" @click="curActive = 1">Position</div>
+            <div class="fs14b title" :class="{ active: curActive === 2 }" @click="curActive = 2">Trade History</div>
+        </div>
+        <el-table v-show="curActive === 1" class="a-table" :data="list" empty-text="No Data">
             <el-table-column label="Pair" prop="pair"></el-table-column>
             <el-table-column label="Direction" prop="direction" :formatter="directionFormatter"></el-table-column>
             <el-table-column label="Open Price" prop="openPrice">
@@ -75,17 +78,23 @@
                 </template>
             </el-table-column> -->
         </el-table>
+        <HisList key="his" v-show="curActive === 2" />
     </div>
 </template>
 
 <script>
 import Big from 'big.js'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import HisList from './his.vue'
 export default {
     name: 'Order',
+    components: {
+        HisList
+    },
     data() {
         return {
             margin: 0,
+            curActive: 1,
             list: [
                 // {
                 //   pair: "ETH/USDT",
