@@ -1,5 +1,7 @@
 .order {
     padding: 0 24px;
+    height: 480px;
+    box-sizing: border-box;
 
     .title-con {
         display: flex;
@@ -111,6 +113,12 @@
         ::v-deep .number.active,
         ::v-deep .btn-next {
             color: #fff;
+        }
+    }
+
+    .tarde-order .el-table {
+        ::v-deep .cell {
+            font-weight: normal;
         }
     }
 }

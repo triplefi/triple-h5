@@ -15,12 +15,12 @@ module.exports = {
                 target: 'https://triple.fi',
                 secure: true,
                 changeOrigin: true
-            },
-            '/wss': {
-                ws: true,
-                target: 'wss://triple.fi/wss',
-                changeOrigin: true
             }
+            // '/wss': {
+            //     ws: true,
+            //     target: 'wss://triple.fi/wss',
+            //     changeOrigin: true
+            // }
         }
         // before: require('./mock/mock-server.js')
     },

@@ -258,15 +258,20 @@ export default {
             //             )
         }
     },
-    contractEvents({ state, commit }) {
+    async contractEvents({ state, commit }) {
         // 订阅合约 events
         console.log('contractEvents')
         commit('clearTrades')
+        const toBlock = await state.web3.eth.getBlockNumber()
+        let fromBlock = 0
+        if (state.chainId == 80001) {
+            fromBlock = toBlock - 1000 > 0 ? toBlock - 1000 : 0
+        }
         state.contract.getPastEvents(
             'Trade',
             {
-                fromBlock: 0,
-                toBlock: 'latest'
+                fromBlock,
+                toBlock
             },
             (err, event) => {
                 if (err) {

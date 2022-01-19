@@ -1,5 +1,5 @@
 <template>
-    <div class="order">
+    <div class="tarde-order">
         <el-table class="a-table" :data="tradeList" empty-text="No Data">
             <el-table-column prop="time" label="Time"> </el-table-column>
             <el-table-column prop="direction" label="Direction">

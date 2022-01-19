@@ -17,7 +17,6 @@
                 </div>
             </div>
             <Order></Order>
-            <div style="height: 32px"></div>
         </div>
     </div>
 </template>
