@@ -111,8 +111,10 @@ import { formatNum } from '@/utils/util'
 import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { mapState } from 'vuex'
+import networkMixin from '@/components/networkMixin'
 export default {
     name: 'Pool',
+    mixins: [networkMixin],
     data() {
         return {
             activeName: '',

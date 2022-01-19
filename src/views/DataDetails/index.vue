@@ -69,8 +69,10 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import networkMixin from '@/components/networkMixin'
 export default {
+    mixins: [networkMixin],
     data() {
         return {
             loading: false,

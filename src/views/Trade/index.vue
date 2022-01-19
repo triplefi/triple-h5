@@ -30,8 +30,10 @@ import Deal from './components/Deal'
 import Account from './components/Account'
 import Order from './components/Order'
 import Kline from './components/Kline'
+import networkMixin from '@/components/networkMixin'
 export default {
     name: 'Trade',
+    mixins: [networkMixin],
     components: {
         Market,
         Current,

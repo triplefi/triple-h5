@@ -244,13 +244,6 @@ export default {
         } catch (error) {
             if (state.chainId) {
                 commit('setNetworkError', true)
-                console.log(error)
-                MessageBox({
-                    title: 'Wrong Network',
-                    message: 'Please connect to the appropriate Ethereum network',
-                    confirmButtonText: 'Confirm',
-                    dangerouslyUseHTMLString: true
-                })
             }
             //             this.$alert(
             //                 `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>

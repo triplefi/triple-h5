@@ -84,7 +84,9 @@ import { getAllAccount, getAccountInterest, getAccountTrade } from '@/api'
 import { mapState, mapActions } from 'vuex'
 import { formatMoney } from '@/utils/util'
 import dayjs from 'dayjs'
+import networkMixin from '@/components/networkMixin'
 export default {
+    mixins: [networkMixin],
     data() {
         return {
             loading: false,
