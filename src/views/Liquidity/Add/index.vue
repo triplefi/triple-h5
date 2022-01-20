@@ -79,7 +79,7 @@
                         class="serach-input"
                         v-model="search"
                         @input="handleSearch"
-                        placeholder="Search name or paste address"
+                        placeholder="Search name"
                     ></el-input>
                     <!-- <div class="flex flex-ac">
             <span class="fs14 label">Slippage tolerance</span>
