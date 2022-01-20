@@ -7,13 +7,21 @@
                 <div class="wrap">
                     <div class="flex flex-ac flex-bt">
                         <!-- <span v-if="token" class="fs14b token">{{ token }}</span> -->
-                        <span class="fs14">Object</span>
+                        <span class="fs14">Pair</span>
                         <el-button v-if="!token" @click="selectToken" class="a-select" type="primary" round
-                            >Select a token<i class="el-icon-arrow-down el-icon--right"></i
+                            >Select pair<i class="el-icon-arrow-down el-icon--right"></i
                         ></el-button>
                         <div v-else class="fs14b currency" @click="selectToken">
-                            <img class="icon-coin" :src="token | getCoinIcon" alt="" />
-                            <span>{{ token }}</span>
+                            <!-- <img class="icon-coin" :src="token | getCoinIcon" alt="" /> -->
+                            <div class="icons">
+                                <div class="icon icon-1">
+                                    <img :src="token | getCoinIcon" alt="" />
+                                </div>
+                                <div class="icon icon-2">
+                                    <img :src="currency | getCoinIcon" alt="" />
+                                </div>
+                            </div>
+                            <span>{{ token }} / {{ currency }}</span>
                             <i class="el-icon-arrow-down"></i>
                         </div>
                     </div>
@@ -21,7 +29,7 @@
                 <i class="el-icon-plus"></i>
                 <div class="wrap">
                     <div class="flex flex-ac flex-bt">
-                        <span class="fs14">Currency</span>
+                        <span class="fs14">Token</span>
                         <el-button v-if="!currency" @click="selectCurrency" class="a-select" type="primary" round
                             >Select a currency<i class="el-icon-arrow-down el-icon--right"></i
                         ></el-button>
@@ -33,6 +41,7 @@
                     </div>
                     <div style="height: 10px"></div>
                     <el-input-number
+                        :controls="false"
                         style="width: 100%"
                         v-model="amount"
                         :precision="precision"
@@ -59,12 +68,12 @@
                         >Approve</el-button
                     >
                     <el-button class="btn-enter" type="primary" round @click="handleAddLiquidity" :disabled="!allowance"
-                        >Supply</el-button
+                        >Deposit</el-button
                     >
                 </div>
             </div>
 
-            <el-dialog title="Select a token" :visible.sync="selectModel" :close-on-click-modal="false" width="375px">
+            <el-dialog title="Select pair" :visible.sync="selectModel" :close-on-click-modal="false" width="375px">
                 <div class="content-select">
                     <el-input
                         class="serach-input"
@@ -99,11 +108,30 @@
                     <div class="line"></div>
                     <div class="curreny-list">
                         <template v-if="currencys.length">
-                            <div class="curreny-item" v-for="item in showList" :key="item" @click="checkCoin(item)">
-                                <img class="icon" :src="item | getCoinIcon" alt="" />
+                            <div
+                                class="curreny-item"
+                                v-for="item in showList"
+                                :key="item.token"
+                                @click="checkCoin(item)"
+                            >
+                                <div v-if="item.token" class="icons">
+                                    <div class="icon icon-1">
+                                        <img :src="item.token | getCoinIcon" alt="" />
+                                    </div>
+                                    <div class="icon icon-2">
+                                        <img :src="item.currency | getCoinIcon" alt="" />
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div class="icons">
+                                        <img class="icon-3" :src="item.currency | getCoinIcon" alt="" />
+                                    </div>
+                                </div>
                                 <div>
-                                    <div class="fs14 code">{{ item }}</div>
-                                    <div class="fs12 name">{{ item.toLowerCase() }}</div>
+                                    <div class="fs14 code">
+                                        <span v-if="item.token">{{ item.token }} / </span>{{ item.currency }}
+                                    </div>
+                                    <!-- <div class="fs12 name">{{ item.token.toLowerCase() }}</div> -->
                                 </div>
                                 <div class="fs16 value"></div>
                             </div>
@@ -146,7 +174,7 @@ export default {
             selectType: '',
             selectModel: false,
             search: '',
-            currencys: ['USDT'],
+            currencys: [{ currency: 'USDT' }],
             // currencys: ["ETH", "USDC", "USDT", "DAI"], // 本位币
             // currencys: ["ETH", "UNI", "COMP", "MKR", "LINK", "BTT"], // LP
             showList: [],
@@ -291,29 +319,38 @@ export default {
         },
         selectToken() {
             this.selectType = 'token'
-            this.currencys = this.list.map((item) => item.token.toUpperCase())
+            this.currencys = this.list.map((item) => {
+                return {
+                    token: item.token.toUpperCase(),
+                    currency: item.currency.toUpperCase()
+                }
+            })
             this.showList = this.currencys
             this.selectModel = true
         },
         selectCurrency() {
             this.selectType = 'currency'
-            this.currencys = ['USDT']
+            this.currencys = [
+                {
+                    currency: 'USDT'
+                }
+            ]
             this.showList = this.currencys
             this.selectModel = true
         },
-        checkCoin(val) {
+        checkCoin(item) {
             if (this.selectType === 'token') {
-                if (this.token != val) {
-                    this.token = val
-                    this.$router.push(`/pool/add/${this.currency.toLowerCase()}/${val.toLowerCase()}`)
+                if (this.token != item.token) {
+                    this.token = item.token
+                    this.$router.push(`/pool/add/${this.currency.toLowerCase()}/${item.token.toLowerCase()}`)
                 }
             } else if (this.selectType === 'currency') {
-                if (this.currency != val) {
-                    this.currency = val
+                if (this.currency != item.currency) {
+                    this.currency = item.currency
                     this.$router.push(
                         this.token
-                            ? `/pool/add/${val.toLowerCase()}/${this.token.toLowerCase()}`
-                            : `/pool/add/${val.toLowerCase()}`
+                            ? `/pool/add/${item.currency.toLowerCase()}/${this.token.toLowerCase()}`
+                            : `/pool/add/${item.currency.toLowerCase()}`
                     )
                 }
             }
@@ -324,7 +361,7 @@ export default {
             let Reg = new RegExp(reg, 'i')
 
             this.showList = this.currencys.filter((item) => {
-                return item.match(Reg)
+                return (item.token || '').match(Reg) || (item.currency || '').match(Reg)
             })
         },
         // approve

@@ -57,10 +57,10 @@
             <div class="no-liquidity" v-else>
                 <svg-icon icon-class="ic_Nothing" class-name="icon-noliq"></svg-icon>
                 <div class="fs12">No liquidity found.</div>
-                <div class="flex import">
+                <!-- <div class="flex import">
                     <span class="fs12">Don't see a pool you joined?</span>
                     <a class="fs12" href="#">Import it.</a>
-                </div>
+                </div> -->
             </div>
 
             <el-dialog title="Remove Pool" :visible.sync="removeModel" :close-on-click-modal="false" width="375px">
