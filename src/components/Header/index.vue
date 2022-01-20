@@ -44,7 +44,7 @@
         <div v-else>
             <div v-if="!coinbase" class="wallet btn14" @click="model = true">Connect Wallet</div>
             <div v-else class="wallet2 fs14" @click="model = true">
-                <span>{{ balance | formatBalance }} ETH</span>
+                <span>{{ balance | formatBalance }} {{ curNetwork.token }}</span>
                 <div class="address">
                     <span>{{ coinbase | formatCoinbase }}</span>
                     <svg-icon v-if="wallet === 'MetaMask'" icon-class="ic_metamask" class-name="icon-wallet"></svg-icon>
@@ -147,14 +147,16 @@ export default {
                     id: 4,
                     label: 'Rinkeby',
                     icon: 'ic_rinkeby',
-                    size: 18
+                    size: 18,
+                    token: 'ETH'
                 },
                 {
                     type: 'matic',
                     label: 'Polygon(Matic)',
                     icon: 'ic_matic',
                     id: 80001,
-                    size: 16
+                    size: 16,
+                    token: 'MATIC'
                 }
             ]
         }

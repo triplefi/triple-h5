@@ -167,7 +167,6 @@ const store = new Vuex.Store({
                 if (state.trades.length > 50) {
                     state.trades.pop()
                 }
-                console.log(state.trades, '------')
             }
         },
         clearTrades(state) {
