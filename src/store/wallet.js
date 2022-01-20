@@ -262,45 +262,69 @@ export default {
         // 订阅合约 events
         console.log('contractEvents')
         commit('clearTrades')
-        const toBlock = await state.web3.eth.getBlockNumber()
-        let fromBlock = 0
-        if (state.chainId == 80001) {
-            fromBlock = toBlock - 1000 > 0 ? toBlock - 1000 : 0
+        let toBlock = await state.web3.eth.getBlockNumber()
+        const getFromBlock = (to) => {
+            return to - 1000 > 0 ? to - 1000 : 0
         }
-        state.contract.getPastEvents(
-            'Trade',
-            {
-                fromBlock,
-                toBlock
-            },
-            (err, event) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    console.log('PastTrades', event)
-                    if (event.length) {
-                        const _list = event.map((item) => {
-                            const { amount, direction, price } = item.returnValues
-                            return {
-                                amount,
-                                direction,
-                                price,
-                                blockNumber: item.blockNumber,
-                                transactionHash: item.transactionHash
+        let fromBlock = getFromBlock(toBlock)
+
+        // matic网络，轮询获取trades
+        let requestNum = 0
+        const getPastEvents = (from, to, isGetAll = false) => {
+            state.contract.getPastEvents(
+                'Trade',
+                {
+                    fromBlock: from,
+                    toBlock: to
+                },
+                (err, event) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log('PastTrades', event)
+                        if (event.length) {
+                            const _list = event.map((item) => {
+                                const { amount, direction, price } = item.returnValues
+                                return {
+                                    amount,
+                                    direction,
+                                    price,
+                                    blockNumber: item.blockNumber,
+                                    transactionHash: item.transactionHash
+                                }
+                            })
+                            _list.forEach(async (item) => {
+                                const block = await state.web3.eth.getBlock(item.blockNumber)
+                                item.time = block.timestamp * 1000
+                                commit('setTrade', item)
+                            })
+                        }
+                        if (requestNum < 20 && isGetAll && (event.length || 0) + state.trades.length < 50 && from > 0) {
+                            if (!event.length) {
+                                requestNum++
                             }
-                        })
-                        _list.forEach(async (item) => {
-                            const block = await state.web3.eth.getBlock(item.blockNumber)
-                            item.time = block.timestamp * 1000
-                            commit('setTrade', item)
-                        })
+                            getPastEvents(getFromBlock(from), from, true)
+                        }
                     }
                 }
+            )
+        }
+        // 首次获取历史数据，截止获取到50条。
+        getPastEvents(fromBlock, toBlock, true)
+        // matic无法收到trade消息，只能通过轮询获取trade信息
+        if (state.chainId == 80001) {
+            fromBlock = getFromBlock(toBlock)
+            if (window.getTradeHandler) {
+                clearInterval(window.getTradeHandler)
             }
-        )
+            window.getTradeHandler = setInterval(async () => {
+                const latest = await state.web3.eth.getBlockNumber()
+                getPastEvents(getFromBlock(latest), latest)
+            }, 2000)
+        }
         state.contract.events.Trade(
             {
-                fromBlock: 'latest'
+                fromBlock: toBlock
                 // fromBlock: 0,
                 // toBlock: 'latest'
             },

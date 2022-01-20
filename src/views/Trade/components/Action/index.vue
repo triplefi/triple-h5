@@ -288,7 +288,7 @@ export default {
                     self.longLoading = false
                 }, 10000)
             } else {
-                window.sessionStorage.setItem('longLoading', null)
+                window.sessionStorage.setItem('longLoading', '')
                 clearTimeout(this.longTimeHandler)
             }
         },
@@ -300,7 +300,7 @@ export default {
                     self.shortLoading = false
                 }, 10000)
             } else {
-                window.sessionStorage.setItem('shortLoading', null)
+                window.sessionStorage.setItem('shortLoading', '')
                 clearTimeout(this.shortTimeHandler)
             }
         }

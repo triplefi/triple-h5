@@ -158,14 +158,16 @@ const store = new Vuex.Store({
         setPosition(state, payload) {
             state.position = payload || {}
         },
+        // push最新的trade数据进入，去重，排序
         setTrade(state, payload) {
             const index = state.trades.findIndex((e) => e.transactionHash == payload.transactionHash)
             if (index < 0) {
+                state.trades.unshift(payload)
+                state.trades.sort(sortBy('time', true, false))
                 if (state.trades.length > 50) {
                     state.trades.pop()
                 }
-                state.trades.unshift(payload)
-                state.trades.sort(sortBy('time', true, false))
+                console.log(state.trades, '------')
             }
         },
         clearTrades(state) {
