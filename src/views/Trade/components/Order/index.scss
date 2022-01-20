@@ -119,6 +119,10 @@
     .tarde-order .el-table {
         ::v-deep .cell {
             font-weight: normal;
+            font-size: 12px;
+        }
+        ::v-deep td {
+            padding: 2px 0;
         }
     }
 }

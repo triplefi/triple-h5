@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
-import { Message, MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 import { bus } from '@/utils/bus'
 import { getTradePairs } from '@/api'
 let poolInterval = null
@@ -361,6 +361,8 @@ export default {
             shortPrice: shortPrice * 1
         })
         dispatch('getPoolData')
+        // 发生交易时更新持仓
+        bus.$emit('updateUserPosition')
     },
     // 更新数据
     async refreshData({ state, commit, dispatch }) {

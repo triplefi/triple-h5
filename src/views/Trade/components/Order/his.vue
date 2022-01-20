@@ -40,6 +40,7 @@ import Big from 'big.js'
 import dayjs from 'dayjs'
 import { getAccountTrade } from '@/api'
 import { mapState } from 'vuex'
+import { bus } from '@/utils/bus'
 export default {
     name: 'His',
     data() {
@@ -73,6 +74,12 @@ export default {
             }
         }
     },
+    mounted() {
+        bus.$on('updateUserPosition', this.getAccountTrade)
+    },
+    beforeDestroy() {
+        bus.$off('updateUserPosition')
+    },
     methods: {
         getDirection(k) {
             return {
@@ -86,19 +93,24 @@ export default {
             if (!this.pairInfo || !this.contract) {
                 return
             }
+            this.page = 1
             const res = await getAccountTrade({
                 contract: this.pairInfo.contract,
                 count: 200,
                 account: this.coinbase
             })
-            if (res.result) {
-                let list = []
-                res.data.forEach(async (d) => {
-                    const { amount, block, direction, price } = d
-                    const { timestamp } = await this.web3.eth.getBlock(block)
+            const { result, data } = res
+            if (result) {
+                data.sort((a, b) => (a.block > b.block ? -1 : 1))
+                const requestList = data.map((e) => {
+                    return this.web3.eth.getBlock(e.block)
+                })
+                const times = await Promise.all(requestList)
+                const list = data.map((e, i) => {
+                    const { amount, direction, price } = e
+                    const timestamp = times[i].timestamp
                     const time = dayjs(timestamp * 1000).format('YYYY-MM-DD HH:mm')
-                    console.log(amount, Math.pow(10, this.amountDecimal), '---', this.feeRate, this.divConst, price)
-                    list.push({
+                    return {
                         amount,
                         time,
                         direction,
@@ -110,7 +122,7 @@ export default {
                                 .times(this.feeRate || 0)
                                 .div(this.divConst || 1)
                         )
-                    })
+                    }
                 })
                 this.list = list
             }
