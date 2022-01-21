@@ -4,7 +4,7 @@
             <el-table-column prop="time" label="Time"> </el-table-column>
             <el-table-column prop="direction" label="Direction">
                 <template slot-scope="scope">
-                    {{ getDirection(scope.row.direction) }}
+                    {{ getDirection(scope.row.direction) }}{{ scope.row.isExplosive ? ' LQ' : '' }}
                 </template>
             </el-table-column>
             <el-table-column prop="amount" label="Amount">
@@ -38,7 +38,7 @@
 <script>
 import Big from 'big.js'
 import dayjs from 'dayjs'
-import { getAccountTrade } from '@/api'
+import { getAccountTrade, getAccountExplosive } from '@/api'
 import { mapState } from 'vuex'
 import { bus } from '@/utils/bus'
 export default {
@@ -94,38 +94,56 @@ export default {
                 return
             }
             this.page = 1
-            const res = await getAccountTrade({
-                contract: this.pairInfo.contract,
-                count: 200,
-                account: this.coinbase
-            })
-            const { result, data } = res
-            if (result) {
-                data.sort((a, b) => (a.block > b.block ? -1 : 1))
-                const requestList = data.map((e) => {
-                    return this.web3.eth.getBlock(e.block)
+
+            const [explosive, trades] = await Promise.all([
+                getAccountExplosive({
+                    contract: this.pairInfo.contract,
+                    count: 100,
+                    account: this.coinbase
+                }),
+                getAccountTrade({
+                    contract: this.pairInfo.contract,
+                    count: 200,
+                    account: this.coinbase
                 })
-                const times = await Promise.all(requestList)
-                const list = data.map((e, i) => {
-                    const { amount, direction, price } = e
-                    const timestamp = times[i].timestamp
-                    const time = dayjs(timestamp * 1000).format('YYYY-MM-DD HH:mm')
-                    return {
-                        amount,
-                        time,
-                        direction,
-                        price,
-                        fee: String(
-                            Big(amount)
-                                .times(Math.pow(10, this.amountDecimal))
-                                .times(price)
-                                .times(this.feeRate || 0)
-                                .div(this.divConst || 1)
-                        )
-                    }
-                })
-                this.list = list
+            ])
+            let datas = []
+            if (explosive.result) {
+                datas = [
+                    ...datas,
+                    ...explosive.data.map((e) => {
+                        return { ...e, isExplosive: true }
+                    })
+                ]
             }
+            if (trades.result) {
+                datas = [...datas, ...trades.data]
+            }
+            datas.sort((a, b) => (a.block > b.block ? -1 : 1))
+            const requestList = datas.map((e) => {
+                return this.web3.eth.getBlock(e.block)
+            })
+            const times = await Promise.all(requestList)
+            const list = datas.map((e, i) => {
+                const { amount, direction, price, isExplosive } = e
+                const timestamp = times[i].timestamp
+                const time = dayjs(timestamp * 1000).format('YYYY-MM-DD HH:mm')
+                return {
+                    amount,
+                    time,
+                    direction,
+                    isExplosive,
+                    price,
+                    fee: String(
+                        Big(amount)
+                            .times(Math.pow(10, this.amountDecimal))
+                            .times(price)
+                            .times(this.feeRate || 0)
+                            .div(this.divConst || 1)
+                    )
+                }
+            })
+            this.list = list
         }
     }
 }

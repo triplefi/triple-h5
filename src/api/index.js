@@ -44,11 +44,11 @@ export const getTradeKline = (query) => {
 }
 
 // 获取用户自己的爆仓记录
-export const getUserExplosive = ({ addr }) => {
+export const getAccountExplosive = ({ contract, account, count }) => {
     return request({
-        url: '/api/contract/explosive',
+        url: '/api/account/explosive',
         method: 'get',
-        params: { addr }
+        params: { contract, account, count }
     })
 }
 
