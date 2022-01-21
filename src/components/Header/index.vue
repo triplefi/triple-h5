@@ -30,6 +30,7 @@
                         :class="`network-item ${item.id === chainId ? 'active' : ''}`"
                         v-for="item in networkTypeList"
                         :key="item.id"
+                        @click="onSwitchNetwork(item.id)"
                     >
                         <svg-icon :icon-class="item.icon" :style="`font-size:${item.size}`"></svg-icon>
                         <span class="fs14">{{ item.label }}</span>
@@ -162,7 +163,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'chainId']),
+        ...mapState(['provider', 'coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'chainId']),
         curNetwork() {
             const info = this.networkTypeList.find((e) => e.id == this.chainId)
             console.log(this.chainId, info)
@@ -202,6 +203,14 @@ export default {
             const getTokensTime = window.localStorage.getItem(`${this.coinbase}-get-test-tokens`) || 0
             const now = new Date().getTime()
             this.getTokenDisable = now - getTokensTime <= 5 * 60 * 1000
+        },
+        async onSwitchNetwork(id) {
+            if (this.provider) {
+                await this.provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x' + parseInt(id).toString(16) }]
+                })
+            }
         },
         async handleGetTokens() {
             this.getTokenLoading = true
