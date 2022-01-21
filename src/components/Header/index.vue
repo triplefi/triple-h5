@@ -30,7 +30,7 @@
                         :class="`network-item ${item.id === chainId ? 'active' : ''}`"
                         v-for="item in networkTypeList"
                         :key="item.id"
-                        @click="onSwitchNetwork(item.id)"
+                        @click="onSwitchNetwork(item)"
                     >
                         <svg-icon :icon-class="item.icon" :style="`font-size:${item.size}`"></svg-icon>
                         <span class="fs14">{{ item.label }}</span>
@@ -149,7 +149,8 @@ export default {
                     label: 'Rinkeby',
                     icon: 'ic_rinkeby',
                     size: 18,
-                    token: 'ETH'
+                    token: 'ETH',
+                    rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
                 },
                 {
                     type: 'matic',
@@ -157,7 +158,8 @@ export default {
                     icon: 'ic_matic',
                     id: 80001,
                     size: 16,
-                    token: 'MATIC'
+                    token: 'MATIC',
+                    rpc: 'https://matic-testnet-archive-rpc.bwarelabs.com'
                 }
             ]
         }
@@ -204,11 +206,37 @@ export default {
             const now = new Date().getTime()
             this.getTokenDisable = now - getTokensTime <= 5 * 60 * 1000
         },
-        async onSwitchNetwork(id) {
+        async onSwitchNetwork(item) {
             if (this.provider) {
-                await this.provider.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x' + parseInt(id).toString(16) }]
+                const chainId = '0x' + parseInt(item.id).toString(16)
+                try {
+                    await this.provider.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId }]
+                    })
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        try {
+                            await this.provider.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [
+                                    {
+                                        chainId,
+                                        chainName: item.label,
+                                        rpcUrls: [item.rpc]
+                                    }
+                                ]
+                            })
+                        } catch (addError) {
+                            console.log(addError)
+                            // handle "add" error
+                        }
+                    }
+                }
+            } else {
+                this.$message({
+                    type: 'error',
+                    message: 'Please connect wallet first.'
                 })
             }
         },
