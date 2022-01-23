@@ -263,16 +263,17 @@ export default {
         console.log('contractEvents')
         commit('clearTrades')
         let toBlock = await state.web3.eth.getBlockNumber()
+        const limit = state.chainId == 80001 ? 10000 : 1000
         const getFromBlock = (to) => {
-            return to - 1000 > 0 ? to - 1000 : 0
+            return to - limit > 0 ? to - limit : 0
         }
         let fromBlock = getFromBlock(toBlock)
 
         // matic网络，轮询获取trades
         let requestNum = 0
-        const getPastEvents = (from, to, isGetAll = false) => {
+        const getPastEvents = (from, to, isGetAll = false, key = 'Trade', contractAddress = '') => {
             state.contract.getPastEvents(
-                'Trade',
+                key,
                 {
                     fromBlock: from,
                     toBlock: to
@@ -281,10 +282,11 @@ export default {
                     if (err) {
                         console.log(err)
                     } else {
-                        console.log('PastTrades', event)
+                        // console.log('PastTrades', event)
                         if (event.length) {
                             const _list = event.map((item) => {
                                 const { amount, direction, price } = item.returnValues
+                                console.log(direction)
                                 return {
                                     amount,
                                     direction,
@@ -299,18 +301,29 @@ export default {
                                 commit('setTrade', item)
                             })
                         }
-                        if (requestNum < 20 && isGetAll && (event.length || 0) + state.trades.length < 50 && from > 0) {
+                        if (
+                            requestNum < Number.MAX_VALUE &&
+                            isGetAll &&
+                            (event.length || 0) + state.trades.length < 50 &&
+                            from > 0 &&
+                            state.contractAddress === contractAddress
+                        ) {
                             if (!event.length) {
                                 requestNum++
                             }
-                            getPastEvents(getFromBlock(from), from, true)
+                            getPastEvents(getFromBlock(from), from, true, key, contractAddress)
                         }
                     }
                 }
             )
         }
+        // 获取历史交易数据，包括爆仓
+        const getAllPaseEvents = (from, to, isGetAll = false) => {
+            getPastEvents(from, to, isGetAll, 'Trade', state.contractAddress)
+            getPastEvents(from, to, isGetAll, 'Explosive', state.contractAddress)
+        }
         // 首次获取历史数据，截止获取到50条。
-        getPastEvents(fromBlock, toBlock, true)
+        getAllPaseEvents(fromBlock, toBlock, true, 'Trade')
         // matic无法收到trade消息，只能通过轮询获取trade信息
         if (state.chainId == 80001) {
             fromBlock = getFromBlock(toBlock)
@@ -319,35 +332,39 @@ export default {
             }
             window.getTradeHandler = setInterval(async () => {
                 const latest = await state.web3.eth.getBlockNumber()
-                getPastEvents(getFromBlock(latest), latest)
+                getAllPaseEvents(getFromBlock(latest), latest, false)
             }, 2000)
         }
-        state.contract.events.Trade(
-            {
-                fromBlock: toBlock
-                // fromBlock: 0,
-                // toBlock: 'latest'
-            },
-            async (err, event) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    console.log('event', event.event, event)
-                    if (event.event === 'Trade') {
-                        const { amount, direction, price } = event.returnValues
-                        const block = await state.web3.eth.getBlock(event.blockNumber)
-                        commit('setTrade', {
-                            amount,
-                            direction,
-                            price,
-                            time: block.timestamp * 1000,
-                            blockNumber: event.blockNumber,
-                            transactionHash: event.transactionHash
-                        })
+        const addTradeListener = (key) => {
+            state.contract.events[key](
+                {
+                    fromBlock: toBlock
+                    // fromBlock: 0,
+                    // toBlock: 'latest'
+                },
+                async (err, event) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log('event', event.event, event)
+                        if (event.event === key) {
+                            const { amount, direction, price } = event.returnValues
+                            const block = await state.web3.eth.getBlock(event.blockNumber)
+                            commit('setTrade', {
+                                amount,
+                                direction,
+                                price,
+                                time: block.timestamp * 1000,
+                                blockNumber: event.blockNumber,
+                                transactionHash: event.transactionHash
+                            })
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
+        addTradeListener('Trade')
+        addTradeListener('Explosive')
     },
     // 获取持仓
     async getPosition({ state, commit, dispatch }) {
