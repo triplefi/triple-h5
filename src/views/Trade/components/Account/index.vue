@@ -38,14 +38,10 @@
             </div>
         </div>
 
-        <div class="profit-con" v-if="profitInfo">
+        <div class="profit-con" v-if="profitInfo" :key="profitInfo.transactionHash">
             <div class="close-con">
                 <div></div>
-                <svg-icon
-                    icon-class="ic_close"
-                    class-name="s24 close"
-                    @click.native.stop="handleCloseProfit()"
-                ></svg-icon>
+                <svg-icon icon-class="ic_close" class-name="close" @click.native.stop="handleCloseProfit()"></svg-icon>
             </div>
             <div>
                 <div class="label">{{ profitInfo.direction == -2 ? 'Long' : 'Short' }} Amount</div>
@@ -61,8 +57,8 @@
             </div>
             <div>
                 <div class="label"><span class="profit-label">Profit</span>USDT</div>
-                <div class="value">{{ pricePrecision(profitInfo.profit) | formatMoney }}</div>
-                <div class="amount-ani value">+ {{ pricePrecision(profitInfo.profit) | formatMoney }}</div>
+                <div class="value">{{ profitInfo.profit | formatMoney }}</div>
+                <div class="amount-ani value">+ {{ profitInfo.profit | formatMoney }}</div>
             </div>
         </div>
 
@@ -111,7 +107,7 @@
 
 <script>
 import Big from 'big.js'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
     name: 'Account',
     data() {
@@ -152,7 +148,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['rechargeMargin', 'withdrawMargin', 'setProfitInfo']),
+        ...mapMutations(['setProfitInfo']),
+        ...mapActions(['rechargeMargin', 'withdrawMargin']),
         transfer() {
             this.showTab = true
         },

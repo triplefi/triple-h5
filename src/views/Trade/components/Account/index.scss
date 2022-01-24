@@ -1,6 +1,7 @@
 .account {
     padding: 16px 24px 24px 24px;
-    height: 272px;
+    height: 320px;
+    box-sizing: border-box;
     .account-title {
         font-weight: 700;
         margin-bottom: 16px;
@@ -65,11 +66,19 @@
         border: 1px solid var(--COLOR-t4);
         border-radius: 16px;
         padding: 8px;
+        .close-con {
+            margin-bottom: 8px;
+            .close {
+                font-size: 20px;
+                cursor: pointer;
+            }
+        }
         & > div {
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: relative;
+            margin-bottom: 5px;
         }
         .label {
             font-size: 12px;
@@ -84,26 +93,37 @@
             margin-right: 5px;
             color: #f9d3b4;
         }
-        .profit-value {
-            color: #f9d3b4;
-        }
 
         .amount-ani {
+            color: #f9d3b4;
             font-weight: bold;
             position: absolute;
             right: 0;
             top: 0;
-            animation: move-amount 3s 1 linear forwards;
+            opacity: 1;
+            animation: move-amount 2s 1 linear forwards;
         }
 
         @keyframes move-amount {
-            from {
+            0% {
                 top: 0px;
+                // right: 0;
                 opacity: 1;
             }
-            to {
-                top: -200px;
-                opacity: 0.5;
+            50% {
+                top: -130px;
+                // right: 20px;
+                opacity: 1;
+            }
+            75% {
+                top: -195px;
+                // right: 20px;
+                opacity: 1;
+            }
+            100% {
+                top: -260px;
+                // right: 20px;
+                opacity: 0;
             }
         }
     }

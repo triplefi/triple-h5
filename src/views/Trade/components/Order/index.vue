@@ -84,7 +84,7 @@
 
 <script>
 import Big from 'big.js'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import HisList from './his.vue'
 export default {
     name: 'Order',
@@ -138,7 +138,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['closeLong', 'closeShort', 'setProfitInfo']),
+        ...mapMutations(['setProfitInfo']),
+        ...mapActions(['closeLong', 'closeShort']),
         deadlineTimestamp() {
             return parseInt(new Date().getTime() / 1000) + this.deadline
         },
@@ -185,7 +186,7 @@ export default {
                 return row.amount * (row.openPrice - this.price)
             }
         },
-        calcProfitInfo(returnValues, row) {
+        calcProfitInfo(returnValues, row, transactionHash) {
             if (returnValues) {
                 const closePrice = returnValues.price
                 const openPrice = row.openPrice
@@ -202,7 +203,12 @@ export default {
                     openPrice,
                     amount: returnValues.amount,
                     direction: returnValues.direction,
-                    profit: Number(Big(closePrice).minus(openPrice).times(returnValues.amount))
+                    transactionHash,
+                    profit: Math.abs(
+                        Number(
+                            Big(closePrice).minus(openPrice).times(returnValues.amount).div(Math.pow(10, this.decimals))
+                        )
+                    )
                 }
                 console.log(profitInfo, '=====profitInfo')
                 this.setProfitInfo(profitInfo)
@@ -235,7 +241,7 @@ export default {
                         this.refreshData()
 
                         // 计算收益
-                        this.calcProfitInfo(res?.events?.Trade?.returnValues, row)
+                        this.calcProfitInfo(res?.events?.Trade?.returnValues, row, res?.events?.Trade?.transactionHash)
                     })
                     .catch((err) => {
                         console.error(err)
@@ -251,7 +257,7 @@ export default {
                         this.refreshData()
 
                         // 计算收益
-                        this.calcProfitInfo(res?.events?.Trade?.returnValues, row)
+                        this.calcProfitInfo(res?.events?.Trade?.returnValues, row, res?.events?.Trade?.transactionHash)
                     })
                     .catch((err) => {
                         console.error(err)
