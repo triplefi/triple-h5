@@ -38,6 +38,34 @@
             </div>
         </div>
 
+        <div class="profit-con" v-if="profitInfo">
+            <div class="close-con">
+                <div></div>
+                <svg-icon
+                    icon-class="ic_close"
+                    class-name="s24 close"
+                    @click.native.stop="handleCloseProfit()"
+                ></svg-icon>
+            </div>
+            <div>
+                <div class="label">{{ profitInfo.direction == -2 ? 'Long' : 'Short' }} Amount</div>
+                <div class="value">{{ amountPrecision(profitInfo.amount) | formatMoney }}</div>
+            </div>
+            <div>
+                <div class="label">Open Price</div>
+                <div class="value">{{ pricePrecision(profitInfo.openPrice) | formatMoney }}</div>
+            </div>
+            <div>
+                <div class="label">Close Price</div>
+                <div class="value">{{ pricePrecision(profitInfo.closePrice) | formatMoney }}</div>
+            </div>
+            <div>
+                <div class="label"><span class="profit-label">Profit</span>USDT</div>
+                <div class="value">{{ pricePrecision(profitInfo.profit) | formatMoney }}</div>
+                <div class="amount-ani value">+ {{ pricePrecision(profitInfo.profit) | formatMoney }}</div>
+            </div>
+        </div>
+
         <el-dialog title="Margin Transfer" :visible.sync="showTab" :close-on-click-modal="false" width="375px">
             <div class="content-tab">
                 <el-tabs v-model="activeName" type="card">
@@ -96,7 +124,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['token0Balance', 'position']),
+        ...mapState(['token0Balance', 'position', 'profitInfo']),
         ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice']),
         precision() {
             return Math.abs(this.decimals) || 2
@@ -124,7 +152,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['rechargeMargin', 'withdrawMargin']),
+        ...mapActions(['rechargeMargin', 'withdrawMargin', 'setProfitInfo']),
         transfer() {
             this.showTab = true
         },
@@ -170,6 +198,9 @@ export default {
                 .catch((err) => {
                     console.error(err)
                 })
+        },
+        handleCloseProfit() {
+            this.setProfitInfo(null)
         }
     }
 }

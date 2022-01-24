@@ -28,6 +28,9 @@ export default {
     },
     async mounted() {
         const wallet = localStorage.getItem('wallet')
+        if (this.$route.path === '/') {
+            this.initWeb3 = true
+        }
         if (wallet === 'MetaMask') {
             await this.metaMaskInit()
         } else if (wallet === 'WalletConnect') {

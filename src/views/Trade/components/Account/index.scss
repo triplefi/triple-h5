@@ -60,4 +60,51 @@
             margin: 10px 0 25px;
         }
     }
+    .profit-con {
+        margin-top: 20px;
+        border: 1px solid var(--COLOR-t4);
+        border-radius: 16px;
+        padding: 8px;
+        & > div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+        .label {
+            font-size: 12px;
+            color: var(--COLOR-t2);
+        }
+        .value {
+            font-size: 12px;
+            color: var(--COLOR-t1);
+        }
+        .profit-label {
+            font-size: 14px;
+            margin-right: 5px;
+            color: #f9d3b4;
+        }
+        .profit-value {
+            color: #f9d3b4;
+        }
+
+        .amount-ani {
+            font-weight: bold;
+            position: absolute;
+            right: 0;
+            top: 0;
+            animation: move-amount 3s 1 linear forwards;
+        }
+
+        @keyframes move-amount {
+            from {
+                top: 0px;
+                opacity: 1;
+            }
+            to {
+                top: -200px;
+                opacity: 0.5;
+            }
+        }
+    }
 }

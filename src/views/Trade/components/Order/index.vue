@@ -138,7 +138,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['closeLong', 'closeShort']),
+        ...mapActions(['closeLong', 'closeShort', 'setProfitInfo']),
         deadlineTimestamp() {
             return parseInt(new Date().getTime() / 1000) + this.deadline
         },
@@ -185,6 +185,29 @@ export default {
                 return row.amount * (row.openPrice - this.price)
             }
         },
+        calcProfitInfo(returnValues, row) {
+            if (returnValues) {
+                const closePrice = returnValues.price
+                const openPrice = row.openPrice
+                // 平多
+                if (returnValues.direction == -2 && closePrice <= openPrice) {
+                    return
+                }
+                // 平空
+                if (returnValues.direction == 2 && closePrice >= openPrice) {
+                    return
+                }
+                const profitInfo = {
+                    closePrice,
+                    openPrice,
+                    amount: returnValues.amount,
+                    direction: returnValues.direction,
+                    profit: Number(Big(closePrice).minus(openPrice).times(returnValues.amount))
+                }
+                console.log(profitInfo, '=====profitInfo')
+                this.setProfitInfo(profitInfo)
+            }
+        },
         handleClose(row) {
             if (parseFloat(row.closeNum) == 0) {
                 this.$message({
@@ -210,6 +233,9 @@ export default {
                     .then((res) => {
                         console.log(res)
                         this.refreshData()
+
+                        // 计算收益
+                        this.calcProfitInfo(res?.events?.Trade?.returnValues, row)
                     })
                     .catch((err) => {
                         console.error(err)
@@ -223,6 +249,9 @@ export default {
                     .then((res) => {
                         console.log(res)
                         this.refreshData()
+
+                        // 计算收益
+                        this.calcProfitInfo(res?.events?.Trade?.returnValues, row)
                     })
                     .catch((err) => {
                         console.error(err)

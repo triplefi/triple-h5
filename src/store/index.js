@@ -68,7 +68,8 @@ const store = new Vuex.Store({
         limitCoefficient: 0.99,
 
         isNetworkError: false,
-        pairList: []
+        pairList: [],
+        profitInfo: null // 收益，当有收益时显示
     },
     mutations: {
         setReady(state, payload) {
@@ -207,6 +208,9 @@ const store = new Vuex.Store({
         },
         setPairInfo(state, payload) {
             state.pairInfo = payload
+        },
+        setProfitInfo(state, payload) {
+            state.profitInfo = payload
         }
     },
     actions: {
