@@ -160,7 +160,7 @@ export default {
                     id: 80001,
                     size: 16,
                     token: 'MATIC',
-                    rpc: 'https://matic-testnet-archive-rpc.bwarelabs.com',
+                    rpc: 'https://rpc-mumbai.maticvigil.com',
                     explorerUrl: 'https://mumbai.polygonscan.com/'
                 }
             ]

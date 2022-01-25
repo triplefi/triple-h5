@@ -263,7 +263,7 @@ export default {
         console.log('contractEvents')
         commit('clearTrades')
         let toBlock = await state.web3.eth.getBlockNumber()
-        const limit = state.chainId == 80001 ? 10000 : 1000
+        const limit = state.chainId == 80001 ? 1000 : 10000
         const getFromBlock = (to) => {
             return to - limit > 0 ? to - limit : 0
         }
