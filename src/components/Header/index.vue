@@ -150,7 +150,8 @@ export default {
                     icon: 'ic_rinkeby',
                     size: 18,
                     token: 'ETH',
-                    rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
+                    rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+                    explorerUrl: 'https://rinkeby.etherscan.io'
                 },
                 {
                     type: 'matic',
@@ -159,7 +160,8 @@ export default {
                     id: 80001,
                     size: 16,
                     token: 'MATIC',
-                    rpc: 'https://matic-testnet-archive-rpc.bwarelabs.com'
+                    rpc: 'https://matic-testnet-archive-rpc.bwarelabs.com',
+                    explorerUrl: 'https://mumbai.polygonscan.com/'
                 }
             ]
         }
@@ -223,7 +225,8 @@ export default {
                                     {
                                         chainId,
                                         chainName: item.label,
-                                        rpcUrls: [item.rpc]
+                                        rpcUrls: [item.rpc],
+                                        blockExplorerUrls: [item.explorerUrl]
                                     }
                                 ]
                             })

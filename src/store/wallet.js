@@ -286,7 +286,6 @@ export default {
                         if (event.length) {
                             const _list = event.map((item) => {
                                 const { amount, direction, price } = item.returnValues
-                                console.log(direction)
                                 return {
                                     amount,
                                     direction,

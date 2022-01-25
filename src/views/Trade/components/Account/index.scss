@@ -66,6 +66,7 @@
         border: 1px solid var(--COLOR-t4);
         border-radius: 16px;
         padding: 8px;
+        z-index: 0;
         .close-con {
             margin-bottom: 8px;
             .close {
@@ -102,6 +103,7 @@
             top: 0;
             opacity: 1;
             animation: move-amount 2s 1 linear forwards;
+            pointer-events: none;
         }
 
         @keyframes move-amount {
