@@ -93,6 +93,10 @@
             font-size: 14px;
             margin-right: 5px;
             color: #f9d3b4;
+            font-weight: bold;
+        }
+        .profit-value {
+            color: #f9d3b4;
         }
 
         .amount-ani {
@@ -102,7 +106,7 @@
             right: 0;
             top: 0;
             opacity: 1;
-            animation: move-amount 2s 1 linear forwards;
+            animation: move-amount 1s 1 linear forwards;
             pointer-events: none;
         }
 

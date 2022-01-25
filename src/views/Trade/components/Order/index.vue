@@ -210,7 +210,6 @@ export default {
                         )
                     )
                 }
-                console.log(profitInfo, '=====profitInfo')
                 this.setProfitInfo(profitInfo)
             }
         },

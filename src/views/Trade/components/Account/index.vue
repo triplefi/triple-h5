@@ -57,7 +57,7 @@
             </div>
             <div>
                 <div class="label"><span class="profit-label">Profit</span>USDT</div>
-                <div class="value">{{ profitInfo.profit | formatMoney }}</div>
+                <div class="value profit-value">{{ profitInfo.profit | formatMoney }}</div>
                 <div class="amount-ani value">+ {{ profitInfo.profit | formatMoney }}</div>
             </div>
         </div>
@@ -145,6 +145,16 @@ export default {
                 return keepMargin
             }
             return 0
+        }
+    },
+    watch: {
+        profitInfo(v) {
+            if (v) {
+                let audio = new Audio()
+                audio.src = require('./video.mp3')
+                console.log(audio)
+                audio.play()
+            }
         }
     },
     methods: {
