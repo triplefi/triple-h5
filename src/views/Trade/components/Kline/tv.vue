@@ -249,6 +249,11 @@ export default {
         //     console.log(e);
         //   }
         // },
+        'chartParams.pricescale'() {
+            if (this.ticker) {
+                this.initTV()
+            }
+        },
         ticker(curVal) {
             curVal && this.initTV()
         },
@@ -284,5 +289,9 @@ export default {
 .tvCointainer {
     width: 100%;
     height: 100%;
+    background: #0a0911;
+    iframe {
+        background: #0a0911;
+    }
 }
 </style>

@@ -1,6 +1,6 @@
 /* 背景色 */
-.chart-page {
-  background-color: #1e1e1e;
+.chart-page,.js-rootresizer__contents {
+  background: #0A0911 !important;
 }
 .main-properties {
   height: 240px !important;

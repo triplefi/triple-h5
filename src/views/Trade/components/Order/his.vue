@@ -134,13 +134,15 @@ export default {
                     direction,
                     isExplosive,
                     price,
-                    fee: String(
-                        Big(amount)
-                            .times(Math.pow(10, this.amountDecimal))
-                            .times(price)
-                            .times(this.feeRate || 0)
-                            .div(this.divConst || 1)
-                    )
+                    fee: isExplosive
+                        ? '0'
+                        : String(
+                              Big(amount)
+                                  .times(Math.pow(10, this.amountDecimal))
+                                  .times(price)
+                                  .times(this.feeRate || 0)
+                                  .div(this.divConst || 1)
+                          )
                 }
             })
             this.list = list
