@@ -27,7 +27,7 @@
                 <img class="icon" :src="item.trade_coin.toUpperCase() | getCoinIcon" alt="" />
                 <span class="btn13">{{ item.trade_coin.toUpperCase() }}</span>
                 <span class="fs13 code"></span>
-                <span class="btn13 price">${{ pricePrecision(item.index_price) | formatMoney }}</span>
+                <span class="btn13 price">${{ calcPricePrecision(item) | formatMoney }}</span>
                 <div class="btn13 rate">
                     {{ item.index_price - item.open_price >= 0 ? '+' : ''
                     }}{{ (((item.index_price - item.open_price) / item.open_price) * 100).toFixed(2) }}%
@@ -39,31 +39,58 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { formatNum } from '@/utils/util'
+import abi from '@/contracts/HedgexSingle.json'
 export default {
     name: 'Market',
     data() {
         return {
-            query: ''
+            query: '',
+            decimalsInfo: {}
         }
     },
     computed: {
         ...mapState(['pairInfo', 'pairList']),
         showList() {
+            let list = []
             if (this.query) {
                 let reg = `${this.query}`
                 let Reg = new RegExp(reg, 'i')
-                return this.pairList.filter((item) => {
+                list = this.pairList.filter((item) => {
                     return item.trade_coin.match(Reg)
                 })
             } else {
-                return this.pairList
+                list = [...this.pairList]
             }
+            return list
+        }
+    },
+    watch: {
+        pairList(v) {
+            v.forEach(async (item) => {
+                const contract = new this.web3.eth.Contract(abi, item.contract)
+                const amountDecimal = await contract.methods.amountDecimal().call()
+                const decimals = await contract.methods.decimals().call()
+                this.decimalsInfo[`${item.trade_coin}_${item.margin_coin}`] = {
+                    amountDecimal,
+                    decimals
+                }
+            })
         }
     },
     methods: {
         ...mapActions(['initContract', 'setPairCoin', 'setPairCoin']),
         checkActive(item) {
             return item.trade_coin.toUpperCase() == this.tradeCoin && item.margin_coin.toUpperCase() == this.marginCoin
+        },
+        calcPricePrecision(item) {
+            const key = `${item.trade_coin}_${item.margin_coin}`
+            const { decimals, amountDecimal } = this.decimalsInfo[key] || {}
+            if (decimals || amountDecimal) {
+                const _decimals = (decimals || 0) * 1 + (amountDecimal || 0) * 1
+                return formatNum(item.index_price / Math.pow(10, _decimals), _decimals)
+            }
+            return 0
         }
     }
 }

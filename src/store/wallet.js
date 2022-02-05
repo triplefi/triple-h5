@@ -448,22 +448,26 @@ export default {
         }
     },
     // 获取交易对
-    async getPairsList({ commit, dispatch }) {
+    async getPairsList({ commit, dispatch }, params) {
         try {
             const res = await getTradePairs()
             let list = res.result ? res.data : []
-            let pairInfo = {}
-            try {
-                pairInfo = window.localStorage.getItem('curPairInfo')
-                pairInfo = JSON.parse(pairInfo) || {}
-            } catch (error) {
-                pairInfo = {}
+            if (!params?.noSetPairInfo) {
+                let pairInfo = {}
+                try {
+                    pairInfo = window.localStorage.getItem('curPairInfo')
+                    pairInfo = JSON.parse(pairInfo) || {}
+                } catch (error) {
+                    pairInfo = {}
+                }
+                const findInfo = list.find((e) => e.trade_coin === pairInfo.trade_coin)
+                pairInfo = findInfo || list[0] || {}
+                dispatch('setPairCoin', pairInfo)
             }
-            console.log(pairInfo, '==========================')
-            const findInfo = list.find((e) => e.trade_coin === pairInfo.trade_coin)
-            pairInfo = findInfo || list[0] || {}
-            dispatch('setPairCoin', pairInfo)
             commit('setPairList', list)
+            setTimeout(() => {
+                dispatch('getPairsList', { noSetPairInfo: true })
+            }, 3000)
         } catch (error) {
             console.log(error)
             dispatch('getPairsList')
