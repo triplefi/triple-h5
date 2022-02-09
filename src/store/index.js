@@ -165,7 +165,7 @@ const store = new Vuex.Store({
             if (index < 0) {
                 state.trades.unshift(payload)
                 state.trades.sort(sortBy('time', true, false))
-                if (state.trades.length > 50) {
+                if (state.trades.length > 30) {
                     state.trades.pop()
                 }
             }

@@ -301,9 +301,9 @@ export default {
                             })
                         }
                         if (
-                            requestNum < Number.MAX_VALUE &&
+                            requestNum < 50 &&
                             isGetAll &&
-                            (event.length || 0) + state.trades.length < 50 &&
+                            (event.length || 0) + state.trades.length < 30 &&
                             from > 0 &&
                             state.contractAddress === contractAddress
                         ) {
