@@ -1,37 +1,53 @@
 <template>
     <div class="account">
-        <div class="account-title">Account -USDT</div>
-        <div class="flex flex-ac">
+        <div class="account-title">Account - USDT</div>
+        <div class="flex flex-ac flex-bt">
             <div class="fs12 name">Wallet</div>
             <div class="fs12 value">
-                {{ formatDecimals(token0Balance) | formatMoney }}
+                {{ parseFloat(formatDecimals(token0Balance)).toFixed(2) | formatMoney }}
             </div>
-            <div class="fs12 transfer" @click="transfer">Transfer</div>
+            <!-- <div class="fs12 transfer" @click="transfer">Transfer</div> -->
+            <el-button @click="transfer" type="primary" round size="mini" class="transfer">Transfer</el-button>
         </div>
-        <div class="flex flex-ac">
+        <div class="flex flex-ac flex-bt">
             <div class="fs12 name">Margin</div>
             <div class="fs12 value">
                 {{ formatDecimals(position.margin) | formatMoney }}
             </div>
         </div>
-        <div class="flex flex-ac">
+        <div class="flex flex-ac flex-bt">
             <div class="fs12 name">Net Value</div>
             <div class="fs12 value">{{ formatDecimals(NetValue) | formatMoney }}</div>
         </div>
-        <div class="flex flex-ac">
-            <div class="fs12 name">Est. Liquidate Price</div>
-            <div class="fs12 value" v-if="LiquidationPrice > 0">
+        <div class="flex flex-ac flex-bt">
+            <el-tooltip effect="dark" placement="left">
+                <div slot="content">
+                    Deposit will lower the account leverage and it will lower the risk of liquidation and the Est.
+                    Liquidation Price will move further from the current market price.
+                </div>
+                <div class="fs12 name c-help">Est. Liquidate Price</div>
+            </el-tooltip>
+            <div
+                class="fs12 value"
+                :class="{ 'click-transfer': liquidationStatus == 1 }"
+                @click="
+                    () => {
+                        liquidationStatus == 1 && transfer()
+                    }
+                "
+                v-if="liquidationStatus > 0"
+            >
                 {{ pricePrecision(LiquidationPrice) | formatMoney }}
             </div>
             <div class="fs12 value" v-else>--</div>
         </div>
-        <div class="flex flex-ac">
+        <div class="flex flex-ac flex-bt">
             <div class="fs12 name">Used Margin</div>
             <div class="fs12 value">
                 {{ formatDecimals(UsedMargin) | formatMoney }}
             </div>
         </div>
-        <div class="flex flex-ac">
+        <div class="flex flex-ac flex-bt">
             <div class="fs12 name">Maintenance margin</div>
             <div class="fs12 value">
                 {{ formatDecimals(keepMargin) | formatMoney }}
@@ -65,10 +81,14 @@
         <el-dialog title="Margin Transfer" :visible.sync="showTab" :close-on-click-modal="false" width="375px">
             <div class="content-tab">
                 <el-tabs v-model="activeName" type="card">
-                    <el-tab-pane label="Recharge" name="recharge">
+                    <div class="fs12" v-if="UsedMargin">
+                        Reminder: Deposit will lower the account leverage and it will lower the risk of liquidation.
+                    </div>
+                    <el-tab-pane label="Deposit" name="recharge">
                         <el-input-number
                             style="width: 100%; margin-top: 20px"
                             v-model="amount1"
+                            :controls="false"
                             :precision="precision"
                             :step="step"
                             :min="0"
@@ -84,6 +104,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="Withdraw" name="withdraw">
                         <el-input-number
+                            :controls="false"
                             style="width: 100%; margin-top: 20px"
                             v-model="amount2"
                             :precision="precision"
@@ -120,7 +141,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['token0Balance', 'position', 'profitInfo']),
+        ...mapState(['token0Balance', 'position', 'profitInfo', 'price']),
         ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice']),
         precision() {
             return Math.abs(this.decimals) || 2
@@ -145,6 +166,16 @@ export default {
                 return keepMargin
             }
             return 0
+        },
+        liquidationStatus() {
+            if (this.LiquidationPrice > 0 && this.price) {
+                if (Math.abs((this.price - this.LiquidationPrice) / this.price) < 0.03) {
+                    return 1
+                }
+                return 2
+            } else {
+                return 0
+            }
         }
     },
     watch: {
