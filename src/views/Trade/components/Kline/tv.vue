@@ -177,10 +177,10 @@ export default {
         // 设置k线配置
         setDataFeed() {
             // const protocol = location.protocol === 'http:' ? 'ws:' : 'wss'
-            let wsURL = 'wss://triple.fi/wss/kline'
+            let wsURL = `wss://${window.location.host}/wss/kline`
             const curChainId = window.localStorage.getItem('curChainId')
             if (curChainId == 80001) {
-                wsURL = 'wss://triple.fi/matic/wss/kline'
+                wsURL = `wss://${window.location.host}/matic/wss/kline`
             }
 
             this.initData = {
