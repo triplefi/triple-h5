@@ -30,6 +30,8 @@ import Account from './components/Account'
 import Order from './components/Order'
 import Kline from './components/Kline'
 import networkMixin from '@/components/networkMixin'
+import { mapState } from 'vuex'
+import { checkMatic } from '@/utils/util'
 export default {
     name: 'Trade',
     mixins: [networkMixin],
@@ -42,21 +44,47 @@ export default {
         Order,
         Kline
     },
-    mounted() {
-        const isShowTips = window.localStorage.getItem('isFirstTrade') || 0
-        window.localStorage.setItem('isFirstTrade', 1)
-        if (parseInt(isShowTips) === 0) {
-            this.$alert(
-                `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
-Welcome to use the Triple.Fi Beta version! Please follow the steps below,</br>
-1. Switch your wallet to Ethereum Rinkeby Test Network.</br>
-2. Get free test tokens on the top left corner.</br>
-3. Click “Approve” button and have fun trading!</br></br></div>`,
-                {
-                    confirmButtonText: 'Confirm',
-                    dangerouslyUseHTMLString: true
+    computed: {
+        ...mapState(['chainId'])
+    },
+    watch: {
+        chainId: {
+            immediate: true,
+            handler(v) {
+                if (v) {
+                    const key = `isFirstTrade${v}`
+                    const isShowTips = window.localStorage.getItem(key) || 0
+                    window.localStorage.setItem(key, 1)
+                    if (parseInt(isShowTips) === 0) {
+                        console.log(v, '----', checkMatic(v))
+                        if (checkMatic(v)) {
+                            this.$alert(
+                                `<div style="line-height:40px;font-size:15px;">Dear traders,</br></br>
+    Welcome to use TripleFi!</br>
+    Please have USDT (polygon) and Matic in your wallet first.</br>
+    Then click the “Approve” button and have fun trading!</br>
+    You can also switch to Rinkeby Testnet to test with stimulated trading for free.</br></br></div>`,
+                                {
+                                    confirmButtonText: 'Confirm',
+                                    dangerouslyUseHTMLString: true
+                                }
+                            )
+                        } else {
+                            this.$alert(
+                                `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
+    Welcome to use the Triple.Fi stimulated trading version! Please follow the steps below,</br>
+    1. Switch your wallet to Ethereum Rinkeby Test Network.</br>
+    2. Get free test tokens on the top left corner.</br>
+    3. Click “Approve” button and have fun trading!</br></br></div>`,
+                                {
+                                    confirmButtonText: 'Confirm',
+                                    dangerouslyUseHTMLString: true
+                                }
+                            )
+                        }
+                    }
                 }
-            )
+            }
         }
     }
 }

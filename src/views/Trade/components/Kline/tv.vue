@@ -3,6 +3,7 @@
 </template>
 <script>
 import WS from '@/utils/wsUtil'
+import { getNetUrl } from '@/utils/util'
 import UDFCompatibleDatafeed from '@/utils/UDF'
 export default {
     data() {
@@ -177,12 +178,7 @@ export default {
         // 设置k线配置
         setDataFeed() {
             // const protocol = location.protocol === 'http:' ? 'ws:' : 'wss'
-            let wsURL = `wss://${window.location.host}/wss/kline`
-            const curChainId = window.localStorage.getItem('curChainId')
-            if (curChainId == 80001) {
-                wsURL = `wss://${window.location.host}/matic/wss/kline`
-            }
-
+            let wsURL = getNetUrl(`wss://${window.location.host}/wss/kline`)
             this.initData = {
                 interval: this.chartParams.interval,
                 wsURL,

@@ -782,14 +782,16 @@
                 <p></p>
                 <div class="buttons">
                     <router-link to="/trade">
-                        <div class="label">Testnet Beta Version Available Now on: Rinkeby Testnet</div>
-                    </router-link>
-                    <div class="label gray">
-                        Mainnet available soon on polygon
-                        <div>
-                            <img class="img" src="./img/logo.png" alt="" />
+                        <div class="label" style="right: 60px">
+                            Available on polygon
+                            <div>
+                                <img class="img" src="./img/logo.png" alt="" />
+                            </div>
                         </div>
-                    </div>
+                    </router-link>
+                    <router-link to="/trade">
+                        <div class="label">Stimulated trading available on Rinkeby Testnet</div>
+                    </router-link>
                     <!-- <a
                         class="active"
                         target="_blank"
@@ -5058,8 +5060,8 @@
                                 fill="#0A0A23"
                             />
                         </svg>
-                        <h3>10x Leverage</h3>
-                        <p>Traders can trade with up to 10x leverage to long or short 24/7</p>
+                        <h3>20x Leverage</h3>
+                        <p>Traders can trade with up to 20x leverage to long or short 24/7</p>
                     </div>
                     <div class="cont_3_item">
                         <svg
@@ -5298,8 +5300,8 @@
                                 </clipPath>
                             </defs>
                         </svg>
-                        <h3>Permissionless Pool Creation</h3>
-                        <p>Any one can create new pools for any cryptocurrency easily</p>
+                        <h3>Competitive Fee Rate</h3>
+                        <p>TripleFi offers the best trading fee rate to minimize the trading cost for traders</p>
                     </div>
                     <div class="cont_3_item">
                         <svg

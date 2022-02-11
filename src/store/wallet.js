@@ -4,6 +4,7 @@ import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { Message } from 'element-ui'
 import { bus } from '@/utils/bus'
+import { checkMatic } from '@/utils/util'
 import { getTradePairs } from '@/api'
 let poolInterval = null
 export default {
@@ -245,17 +246,6 @@ export default {
             if (state.chainId) {
                 commit('setNetworkError', true)
             }
-            //             this.$alert(
-            //                 `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
-            // Welcome to use the Triple.Fi Beta version! Please follow the steps below,</br>
-            // 1. Switch your wallet to Ethereum Rinkeby Test Network.</br>
-            // 2. Get free test tokens on the top left corner.</br>
-            // 3. Click “Authorize” button and have fun trading!</br></br></div>`,
-            //                 {
-            //                     confirmButtonText: 'Confirm',
-            //                     dangerouslyUseHTMLString: true
-            //                 }
-            //             )
         }
     },
     async contractEvents({ state, commit }) {
@@ -263,7 +253,7 @@ export default {
         console.log('contractEvents')
         commit('clearTrades')
         let toBlock = await state.web3.eth.getBlockNumber()
-        const limit = state.chainId == 80001 ? 1000 : 10000
+        const limit = checkMatic(state.chainId) ? 1000 : 10000
         const getFromBlock = (to) => {
             return to - limit > 0 ? to - limit : 0
         }
@@ -324,7 +314,7 @@ export default {
         // 首次获取历史数据，截止获取到50条。
         getAllPaseEvents(fromBlock, toBlock, true, 'Trade')
         // matic无法收到trade消息，只能通过轮询获取trade信息
-        if (state.chainId == 80001) {
+        if (checkMatic(state.chainId)) {
             fromBlock = getFromBlock(toBlock)
             if (window.getTradeHandler) {
                 clearInterval(window.getTradeHandler)

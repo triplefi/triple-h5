@@ -124,7 +124,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { screenFull, exitFull, checkFull } from '@/utils/util'
+import { screenFull, exitFull, checkFull, getNetConfig } from '@/utils/util'
 import { getTestCoin } from '@/api'
 export default {
     name: 'Header',
@@ -142,35 +142,13 @@ export default {
                 Telegram: 'https://t.me/triplefi',
                 Discord: 'https://discord.com/invite/Ar6aDuCuxY'
             },
-            networkTypeList: [
-                {
-                    type: 'rinkeby',
-                    id: 4,
-                    label: 'Rinkeby',
-                    icon: 'ic_rinkeby',
-                    size: 18,
-                    token: 'ETH',
-                    rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-                    explorerUrl: 'https://rinkeby.etherscan.io'
-                },
-                {
-                    type: 'matic',
-                    label: 'Polygon(Matic)',
-                    icon: 'ic_matic',
-                    id: 80001,
-                    size: 16,
-                    token: 'MATIC',
-                    rpc: 'https://rpc-mumbai.maticvigil.com',
-                    explorerUrl: 'https://mumbai.polygonscan.com/'
-                }
-            ]
+            networkTypeList: getNetConfig()
         }
     },
     computed: {
         ...mapState(['provider', 'coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'chainId']),
         curNetwork() {
             const info = this.networkTypeList.find((e) => e.id == this.chainId)
-            console.log(this.chainId, info)
             return info || this.networkTypeList[0]
         }
     },

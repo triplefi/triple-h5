@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getNetUrl } from '@/utils/util'
 
 const service = axios.create({
     baseURL: process.env.NODE_ENV === 'development' ? '/' : `${window.location.origin}/`,
@@ -7,11 +8,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
     (config) => {
-        // TODO，网络支持多以后可以做成配置化
-        const curChainId = window.localStorage.getItem('curChainId')
-        if (curChainId == 80001) {
-            config.url = config.url.replace('/api/', '/matic/api/')
-        }
+        config.url = getNetUrl(config.url)
         return config
     },
     (error) => {
