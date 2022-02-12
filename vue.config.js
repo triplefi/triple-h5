@@ -8,20 +8,20 @@ module.exports = {
         overlay: {
             warnings: false,
             errors: true
-        },
-        proxy: {
-            '/api': {
-                ws: true,
-                target: 'https://polygon.triple.fi',
-                secure: true,
-                changeOrigin: true
-            }
-            // '/wss': {
-            //     ws: true,
-            //     target: 'wss://triple.fi/wss',
-            //     changeOrigin: true
-            // }
         }
+        // proxy: {
+        //     '/api': {
+        //         ws: true,
+        //         target: 'https://polygon.triple.fi',
+        //         secure: true,
+        //         changeOrigin: true
+        //     }
+        // '/wss': {
+        //     ws: true,
+        //     target: 'wss://triple.fi/wss',
+        //     changeOrigin: true
+        // }
+        // }
         // before: require('./mock/mock-server.js')
     },
     chainWebpack: (config) => {

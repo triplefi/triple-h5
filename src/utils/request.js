@@ -2,13 +2,14 @@ import axios from 'axios'
 import { getNetUrl } from '@/utils/util'
 
 const service = axios.create({
-    baseURL: process.env.NODE_ENV === 'development' ? '/' : `${window.location.origin}/`,
+    // baseURL: process.env.NODE_ENV === 'development' ? '/' : `${window.location.origin}/`,
+    baseURL: `${window.location.origin}/`,
     timeout: 5000
 })
 
 service.interceptors.request.use(
     (config) => {
-        config.url = getNetUrl(config.url)
+        config.baseURL = getNetUrl(config.baseURL)
         return config
     },
     (error) => {

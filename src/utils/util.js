@@ -236,7 +236,7 @@ export const getNetUrl = (url) => {
         80001: 'mumbai.triple.fi',
         4: 'rinkeby.triple.fi'
     }[curChainId]
-    ;['://triple.fi', '://test.triple.fi'].forEach((e) => {
+    ;['://triple.fi', '://test.triple.fi', '://127.0.0.1:8080'].forEach((e) => {
         url = url.replace(e, '://' + netUrl)
     })
     return url
