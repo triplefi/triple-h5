@@ -12,7 +12,7 @@ module.exports = {
         proxy: {
             '/api': {
                 ws: true,
-                target: 'https://test.triple.fi',
+                target: 'https://polygon.triple.fi',
                 secure: true,
                 changeOrigin: true
             }

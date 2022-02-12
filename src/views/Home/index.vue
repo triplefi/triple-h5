@@ -5060,8 +5060,8 @@
                                 fill="#0A0A23"
                             />
                         </svg>
-                        <h3>20x Leverage</h3>
-                        <p>Traders can trade with up to 20x leverage to long or short 24/7</p>
+                        <h3>25x Leverage</h3>
+                        <p>Traders can trade with up to 25x leverage to long or short 24/7</p>
                     </div>
                     <div class="cont_3_item">
                         <svg

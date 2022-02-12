@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="flex flex-ac flex-bt">
-            <div class="fs12 name">Net Value</div>
+            <div class="fs12 name">Equity</div>
             <div class="fs12 value">{{ formatDecimals(NetValue) | formatMoney }}</div>
         </div>
         <div class="flex flex-ac flex-bt">

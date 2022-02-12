@@ -179,16 +179,6 @@ export const getNetConfig = () => {
     if (/test.triple.fi/.test(window.location.href) || /127.0.0.1/.test(window.location.href)) {
         return [
             {
-                type: 'rinkeby',
-                id: 4,
-                label: 'Rinkeby',
-                icon: 'ic_rinkeby',
-                size: 18,
-                token: 'ETH',
-                rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-                explorerUrl: 'https://rinkeby.etherscan.io'
-            },
-            {
                 type: 'matic',
                 label: 'Polygon(Matic)',
                 icon: 'ic_matic',
@@ -197,10 +187,7 @@ export const getNetConfig = () => {
                 token: 'MATIC',
                 rpc: 'https://rpc-mumbai.matic.today',
                 explorerUrl: 'https://mumbai.polygonscan.com/'
-            }
-        ]
-    } else {
-        return [
+            },
             {
                 type: 'rinkeby',
                 id: 4,
@@ -210,7 +197,10 @@ export const getNetConfig = () => {
                 token: 'ETH',
                 rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
                 explorerUrl: 'https://rinkeby.etherscan.io'
-            },
+            }
+        ]
+    } else {
+        return [
             {
                 type: 'matic',
                 label: 'Polygon',
@@ -220,6 +210,16 @@ export const getNetConfig = () => {
                 token: 'MATIC',
                 rpc: 'https://polygon-rpc.com',
                 explorerUrl: 'https://polygonscan.com'
+            },
+            {
+                type: 'rinkeby',
+                id: 4,
+                label: 'Rinkeby',
+                icon: 'ic_rinkeby',
+                size: 18,
+                token: 'ETH',
+                rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+                explorerUrl: 'https://rinkeby.etherscan.io'
             }
         ]
     }
@@ -230,9 +230,14 @@ export const checkMatic = (id) => {
 }
 // 根据链ID，获取api，wss地址
 export const getNetUrl = (url) => {
-    const curChainId = window.localStorage.getItem('curChainId')
-    if (checkMatic(curChainId)) {
-        return url.replace('/api/', '/matic/api/').replace('/wss/', '/matic/wss/')
-    }
+    const curChainId = window.localStorage.getItem('curChainId') || 137
+    const netUrl = {
+        137: 'polygon.triple.fi',
+        80001: 'mumbai.triple.fi',
+        4: 'rinkeby.triple.fi'
+    }[curChainId]
+    ;['://triple.fi', '://test.triple.fi'].forEach((e) => {
+        url = url.replace(e, '://' + netUrl)
+    })
     return url
 }
