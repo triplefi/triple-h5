@@ -204,7 +204,8 @@ export default {
                                         chainId,
                                         chainName: item.label,
                                         rpcUrls: [item.rpc],
-                                        blockExplorerUrls: [item.explorerUrl]
+                                        blockExplorerUrls: [item.explorerUrl],
+                                        nativeCurrency: item.nativeCurrency
                                     }
                                 ]
                             })

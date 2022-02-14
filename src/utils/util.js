@@ -186,7 +186,12 @@ export const getNetConfig = () => {
                 size: 16,
                 token: 'MATIC',
                 rpc: 'https://rpc-mumbai.matic.today',
-                explorerUrl: 'https://mumbai.polygonscan.com/'
+                explorerUrl: 'https://mumbai.polygonscan.com/',
+                nativeCurrency: {
+                    name: 'MATIC',
+                    decimals: 18,
+                    symbol: 'MATIC'
+                }
             },
             {
                 type: 'rinkeby',
@@ -196,7 +201,12 @@ export const getNetConfig = () => {
                 size: 18,
                 token: 'ETH',
                 rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-                explorerUrl: 'https://rinkeby.etherscan.io'
+                explorerUrl: 'https://rinkeby.etherscan.io',
+                nativeCurrency: {
+                    name: 'ETH',
+                    decimals: 18,
+                    symbol: 'ETH'
+                }
             }
         ]
     } else {
@@ -209,7 +219,12 @@ export const getNetConfig = () => {
                 size: 16,
                 token: 'MATIC',
                 rpc: 'https://polygon-rpc.com',
-                explorerUrl: 'https://polygonscan.com'
+                explorerUrl: 'https://polygonscan.com',
+                nativeCurrency: {
+                    name: 'MATIC',
+                    decimals: 18,
+                    symbol: 'MATIC'
+                }
             },
             {
                 type: 'rinkeby',
@@ -219,7 +234,12 @@ export const getNetConfig = () => {
                 size: 18,
                 token: 'ETH',
                 rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-                explorerUrl: 'https://rinkeby.etherscan.io'
+                explorerUrl: 'https://rinkeby.etherscan.io',
+                nativeCurrency: {
+                    name: 'ETH',
+                    decimals: 18,
+                    symbol: 'ETH'
+                }
             }
         ]
     }
