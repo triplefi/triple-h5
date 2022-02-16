@@ -162,7 +162,7 @@ export default {
         keepMargin(state) {
             if (JSON.stringify(state.position) !== '{}') {
                 const { longPrice, longAmount, shortPrice, shortAmount, margin } = state.position
-                const keepMargin = (longAmount * longPrice + shortAmount * shortPrice) / 30
+                const keepMargin = (longAmount * longPrice + shortAmount * shortPrice) / state.keepMarginScale
                 return keepMargin
             }
             return 0

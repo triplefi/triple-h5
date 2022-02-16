@@ -171,11 +171,11 @@ export default {
                 })
             }
             this.explosiveLoading = true
-            console.log(this.explosiveAddress, this.explosiveTo, '-----')
             try {
+                const gasPrice = await this.web3.eth.getGasPrice()
                 await this.contract.methods
                     .explosive(this.explosiveAddress, this.explosiveTo)
-                    .send({ from: this.coinbase })
+                    .send({ from: this.coinbase, gasPrice })
                 this.explosiveLoading = false
                 this.$message({
                     type: 'success',
@@ -211,9 +211,10 @@ export default {
             }
             this.detectSlideLoading = true
             try {
+                const gasPrice = await this.web3.eth.getGasPrice()
                 await this.contract.methods
                     .detectSlide(this.detectSlideAddress, this.detectSlideTo)
-                    .send({ from: this.coinbase })
+                    .send({ from: this.coinbase, gasPrice })
                 this.detectSlideLoading = false
                 this.$message({
                     type: 'success',

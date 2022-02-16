@@ -38,10 +38,11 @@ export default {
             return this.web3.utils.toBN(val).toString()
         },
         async handleApprove() {
+            const gasPrice = await this.web3.eth.getGasPrice()
             const approve = '0xfffffffffffffffffffffffffffffffe'
             const bol = await this.token0.methods
                 .approve(this.contractAddress, this.toBN(approve)) // 允许合约消费限额
-                .send({ from: this.coinbase })
+                .send({ from: this.coinbase, gasPrice })
             console.log('approve', bol)
             const token0Decimals = await this.token0.methods.decimals().call() // token0精度
             const allowance = await this.token0.methods.allowance(this.coinbase, this.contractAddress).call() // 查询账户允许合约的消费限额

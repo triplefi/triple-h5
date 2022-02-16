@@ -180,7 +180,7 @@ export const getNetConfig = () => {
         return [
             {
                 type: 'matic',
-                label: 'Polygon(Matic)',
+                label: 'Polygon',
                 icon: 'ic_matic',
                 id: 80001,
                 size: 16,

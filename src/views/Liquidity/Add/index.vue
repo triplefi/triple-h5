@@ -366,9 +366,10 @@ export default {
         },
         // approve
         async handleApprove() {
+            const gasPrice = await this.web3.eth.getGasPrice()
             const bol = await this.ptoken0.methods
                 .approve(this.curPair.contractAddress, this.toBN(this.approve)) // 允许合约消费限额
-                .send({ from: this.coinbase })
+                .send({ from: this.coinbase, gasPrice })
             console.log('approve', bol)
             this.handleAllowance()
             this.$message({
@@ -407,9 +408,10 @@ export default {
             }
             console.log(params)
             try {
+                const gasPrice = await this.web3.eth.getGasPrice()
                 const res = await this.pcontract.methods
                     .addLiquidity(params.amount, params.to)
-                    .send({ from: this.coinbase })
+                    .send({ from: this.coinbase, gasPrice })
                 console.log('addLiquidity', res)
                 this.addModel = false
                 this.getContractInfo()

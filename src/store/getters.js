@@ -148,7 +148,7 @@ export default {
             // 当Trader.longAmount == Trader.shortAmount时，无爆仓价格。
             if (longAmount == shortAmount) return 0
             // 维持保证金：keepMargin = (Trader.longAmount * Trader.longPrice + Trader.shortAmount * Trader.shortPrice) / 30;
-            const keepMargin = (longAmount * longPrice + shortAmount * shortPrice) / 30
+            const keepMargin = (longAmount * longPrice + shortAmount * shortPrice) / state.keepMarginScale
             // 设爆仓价格为x，依据爆仓价计算净值如下：
             // Net = 用户保证金（Trader.margin）+ 多仓持仓量（Trader.longAmount) * {x - 多仓开仓均价（Trader.longPrice)} + 空仓持仓量（Trader.shortAmount) * {空仓开仓均价（Trader.shortPrice) - x}
             // const Net = margin + longAmount * (y - longPrice) + shortAmount * (shortPrice - y)

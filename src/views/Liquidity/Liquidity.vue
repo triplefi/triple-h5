@@ -323,9 +323,10 @@ export default {
                 to: this.coinbase
             }
             try {
+                const gasPrice = await this.web3.eth.getGasPrice()
                 const res = await this.pcontract.methods
                     .removeLiquidity(params.liquidity, params.to)
-                    .send({ from: this.coinbase })
+                    .send({ from: this.coinbase, gasPrice })
                 console.log('removeLiquidity', res)
                 this.removeModel = false
                 this.getPairsInfo()

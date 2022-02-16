@@ -191,6 +191,7 @@ export default {
             }
 
             // commit('setContractAddress', contractAddress)
+            console.log('contractAddress=', contractAddress)
             const contract = new state.web3.eth.Contract(abi, contractAddress)
             const amountDecimal = await contract.methods.amountDecimal().call()
             const decimals = await contract.methods.decimals().call()
@@ -208,9 +209,10 @@ export default {
                 contract.methods.singleOpenLimitRate().call(),
                 contract.methods.poolNetAmountRateLimitOpen().call(),
                 contract.methods.poolNetAmountRateLimitPrice().call(),
-                contract.methods.token0().call()
-                // contract.methods.keepMarginScale().call()
+                contract.methods.token0().call(),
+                contract.methods.keepMarginScale().call()
             ])
+            console.log(constantRes)
             commit('setLeverage', constantRes[0] * 1)
             commit('setFeeRate', constantRes[1] * 1)
             commit('setDivConst', constantRes[2] * 1)
@@ -219,7 +221,7 @@ export default {
             commit('setSingleOpenLimitRate', constantRes[5] * 1)
             commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
             commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
-            // commit('setKeepMarginScale', constantRes[8] * 1)
+            commit('setKeepMarginScale', constantRes[8] * 1)
             // token0
             const token0Address = constantRes[8] // 获取token0address
             console.log(token0Address, '000000000')
@@ -245,6 +247,7 @@ export default {
             }
             commit('setNetworkError', false)
         } catch (error) {
+            console.log(error, '=======')
             if (state.chainId) {
                 commit('setNetworkError', true)
             }
