@@ -23,12 +23,12 @@ export default {
         },
         pricePrecision(val) {
             // 价格换算和精度
-            // if (this.decimals && this.amountDecimal) {
-            const _decimals = this.decimals * 1 + this.amountDecimal * 1
-            return formatNum(val / Math.pow(10, _decimals), _decimals)
-            // } else {
-            //     return val
-            // }
+            if (this.decimals || this.amountDecimal) {
+                const _decimals = this.decimals * 1 + this.amountDecimal * 1
+                return formatNum(val / Math.pow(10, _decimals), _decimals)
+            } else {
+                return '0.0000'
+            }
         },
         amountPrecision(val) {
             // amount换算和精度

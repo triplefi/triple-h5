@@ -477,6 +477,7 @@ export default {
     async setPairCoin({ commit, dispatch }, info) {
         window.localStorage.setItem('curPairInfo', JSON.stringify(info))
         commit('setPairInfo', info)
+        dispatch('resetPair')
         dispatch('initContract', { pairInfo: info })
         commit('setContractAddress', info.contract)
     },
@@ -518,15 +519,18 @@ export default {
     //   const signedMessage = await this.web3.eth.sign(msg);
     //   const signedTypedData = await this.web3.eth.signTypedData(msg);
     // },
-    resetApp({ commit }) {
+    resetApp({ commit, dispatch }) {
         commit('setWeb3', null)
         commit('setProvider', null)
         commit('setContract', null)
         commit('setCoinbase', '')
+
+        dispatch('resetPair')
+    },
+    resetPair({ commit }) {
         commit('setBalance', 0)
         commit('setPosition', {})
         commit('setPrice', 0)
-
         commit('setPoolLongPrice', 0)
         commit('setPoolShortPrice', 0)
         commit('setTotalPool', 0)
