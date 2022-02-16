@@ -2165,6 +2165,17 @@
                     />
                 </svg>
             </div>
+            <div class="email-con">
+                <div class="title">TripleFi News</div>
+                <div class="tips">Don't miss the trading opportunity on TripleFi.</div>
+                <div class="tips">Subscribe now to get updated.</div>
+                <div class="input-con">
+                    <el-input class="input" v-model="inputEmail" placeholder="Type your email..."></el-input>
+                    <el-button :loading="emailLoading" class="btn" type="primary" round @click="handleSubscribe"
+                        >Subscribe</el-button
+                    >
+                </div>
+            </div>
             <div class="cont_2">
                 <!--        <div class="img-box">-->
                 <img class="bg_IMG" src="./img/ic_light.png" alt="" />
@@ -5871,9 +5882,15 @@
 
 <script>
 // @ is an alias to /src
-
+import { addEmail } from '@/api'
 export default {
     name: 'Home',
+    data() {
+        return {
+            inputEmail: '',
+            emailLoading: false
+        }
+    },
     methods: {
         tip() {
             this.$message({
@@ -5887,6 +5904,22 @@ export default {
                     behavior: 'smooth'
                 })
             })
+        },
+        async handleSubscribe() {
+            if (!this.inputEmail) return
+            if (
+                !/^([a-zA-Z0-9]+[_|_|\-|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,6}$/.test(
+                    this.inputEmail
+                )
+            ) {
+                return this.$message.error('Please enter your email address correctly.')
+            }
+            this.emailLoading = true
+            await addEmail(this.inputEmail)
+            this.$message.success('Subscribed successfully!')
+            setTimeout(() => {
+                this.emailLoading = false
+            }, 2000)
         }
     }
 }

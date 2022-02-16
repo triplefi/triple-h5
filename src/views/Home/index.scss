@@ -30,6 +30,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
+    pointer-events: none;
 }
 
 .head {
@@ -46,6 +47,44 @@
     position: relative;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+}
+
+.email-con {
+    padding: 40px 0 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .title {
+        color: #1c2535;
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 16px;
+    }
+    .tips {
+        font-size: 18px;
+        color: #606671;
+    }
+    .input-con {
+        margin-top: 50px;
+        display: flex;
+        width: 480px;
+        height: 40px;
+        .input {
+            ::v-deep input {
+                padding-right: 140px;
+                color: var(--COLOR-c5);
+                background: transparent;
+                border-color: var(--COLOR-c5);
+                font-weight: normal;
+            }
+        }
+        .btn {
+            width: 120px;
+            margin-left: -120px;
+            z-index: 1;
+        }
+    }
 }
 
 .switch_language {

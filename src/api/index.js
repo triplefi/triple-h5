@@ -87,3 +87,12 @@ export const getAccountTrade = ({ contract, account, count }) => {
         params: { contract, account, count }
     })
 }
+
+// 收集邮箱
+export const addEmail = (email) => {
+    return request({
+        url: '/api/odds/add_email',
+        method: 'get',
+        params: { email }
+    })
+}

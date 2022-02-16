@@ -4,6 +4,7 @@
             <svg-icon icon-class="Logo" class-name="logo-1"></svg-icon>
             <svg-icon icon-class="Logo_2" class-name="logo-2"></svg-icon>
         </router-link>
+        <div style="width: 24px"></div>
         <router-link class="tab btn14" to="/trade">Trade</router-link>
         <router-link class="tab btn14" to="/pool">Pool</router-link>
         <el-button
