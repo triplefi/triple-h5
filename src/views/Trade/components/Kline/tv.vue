@@ -172,6 +172,7 @@ export default {
                             this.canSendNext = true
                         }, 300)
                         this.chartParams.interval = interval
+                        window.localStorage.setItem('kline-interval', interval)
                     })
             })
         },
