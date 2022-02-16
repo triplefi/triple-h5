@@ -55,6 +55,7 @@ module.exports = {
                 })
             )
         } else {
+            config.devtool = 'source-map'
             // 为开发环境修改配置...
         }
     }

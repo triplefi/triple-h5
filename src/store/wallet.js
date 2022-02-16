@@ -209,6 +209,7 @@ export default {
                 contract.methods.poolNetAmountRateLimitOpen().call(),
                 contract.methods.poolNetAmountRateLimitPrice().call(),
                 contract.methods.token0().call()
+                // contract.methods.keepMarginScale().call()
             ])
             commit('setLeverage', constantRes[0] * 1)
             commit('setFeeRate', constantRes[1] * 1)
@@ -218,6 +219,7 @@ export default {
             commit('setSingleOpenLimitRate', constantRes[5] * 1)
             commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
             commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
+            // commit('setKeepMarginScale', constantRes[8] * 1)
             // token0
             const token0Address = constantRes[8] // 获取token0address
             console.log(token0Address, '000000000')

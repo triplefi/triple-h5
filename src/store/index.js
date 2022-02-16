@@ -69,7 +69,9 @@ const store = new Vuex.Store({
 
         isNetworkError: false,
         pairList: [],
-        profitInfo: null // 收益，当有收益时显示
+        profitInfo: null, // 收益，当有收益时显示
+
+        keepMarginScale: 30 //维持保证金计算比例
     },
     mutations: {
         setReady(state, payload) {
@@ -211,6 +213,9 @@ const store = new Vuex.Store({
         },
         setProfitInfo(state, payload) {
             state.profitInfo = payload
+        },
+        setKeepMarginScale(state, payload) {
+            state.keepMarginScale = payload
         }
     },
     actions: {

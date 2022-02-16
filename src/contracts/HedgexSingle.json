@@ -13,11 +13,6 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_feedPriceDecimal",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
                 "name": "_minStartPool",
                 "type": "uint256"
             },
@@ -356,7 +351,7 @@
     },
     {
         "inputs": [],
-        "name": "acceptFeeToSetter",
+        "name": "acceptSetter",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -454,6 +449,32 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "canAddLiquidity",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "canOpen",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
@@ -641,38 +662,12 @@
     },
     {
         "inputs": [],
-        "name": "feeToSetter",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "feedPrice",
         "outputs": [
             {
-                "internalType": "contract AggregatorV3Interface",
+                "internalType": "contract IIndexPrice",
                 "name": "",
                 "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "feedPriceDecimal",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -788,6 +783,19 @@
     },
     {
         "inputs": [],
+        "name": "keepMarginScale",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "leverage",
         "outputs": [
             {
@@ -888,6 +896,19 @@
         "name": "openShort",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1089,7 +1110,46 @@
                 "type": "bool"
             }
         ],
+        "name": "setCanAddLiquidity",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "b",
+                "type": "bool"
+            }
+        ],
+        "name": "setCanOpen",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "b",
+                "type": "bool"
+            }
+        ],
         "name": "setFeeOn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "value",
+                "type": "uint16"
+            }
+        ],
+        "name": "setFeeRate",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1103,6 +1163,58 @@
             }
         ],
         "name": "setFeeTo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_feedPrice",
+                "type": "address"
+            }
+        ],
+        "name": "setFeedPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "value",
+                "type": "uint8"
+            }
+        ],
+        "name": "setKeepMarginScale",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "int24",
+                "name": "value",
+                "type": "int24"
+            }
+        ],
+        "name": "setPoolNetAmountRateLimitOpen",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "int24",
+                "name": "value",
+                "type": "int24"
+            }
+        ],
+        "name": "setPoolNetAmountRateLimitPrice",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1296,19 +1408,6 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_feeToSetter",
-                "type": "address"
-            }
-        ],
-        "name": "transferFeeToSetter",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
                 "name": "from",
                 "type": "address"
             },
@@ -1331,6 +1430,19 @@
                 "type": "bool"
             }
         ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwner",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },

@@ -67,15 +67,17 @@ export default {
     },
     watch: {
         pairList(v) {
-            v.forEach(async (item) => {
-                const contract = new this.web3.eth.Contract(abi, item.contract)
-                const amountDecimal = await contract.methods.amountDecimal().call()
-                const decimals = await contract.methods.decimals().call()
-                this.decimalsInfo[`${item.trade_coin}_${item.margin_coin}`] = {
-                    amountDecimal,
-                    decimals
-                }
-            })
+            if (this.web3) {
+                v.forEach(async (item) => {
+                    const contract = new this.web3.eth.Contract(abi, item.contract)
+                    const amountDecimal = await contract.methods.amountDecimal().call()
+                    const decimals = await contract.methods.decimals().call()
+                    this.decimalsInfo[`${item.trade_coin}_${item.margin_coin}`] = {
+                        amountDecimal,
+                        decimals
+                    }
+                })
+            }
         }
     },
     methods: {

@@ -208,7 +208,8 @@ export default {
                         Number(
                             Big(closePrice).minus(openPrice).times(returnValues.amount).div(Math.pow(10, this.decimals))
                         )
-                    )
+                    ),
+                    pair: row.pair
                 }
                 this.setProfitInfo(profitInfo)
             }

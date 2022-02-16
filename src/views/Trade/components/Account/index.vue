@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="profit-con" v-if="profitInfo" :key="profitInfo.transactionHash">
+        <div class="profit-con" v-if="profitInfo && profitInfo.pair === symbol" :key="profitInfo.transactionHash">
             <div class="close-con">
                 <div></div>
                 <svg-icon icon-class="ic_close" class-name="close" @click.native.stop="handleCloseProfit()"></svg-icon>
@@ -142,7 +142,7 @@ export default {
     },
     computed: {
         ...mapState(['token0Balance', 'position', 'profitInfo', 'price']),
-        ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice']),
+        ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice', 'symbol']),
         precision() {
             return Math.abs(this.decimals) || 2
         },
