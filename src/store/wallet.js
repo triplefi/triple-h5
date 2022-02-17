@@ -524,11 +524,11 @@ export default {
         commit('setProvider', null)
         commit('setContract', null)
         commit('setCoinbase', '')
+        commit('setBalance', 0)
 
         dispatch('resetPair')
     },
     resetPair({ commit }) {
-        commit('setBalance', 0)
         commit('setPosition', {})
         commit('setPrice', 0)
         commit('setPoolLongPrice', 0)
