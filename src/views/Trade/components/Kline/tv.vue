@@ -31,6 +31,7 @@ export default {
     created() {},
     mounted() {
         this.initTV()
+        document.addEventListener('visibilitychange', this.handleVisibilityChange)
     },
     /**
      * TradingView 源码修改记录
@@ -178,6 +179,10 @@ export default {
         },
         // 设置k线配置
         setDataFeed() {
+            if (this.klineWS && this.klineWS.isWsOpen) {
+                this.klineWS.closeConnect()
+                this.klineWS = null
+            }
             // const protocol = location.protocol === 'http:' ? 'ws:' : 'wss'
             let wsURL = getNetUrl(`wss://${window.location.host}/wss/kline`)
             this.initData = {
@@ -236,6 +241,11 @@ export default {
                 this.klineWS.closeConnect()
                 this.klineWS = null
             }
+        },
+        handleVisibilityChange() {
+            if (document.visibilityState == 'visible' && this.klineWS && !this.klineWS.isWsOpen()) {
+                this.initTV()
+            }
         }
     },
     watch: {
@@ -279,6 +289,7 @@ export default {
     },
     beforeDestroy() {
         this.delWs()
+        document.removeEventListener('visibilitychange', this.handleVisibilityChange)
     }
 }
 </script>
