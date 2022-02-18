@@ -180,7 +180,7 @@ export const getNetConfig = () => {
         return [
             {
                 type: 'matic',
-                label: 'Polygon',
+                label: 'Mumbai',
                 icon: 'ic_matic',
                 id: 80001,
                 size: 16,
@@ -250,13 +250,18 @@ export const checkMatic = (id) => {
 }
 // 根据链ID，获取api，wss地址
 export const getNetUrl = (url) => {
-    const curChainId = window.localStorage.getItem('curChainId') || 137
-    const netUrl = {
+    const netDic = {
         137: 'polygon.triple.fi',
         80001: 'mumbai.triple.fi',
         4: 'rinkeby.triple.fi'
-    }[curChainId]
-    ;['://triple.fi', '://test.triple.fi', '://127.0.0.1:8080'].forEach((e) => {
+    }
+    const curChainId = window.localStorage.getItem('curChainId')
+    let netUrl = netDic[curChainId]
+    if (!netUrl) {
+        netUrl = netDic[137]
+    }
+    const replaceList = ['://triple.fi', '://test.triple.fi', /:\/\/127.0.0.1:\d{4}/]
+    replaceList.forEach((e) => {
         url = url.replace(e, '://' + netUrl)
     })
     return url
