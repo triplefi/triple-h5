@@ -62,11 +62,9 @@ export default {
         }
     },
     LongMaxAmount(state, getters) {
-        console.log('state.position=', state.position)
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
             const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
-            console.log(price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP, '----')
             if (!divConst || !price) {
                 return 0
             }
@@ -76,10 +74,8 @@ export default {
             // const canUseMargin = getters.NetValue - getters.UsedMargin
             // 用户钱包余额：用户地址中token0的数量，leftAmount
             const leftAmount = token0Balance
-            console.log('leftAmount=', leftAmount)
             // 也就是用户总可用保证金为total = canUseMargin + leftAmount
             const total = getters.canUseMargin + leftAmount
-            console.log('total=', leftAmount)
             // 设最大可开仓量为x，开仓价格为price（多仓为index price + slideP；空仓为index price - slideP(为合约中的固定值，系统设定)），手续费率为r（合约中的feeRate除以divConst），杠杆率为l（合约中的leverage）
             // 则有：x * price / l = total - x * price * r，解方程得：
             // x = total / (price/l + price*r)
@@ -127,7 +123,6 @@ export default {
     },
     CloseMaxAmount(state) {
         const { poolNet, singleCloseLimitRate, divConst, price } = state
-        console.log(poolNet, singleCloseLimitRate, divConst, price)
         if (!price || !divConst) {
             return 0
         }
@@ -140,8 +135,6 @@ export default {
             // 已占用保证金量:usedMargin = [(Trader.longAmount + Trader.shortAmount) * 当前价格（index price）] / 杠杆率(leverage);
             // const usedMargin = ((longAmount + shortAmount) * price) / leverage
             // 可用保证金canUseMargin = 用户净值（3的计算）- usedMargin
-            console.log('getters.NetValue=', getters.NetValue)
-            console.log('getters.UsedMargin=', getters.UsedMargin)
             return getters.NetValue - getters.UsedMargin
         } else {
             return 0
