@@ -410,7 +410,8 @@ export default {
             const totalPool = res[2] * 1
             const poolLongAmount = res[3] * 1
             const poolShortAmount = res[4] * 1
-            const price = res[5] * 1
+            const price = res[5][0] * 1
+            const excursion = res[5][1] * 1
             const poolState = res[7] * 1
             commit('setPoolLongPrice', poolLongPrice)
             commit('setPoolShortPrice', poolShortPrice)
@@ -418,6 +419,7 @@ export default {
             commit('setPoolLongAmount', poolLongAmount)
             commit('setPoolShortAmount', poolShortAmount)
             commit('setPrice', price)
+            commit('setPriceExcursion', excursion)
             commit('setPoolState', poolState)
             let poolNet = totalPool
             if (poolState !== 2) {

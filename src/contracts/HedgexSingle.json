@@ -351,6 +351,98 @@
     },
     {
         "inputs": [],
+        "name": "R0",
+        "outputs": [
+            {
+                "internalType": "int256",
+                "name": "initR",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "number",
+                "type": "uint256"
+            },
+            {
+                "internalType": "int256",
+                "name": "deltaR",
+                "type": "int256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "R1",
+        "outputs": [
+            {
+                "internalType": "int256",
+                "name": "initR",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "number",
+                "type": "uint256"
+            },
+            {
+                "internalType": "int256",
+                "name": "deltaR",
+                "type": "int256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "R2",
+        "outputs": [
+            {
+                "internalType": "int256",
+                "name": "initR",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "number",
+                "type": "uint256"
+            },
+            {
+                "internalType": "int256",
+                "name": "deltaR",
+                "type": "int256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "R3",
+        "outputs": [
+            {
+                "internalType": "int256",
+                "name": "initR",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "number",
+                "type": "uint256"
+            },
+            {
+                "internalType": "int256",
+                "name": "deltaR",
+                "type": "int256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "acceptSetter",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -699,6 +791,11 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            },
+            {
+                "internalType": "int256",
+                "name": "",
+                "type": "int256"
             }
         ],
         "stateMutability": "view",

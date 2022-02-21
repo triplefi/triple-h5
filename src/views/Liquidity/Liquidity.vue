@@ -341,7 +341,7 @@ export default {
             const [
                 totalPool,
                 totalSupply,
-                indexPrice,
+                priceRes,
                 poolLongPrice,
                 poolLongAmount,
                 poolShortPrice,
@@ -361,6 +361,7 @@ export default {
                 this.pcontract.methods.divConst().call(),
                 this.pcontract.methods.poolNetAmountRateLimitOpen().call()
             ])
+            const [indexPrice] = priceRes[0]
             const net =
                 totalPool * 1 +
                 (poolLongAmount * indexPrice + poolShortAmount * poolShortPrice) -
