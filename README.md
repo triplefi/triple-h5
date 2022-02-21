@@ -1,4 +1,4 @@
-# triple
+# triplefi
 
 ## Project setup
 ```

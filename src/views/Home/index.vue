@@ -226,7 +226,7 @@
                             </linearGradient>
                         </defs>
                     </svg>
-                    <H1 class="title_h1">Triple Protocol</H1>
+                    <H1 class="title_h1">TripleFi Protocol</H1>
                     <svg
                         width="81"
                         height="32"
@@ -2211,7 +2211,7 @@
                 </svg>
                 <!--        </div>-->
 
-                <h2>How does Triple Work?</h2>
+                <h2>How does TripleFi Work?</h2>
                 <svg
                     width="1082"
                     height="641"
@@ -4928,7 +4928,7 @@
                 </svg>
             </div>
             <div class="cont_3">
-                <h2>Why Trade with Triple?</h2>
+                <h2>Why Trade with TripleFi?</h2>
                 <div class="cont_3_box">
                     <div class="cont_3_item">
                         <svg
@@ -5840,8 +5840,8 @@
                         </svg>
                     </a>
                 </div>
-                <a class="button" href="mailto:support@Triple.com">Contact Us</a>
-                <p>support@Triple.com</p>
+                <a class="button" href="mailto:support@triple.fi">Contact Us</a>
+                <p>support@triple.fi</p>
             </div>
         </div>
         <div class="bottom">
@@ -5875,7 +5875,7 @@
                     stroke-miterlimit="10"
                 />
             </svg>
-            <p>Copyright © 2021 Triple All Rights Reserved.</p>
+            <p>Copyright © 2021 TripleFi All Rights Reserved.</p>
         </div>
     </div>
 </template>
