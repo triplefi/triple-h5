@@ -34,7 +34,7 @@ export default {
     },
     //多仓,空仓偏移价格，[空仓偏移,多仓偏移]
     slidePrice(state, getters) {
-        const { price, divConst, slideP, poolNetAmountRateLimitPrice } = state
+        const { price, divConst, poolNetAmountRateLimitPrice } = state
         const R = getters.R
         let slideRate = 0
         const absR = Math.abs(R)
@@ -43,12 +43,11 @@ export default {
         } else if (absR >= poolNetAmountRateLimitPrice) {
             slideRate = (absR - poolNetAmountRateLimitPrice) / 5
         }
-        let slide = (price * (slideRate + slideP)) / divConst || 0 // 加入偏移计算
-        let slide0 = (price * slideP) / divConst || 0 // 不加入偏移计算
+        let slide = (price * slideRate) / divConst || 0 // 加入偏移计算
         if (R > 0) {
-            return [slide, slide0]
+            return [slide, 0]
         } else {
-            return [slide0, slide]
+            return [0, slide]
         }
     },
     // NetValue=longAmount*(price - openPrice) + shortAmount*(openPrice - price) + margin;
@@ -64,17 +63,8 @@ export default {
     LongMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const {
-                price,
-                priceExcursion,
-                leverage,
-                token0Balance,
-                poolNet,
-                feeRate,
-                divConst,
-                singleOpenLimitRate,
-                slideP
-            } = state
+            const { price, priceExcursion, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate } =
+                state
             if (!divConst || !price) {
                 return 0
             }
@@ -89,7 +79,7 @@ export default {
             // 设最大可开仓量为x，开仓价格为price（多仓为index price + slideP；空仓为index price - slideP(为合约中的固定值，系统设定)），手续费率为r（合约中的feeRate除以divConst），杠杆率为l（合约中的leverage）
             // 则有：x * price / l = total - x * price * r，解方程得：
             // x = total / (price/l + price*r)
-            const openPrice = price * (1 + slideP / divConst)
+            const openPrice = price
             const r = feeRate / divConst
             const xL = Math.floor(total / (openPrice / leverage + openPrice * r))
             // const x = xL || xS
@@ -110,17 +100,8 @@ export default {
     ShortMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const {
-                price,
-                priceExcursion,
-                leverage,
-                token0Balance,
-                poolNet,
-                feeRate,
-                divConst,
-                singleOpenLimitRate,
-                slideP
-            } = state
+            const { price, priceExcursion, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate } =
+                state
             if (!divConst || !price) {
                 return 0
             }
@@ -136,7 +117,7 @@ export default {
             // 则有：x * price / l = total - x * price * r，解方程得：
             // x = total / (price/l + price*r). = total / price / (1/l + r)
             const r = feeRate / divConst
-            const openPrice = price * (1 - slideP / divConst)
+            const openPrice = price
             const xS = Math.floor(total / (openPrice / leverage + openPrice * r))
             // const x = xL || xS
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）

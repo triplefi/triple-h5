@@ -250,13 +250,13 @@ export default {
         },
         // 8.开仓时需要转入合约的保证金数量rechargeAmount
         // 设本次开仓量为x张合约，则需要的保证金数为：
-        // NeedMargin = (price(每张合约的当前价格) * (1± slideP / divConst) (开多仓为 +, 开空仓为 -)) * amount（开仓量）)* (r(同5) + 1 / leverage)
+        // NeedMargin = (price(每张合约的当前价格) * 1 (开多仓为 +, 开空仓为 -)) * amount（开仓量）)* (r(同5) + 1 / leverage)
         // 用户现有可用保证金按照5中的canUseMargin 来计算。
         // 如果 NeedMargin <= canUseMargin，则rechargeAmount = 0；
         // 否则，rechargeAmount = NeedMargin - canUseMargin；
         LongRechargeAmount() {
-            const { price, leverage, feeRate, divConst, slideP } = this.$store.state
-            const openPrice = price * (1 + slideP / divConst)
+            const { price, leverage, feeRate, divConst } = this.$store.state
+            const openPrice = price
             const openMargin = Math.floor((openPrice * this.amount1 * feeRate) / divConst) // 所需保证金
             const fee = Math.floor((openPrice * this.amount1) / leverage) // 所需手续费
             const NeedMargin = openMargin + fee
@@ -267,8 +267,8 @@ export default {
             }
         },
         ShortRechargeAmount() {
-            const { price, leverage, feeRate, divConst, slideP } = this.$store.state
-            const openPrice = price * (1 - slideP / divConst)
+            const { price, leverage, feeRate, divConst } = this.$store.state
+            const openPrice = price
             const openMargin = Math.floor((openPrice * this.amount2 * feeRate) / divConst) // 所需保证金
             const fee = Math.floor((openPrice * this.amount2) / leverage) // 所需手续费
             const NeedMargin = openMargin + fee

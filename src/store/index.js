@@ -36,7 +36,6 @@ const store = new Vuex.Store({
         divConst: 1,
         singleCloseLimitRate: 1,
         singleOpenLimitRate: 1,
-        slideP: 0,
         fundingRate: 0,
 
         token0: null,
@@ -146,9 +145,6 @@ const store = new Vuex.Store({
         },
         setSingleCloseLimitRate(state, payload) {
             state.singleCloseLimitRate = payload
-        },
-        setSlideP(state, payload) {
-            state.slideP = payload
         },
         setFundingRate(state, payload) {
             state.fundingRate = payload

@@ -211,7 +211,6 @@ export default {
                 contract.methods.leverage().call(),
                 contract.methods.feeRate().call(),
                 contract.methods.divConst().call(),
-                contract.methods.slideP().call(),
                 contract.methods.singleCloseLimitRate().call(),
                 contract.methods.singleOpenLimitRate().call(),
                 contract.methods.poolNetAmountRateLimitOpen().call(),
@@ -221,14 +220,13 @@ export default {
             commit('setLeverage', constantRes[0] * 1)
             commit('setFeeRate', constantRes[1] * 1)
             commit('setDivConst', constantRes[2] * 1)
-            commit('setSlideP', constantRes[3] * 1)
-            commit('setSingleCloseLimitRate', constantRes[4] * 1)
-            commit('setSingleOpenLimitRate', constantRes[5] * 1)
-            commit('setPoolNetAmountRateLimitOpen', constantRes[6] * 1)
-            commit('setPoolNetAmountRateLimitPrice', constantRes[7] * 1)
+            commit('setSingleCloseLimitRate', constantRes[3] * 1)
+            commit('setSingleOpenLimitRate', constantRes[4] * 1)
+            commit('setPoolNetAmountRateLimitOpen', constantRes[5] * 1)
+            commit('setPoolNetAmountRateLimitPrice', constantRes[6] * 1)
 
             // token0
-            const token0Address = constantRes[8] // 获取token0address
+            const token0Address = constantRes[7] // 获取token0address
             console.log(token0Address, '000000000')
             // const token0Address = pairInfo.margin_address // 获取token0address
             const token0 = new state.web3.eth.Contract(erc20abi, token0Address) // 生成token0合约对象
