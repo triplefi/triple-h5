@@ -100,6 +100,7 @@ export default {
             if (priceExcursion > 0) {
                 priceEx = price - Math.abs(priceExcursion)
             }
+            console.log(price, priceExcursion, priceEx, '===========')
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
             return Math.min(limitSAmount, xL) * state.limitCoefficient
         } else {
@@ -145,6 +146,7 @@ export default {
             if (priceExcursion < 0) {
                 priceEx = price - Math.abs(priceExcursion)
             }
+            console.log(price, priceExcursion, priceEx, '====++++===')
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
             return Math.min(limitSAmount, xS) * state.limitCoefficient
         } else {

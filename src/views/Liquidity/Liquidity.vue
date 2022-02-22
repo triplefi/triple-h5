@@ -38,7 +38,7 @@
                             <div class="coin-item">
                                 <div class="fs14 name">Valued USDT</div>
                                 <div class="fs14b value">
-                                    {{ formatDecimals((poolNet * balanceOf) / totalSupply) | formatMoney }}
+                                    {{ formatDecimals((curPoolNet * balanceOf) / totalSupply) | formatMoney }}
                                 </div>
                             </div>
                             <div class="coin-item">
@@ -139,7 +139,7 @@ export default {
             balanceOf: 0,
             totalSupply: 0,
             totalPool: 0,
-            poolNet: 0,
+            curPoolNet: 0,
             token0BalanceOf: 0,
             token0Decimals: 0
         }
@@ -263,9 +263,9 @@ export default {
                 this.token0Decimals = token0Decimals * 1
                 try {
                     const poolNet = await this.pcontract.methods.getPoolNet().call() // 对冲池总价值
-                    this.poolNet = poolNet * 1
+                    this.curPoolNet = poolNet * 1
                 } catch (error) {
-                    this.poolNet = 0
+                    this.curPoolNet = 0
                 }
                 this.loading = false
             } catch (error) {

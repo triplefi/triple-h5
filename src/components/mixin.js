@@ -67,33 +67,32 @@ export default {
             let R0 = await this.contract.methods.R0().call()
             let R1 = await this.contract.methods.R1().call()
             let R2 = await this.contract.methods.R2().call()
-            console.log(R0)
-            if (blockNumber != R0[1]) {
-                R2 = [...R1]
-                R1 = [...R0]
-                R0[0] = R
-                R0[1] = blockNumber
-                R0[2] = 0
-                if (R1[1] != blockNumber - 1) {
-                    R2 = [...R1]
-                    R1 = [...R0]
-                    R1[1] = blockNumber - 1
+            if (blockNumber != R0.number) {
+                R2 = { ...R1 }
+                R1 = { ...R0 }
+                R0.number = blockNumber
+                R0.initR = R
+                R0.deltaR = 0
+                if (R1.number != blockNumber - 1) {
+                    R2 = { ...R1 }
+                    R1 = { ...R0 }
+                    R1.number = blockNumber - 1
                 }
-                if (R2[1] != blockNumber - 2) {
-                    R2 = [...R1]
-                    R2[1] = blockNumber - 2
+                if (R2.number != blockNumber - 2) {
+                    R2 = { ...R1 }
+                    R2.number = blockNumber - 2
                 }
             }
-            let deltaR1 = R - R0[0]
-            let deltaR2 = R - R2[0]
+            let deltaR1 = R - R0.initR
+            let deltaR2 = R - R2.initR
             if (deltaR1 > deltaR0Limit || deltaR2 > deltaR2Limit) {
-                R0[2] = 1
+                R0.deltaR = 1
                 return 1 // buy price +
             } else if (deltaR1 < -deltaR0Limit || deltaR2 < -deltaR2Limit) {
-                R0[2] = -1
+                R0.deltaR = -1
                 return -1 // sell price -
             }
-            return R1[2]
+            return R1.deltaR
         },
         // 计算下单偏移，getter中的slidePrice + 计算结果
         //direction +1 means buy(open-long, close-short)，-1 means sell(open-short, close-long)

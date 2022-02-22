@@ -367,7 +367,9 @@ export default {
             }
             this.longLoading = true
             const exp = await this.poolLimitTrade(1)
+            console.log(exp, '===================', this.slidePriceLong)
             const bigPriceExp = Big(this.tolerance).div(100).plus(1).times(Big(this.slidePriceLong).plus(exp))
+            console.log(Math.floor(bigPriceExp))
             const params = {
                 priceExp: this.toBN(Math.floor(bigPriceExp)),
                 // priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
