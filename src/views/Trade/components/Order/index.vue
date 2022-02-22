@@ -109,7 +109,7 @@ export default {
     },
     computed: {
         ...mapState(['position', 'tolerance', 'poolNet']),
-        ...mapGetters(['symbol', 'slidePrice', 'CloseMaxAmount']),
+        ...mapGetters(['symbol', 'slidePrice', 'CloseLongMaxAmount', 'CloseShortMaxAmount']),
         slidePriceLong() {
             //多仓偏移价格
             return this.price + (this.slidePrice[1] || 0)
@@ -133,7 +133,10 @@ export default {
             immediate: true,
             deep: true
         },
-        CloseMaxAmount() {
+        CloseLongMaxAmount() {
+            this.setPosition(this.position)
+        },
+        CloseShortMaxAmount() {
             this.setPosition(this.position)
         }
     },
@@ -146,9 +149,9 @@ export default {
         async setPosition(val) {
             this.list = []
             const { longAmount, longPrice, margin, shortAmount, shortPrice } = val
-            const limit = this.CloseMaxAmount
             this.margin = margin
             if (longAmount * 1) {
+                const limit = this.CloseLongMaxAmount
                 const maxNum = Math.min(longAmount * 1, limit)
                 this.list.push({
                     pair: this.symbol,
@@ -161,6 +164,7 @@ export default {
                 })
             }
             if (shortAmount * 1) {
+                const limit = this.CloseShortMaxAmount
                 const maxNum = Math.min(shortAmount * 1, limit)
                 this.list.push({
                     pair: this.symbol,
@@ -214,7 +218,7 @@ export default {
                 this.setProfitInfo(profitInfo)
             }
         },
-        handleClose(row) {
+        async handleClose(row) {
             if (parseFloat(row.closeNum) == 0) {
                 this.$message({
                     type: 'error',
@@ -228,7 +232,8 @@ export default {
                 // amount: this.toBN(row.closeNum / this.step),
                 deadline: this.deadlineTimestamp()
             }
-            const price = row.direction > 0 ? this.slidePriceShort : this.slidePriceLong
+            const exp = await this.poolLimitTrade(row.direction > 0 ? -1 : 1)
+            const price = row.direction > 0 ? this.slidePriceShort + exp : this.slidePriceLong + exp
             const toleranceExp = Big(this.tolerance).div(100)
             if (row.direction > 0) {
                 const priceExp = this.toBN(Math.floor(Big(1).minus(toleranceExp).times(price)))

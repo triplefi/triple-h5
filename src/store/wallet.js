@@ -412,6 +412,7 @@ export default {
             const poolShortAmount = res[4] * 1
             const price = res[5][0] * 1
             const excursion = res[5][1] * 1
+            console.log(res[5])
             const poolState = res[7] * 1
             commit('setPoolLongPrice', poolLongPrice)
             commit('setPoolShortPrice', poolShortPrice)

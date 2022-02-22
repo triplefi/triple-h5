@@ -64,7 +64,17 @@ export default {
     LongMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
+            const {
+                price,
+                priceExcursion,
+                leverage,
+                token0Balance,
+                poolNet,
+                feeRate,
+                divConst,
+                singleOpenLimitRate,
+                slideP
+            } = state
             if (!divConst || !price) {
                 return 0
             }
@@ -85,7 +95,12 @@ export default {
             // const x = xL || xS
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
-            let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / price)
+            let priceEx = price
+            // 偏移价格大于0时，针对开多限制总开仓量
+            if (priceExcursion > 0) {
+                priceEx = price - Math.abs(priceExcursion)
+            }
+            let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
             return Math.min(limitSAmount, xL) * state.limitCoefficient
         } else {
             return 0
@@ -94,7 +109,17 @@ export default {
     ShortMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const { price, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate, slideP } = state
+            const {
+                price,
+                priceExcursion,
+                leverage,
+                token0Balance,
+                poolNet,
+                feeRate,
+                divConst,
+                singleOpenLimitRate,
+                slideP
+            } = state
             if (!divConst || !price) {
                 return 0
             }
@@ -115,18 +140,40 @@ export default {
             // const x = xL || xS
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
-            let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / price)
+            let priceEx = price
+            // 偏移价格小于0时，针对开空限制总开仓量
+            if (priceExcursion < 0) {
+                priceEx = price - Math.abs(priceExcursion)
+            }
+            let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
             return Math.min(limitSAmount, xS) * state.limitCoefficient
         } else {
             return 0
         }
     },
-    CloseMaxAmount(state) {
-        const { poolNet, singleCloseLimitRate, divConst, price } = state
+    CloseLongMaxAmount(state) {
+        const { poolNet, singleCloseLimitRate, divConst, price, priceExcursion } = state
         if (!price || !divConst) {
             return 0
         }
-        return ((poolNet * singleCloseLimitRate) / divConst / price) * state.limitCoefficient
+        //同开空
+        let priceEx = price
+        if (priceExcursion < 0) {
+            priceEx = price - Math.abs(priceExcursion)
+        }
+        return ((poolNet * singleCloseLimitRate) / divConst / priceEx) * state.limitCoefficient
+    },
+    CloseShortMaxAmount(state) {
+        const { poolNet, singleCloseLimitRate, divConst, price, priceExcursion } = state
+        if (!price || !divConst) {
+            return 0
+        }
+        // 同开多
+        let priceEx = price
+        if (priceExcursion > 0) {
+            priceEx = price - Math.abs(priceExcursion)
+        }
+        return ((poolNet * singleCloseLimitRate) / divConst / priceEx) * state.limitCoefficient
     },
     canUseMargin(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {

@@ -366,7 +366,8 @@ export default {
                 })
             }
             this.longLoading = true
-            const bigPriceExp = Big(this.tolerance).div(100).plus(1).times(this.slidePriceLong)
+            const exp = await this.poolLimitTrade(1)
+            const bigPriceExp = Big(this.tolerance).div(100).plus(1).times(Big(this.slidePriceLong).plus(exp))
             const params = {
                 priceExp: this.toBN(Math.floor(bigPriceExp)),
                 // priceExp: this.toBN(Math.floor((1 + this.tolerance / 100) * this.slidePriceLong)),
@@ -412,7 +413,8 @@ export default {
                 })
             }
             this.shortLoading = true
-            const bigPriceExp = Big(1).minus(Big(this.tolerance).div(100)).times(this.slidePriceShort)
+            const exp = await this.poolLimitTrade(-1)
+            const bigPriceExp = Big(1).minus(Big(this.tolerance).div(100)).times(Big(this.slidePriceShort).plus(exp))
             const params = {
                 priceExp: this.toBN(Math.floor(bigPriceExp)),
                 // priceExp: this.toBN(Math.floor((1 - this.tolerance / 100) * this.slidePriceShort)),
