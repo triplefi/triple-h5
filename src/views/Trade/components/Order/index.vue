@@ -233,10 +233,12 @@ export default {
                 deadline: this.deadlineTimestamp()
             }
             const exp = await this.poolLimitTrade(row.direction > 0 ? -1 : 1)
+            console.log(exp, '-=----------')
             const price = row.direction > 0 ? this.slidePriceShort + exp : this.slidePriceLong + exp
             const toleranceExp = Big(this.tolerance).div(100)
             if (row.direction > 0) {
                 const priceExp = this.toBN(Math.floor(Big(1).minus(toleranceExp).times(price)))
+                console.log(priceExp, '=====')
                 //  const priceExp = this.toBN(Math.floor((1 - this.tolerance / 100) * price))
                 params.priceExp = priceExp
                 console.log(params)

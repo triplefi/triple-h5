@@ -539,5 +539,6 @@ export default {
         commit('setTotalPool', 0)
         commit('setPoolLongAmount', 0)
         commit('setPoolShortAmount', 0)
+        commit('setPoolNet', 0)
     }
 }

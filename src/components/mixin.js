@@ -105,10 +105,10 @@ export default {
             if (D == direction) {
                 slidePrice = (price * (divConst + deltaRSlidePriceRate)) / divConst
             }
-
-            if ((direction == 1 && priceExcursion > 0) || (direction == -1 && priceExcursion < 0)) {
+            console.log(slidePrice, '----', priceExcursion)
+            if ((direction == 1 && priceExcursion < 0) || (direction == -1 && priceExcursion > 0)) {
                 priceExcursion = priceExcursion / divConst
-                slidePrice = slidePrice - Math.abs(priceExcursion)
+                slidePrice = slidePrice + priceExcursion
             }
             return slidePrice
         }

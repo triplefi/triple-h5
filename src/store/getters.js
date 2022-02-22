@@ -97,8 +97,8 @@ export default {
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
             let priceEx = price
             // 偏移价格大于0时，针对开多限制总开仓量
-            if (priceExcursion > 0) {
-                priceEx = price - Math.abs(priceExcursion)
+            if (priceExcursion < 0) {
+                priceEx = price + priceExcursion
             }
             console.log(price, priceExcursion, priceEx, '===========')
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
@@ -143,8 +143,8 @@ export default {
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
             let priceEx = price
             // 偏移价格小于0时，针对开空限制总开仓量
-            if (priceExcursion < 0) {
-                priceEx = price - Math.abs(priceExcursion)
+            if (priceExcursion > 0) {
+                priceEx = price + priceExcursion
             }
             console.log(price, priceExcursion, priceEx, '====++++===')
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
@@ -160,8 +160,8 @@ export default {
         }
         //同开空
         let priceEx = price
-        if (priceExcursion < 0) {
-            priceEx = price - Math.abs(priceExcursion)
+        if (priceExcursion > 0) {
+            priceEx = price + priceExcursion
         }
         return ((poolNet * singleCloseLimitRate) / divConst / priceEx) * state.limitCoefficient
     },
@@ -172,8 +172,8 @@ export default {
         }
         // 同开多
         let priceEx = price
-        if (priceExcursion > 0) {
-            priceEx = price - Math.abs(priceExcursion)
+        if (priceExcursion < 0) {
+            priceEx = price + priceExcursion
         }
         return ((poolNet * singleCloseLimitRate) / divConst / priceEx) * state.limitCoefficient
     },

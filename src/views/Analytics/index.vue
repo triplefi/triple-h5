@@ -193,6 +193,11 @@ export default {
             return this.addressList.filter((e) => e.Lposition || e.Sposition)
         }
     },
+    mounted() {
+        if (this.contract) {
+            this.getData()
+        }
+    },
     watch: {
         contract: {
             immediate: true,
@@ -224,6 +229,8 @@ export default {
                     return this.contract.methods.traders(e.Account).call()
                 })
             )
+            console.log(curList)
+            console.log(res)
             const tableData = []
             res.forEach((e, i) => {
                 let { longAmount, longPrice, shortAmount, shortPrice } = e
