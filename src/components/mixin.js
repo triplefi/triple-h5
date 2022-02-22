@@ -97,18 +97,13 @@ export default {
         // 计算下单偏移，getter中的slidePrice + 计算结果
         //direction +1 means buy(open-long, close-short)，-1 means sell(open-short, close-long)
         async poolLimitTrade(direction) {
-            let { price, priceExcursion, divConst, poolShortAmount, poolLongAmount, poolNet } = this
+            let { price, divConst, poolShortAmount, poolLongAmount, poolNet } = this
             const deltaRSlidePriceRate = 10000
             const R = (direction * (poolShortAmount - poolLongAmount) * price * divConst) / poolNet
             const D = await this.getDeltaPriceByR(R)
             let slidePrice = 0
             if (D == direction) {
                 slidePrice = (price * (divConst + deltaRSlidePriceRate)) / divConst
-            }
-            console.log(slidePrice, '----', priceExcursion)
-            if ((direction == 1 && priceExcursion < 0) || (direction == -1 && priceExcursion > 0)) {
-                priceExcursion = priceExcursion / divConst
-                slidePrice = slidePrice + priceExcursion
             }
             return slidePrice
         }

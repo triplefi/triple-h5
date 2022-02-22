@@ -227,11 +227,19 @@ export default {
         },
         slidePriceLong() {
             //多仓偏移价格
-            return this.price + (this.slidePrice[1] || 0)
+            let value = this.price + (this.slidePrice[1] || 0)
+            if (this.priceExcursion < 0) {
+                value = value + Math.abs(this.priceExcursion)
+            }
+            return value
         },
         slidePriceShort() {
             //空仓偏移价格
-            return this.price - (this.slidePrice[0] || 0)
+            let value = this.price + (this.slidePrice[0] || 0)
+            if (this.priceExcursion > 0) {
+                value = value - Math.abs(this.priceExcursion)
+            }
+            return value
         },
         deadlineMinute() {
             return this.deadline / 60
