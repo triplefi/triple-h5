@@ -388,7 +388,7 @@ export default {
                 })
         },
         // 用户开空
-        handleOpenShort() {
+        async handleOpenShort() {
             if (!this.coinbase) {
                 this.$message({
                     type: 'error',

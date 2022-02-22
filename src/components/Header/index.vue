@@ -7,6 +7,7 @@
         <div style="width: 24px"></div>
         <router-link class="tab btn14" to="/trade">Trade</router-link>
         <router-link class="tab btn14" to="/pool">Pool</router-link>
+        <router-link class="tab btn14" to="/analytics">Analytics</router-link>
         <el-button
             v-if="!!coinbase && chainId == 4"
             :loading="getTokenLoading"

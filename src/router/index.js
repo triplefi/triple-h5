@@ -57,6 +57,11 @@ const routes = [
         path: '/statistics',
         name: 'Statistics',
         component: () => import(/* webpackChunkName: "statistics" */ '../views/Statistics')
+    },
+    {
+        path: '/analytics',
+        name: 'Analytics',
+        component: () => import(/* webpackChunkName: "analytics" */ '../views/Analytics')
     }
     // { path: '*', component: NotFoundComponent }
 ]
