@@ -61,8 +61,9 @@ export default {
             if (!this.web3 || !this.contract) {
                 return 0
             }
-            const deltaR0Limit = 50000
-            const deltaR2Limit = 100000
+            const deltaR0Limit = (await this.contract.methods.deltaR0Limit().call()) * 1
+            const deltaR2Limit = (await this.contract.methods.deltaR2Limit().call()) * 1
+            console.log(deltaR0Limit, deltaR2Limit, '++++++')
             let blockNumber = await this.web3.eth.getBlockNumber()
             let R0 = await this.contract.methods.R0().call()
             let R1 = await this.contract.methods.R1().call()
@@ -98,7 +99,7 @@ export default {
         //direction +1 means buy(open-long, close-short)，-1 means sell(open-short, close-long)
         async poolLimitTrade(direction) {
             let { price, divConst, poolShortAmount, poolLongAmount, poolNet } = this
-            const deltaRSlidePriceRate = 10000
+            const deltaRSlidePriceRate = (await this.contract.methods.deltaRSlidePriceRate().call()) * 1
             const R = (direction * (poolShortAmount - poolLongAmount) * price * divConst) / poolNet
             const D = await this.getDeltaPriceByR(R)
             let slidePrice = 0

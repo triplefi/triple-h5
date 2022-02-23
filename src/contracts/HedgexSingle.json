@@ -364,9 +364,9 @@
                 "type": "uint256"
             },
             {
-                "internalType": "int256",
+                "internalType": "int8",
                 "name": "deltaR",
-                "type": "int256"
+                "type": "int8"
             }
         ],
         "stateMutability": "view",
@@ -387,9 +387,9 @@
                 "type": "uint256"
             },
             {
-                "internalType": "int256",
+                "internalType": "int8",
                 "name": "deltaR",
-                "type": "int256"
+                "type": "int8"
             }
         ],
         "stateMutability": "view",
@@ -410,32 +410,9 @@
                 "type": "uint256"
             },
             {
-                "internalType": "int256",
+                "internalType": "int8",
                 "name": "deltaR",
-                "type": "int256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "R3",
-        "outputs": [
-            {
-                "internalType": "int256",
-                "name": "initR",
-                "type": "int256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "number",
-                "type": "uint256"
-            },
-            {
-                "internalType": "int256",
-                "name": "deltaR",
-                "type": "int256"
+                "type": "int8"
             }
         ],
         "stateMutability": "view",
@@ -639,6 +616,45 @@
                 "internalType": "uint8",
                 "name": "",
                 "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "deltaR0Limit",
+        "outputs": [
+            {
+                "internalType": "int24",
+                "name": "",
+                "type": "int24"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "deltaR2Limit",
+        "outputs": [
+            {
+                "internalType": "int24",
+                "name": "",
+                "type": "int24"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "deltaRSlidePriceRate",
+        "outputs": [
+            {
+                "internalType": "uint24",
+                "name": "",
+                "type": "uint24"
             }
         ],
         "stateMutability": "view",
@@ -1228,6 +1244,45 @@
     {
         "inputs": [
             {
+                "internalType": "int24",
+                "name": "value",
+                "type": "int24"
+            }
+        ],
+        "name": "setDeltaR0Limit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "int24",
+                "name": "value",
+                "type": "int24"
+            }
+        ],
+        "name": "setDeltaR2Limit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint24",
+                "name": "value",
+                "type": "uint24"
+            }
+        ],
+        "name": "setDeltaRSlidePriceRate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "bool",
                 "name": "b",
                 "type": "bool"
@@ -1337,19 +1392,6 @@
                 "internalType": "uint16",
                 "name": "",
                 "type": "uint16"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "slideP",
-        "outputs": [
-            {
-                "internalType": "uint8",
-                "name": "",
-                "type": "uint8"
             }
         ],
         "stateMutability": "view",
