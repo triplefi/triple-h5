@@ -168,6 +168,11 @@ export default {
             if (this.coinbase) {
                 this.calcGetTokensBtn()
             }
+        },
+        isNetworkError(v) {
+            if (v) {
+                this.onSwitchNetwork(this.networkTypeList[0])
+            }
         }
     },
     mounted() {
