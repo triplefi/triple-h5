@@ -226,6 +226,9 @@ export default {
             return (this.feeRate / this.divConst) * 100
         },
         slidePriceLong() {
+            if (!this.price) {
+                return 0
+            }
             //多仓偏移价格
             let value = this.price + (this.slidePrice[1] || 0)
             if (this.priceExcursion < 0) {
@@ -234,6 +237,9 @@ export default {
             return value
         },
         slidePriceShort() {
+            if (!this.price) {
+                return 0
+            }
             //空仓偏移价格
             let value = this.price + (this.slidePrice[0] || 0)
             if (this.priceExcursion > 0) {

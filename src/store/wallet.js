@@ -417,8 +417,8 @@ export default {
             commit('setTotalPool', totalPool)
             commit('setPoolLongAmount', poolLongAmount)
             commit('setPoolShortAmount', poolShortAmount)
-            commit('setPrice', price)
             commit('setPriceExcursion', excursion)
+            commit('setPrice', price)
             commit('setPoolState', poolState)
             let poolNet = totalPool
             if (poolState !== 2) {
@@ -532,6 +532,7 @@ export default {
     resetPair({ commit }) {
         commit('setPosition', {})
         commit('setPrice', 0)
+        commit('setPriceExcursion', 0)
         commit('setPoolLongPrice', 0)
         commit('setPoolShortPrice', 0)
         commit('setTotalPool', 0)
