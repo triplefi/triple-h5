@@ -104,7 +104,7 @@ export default {
             const D = await this.getDeltaPriceByR(R)
             let slidePrice = 0
             if (D == direction) {
-                slidePrice = (price * (divConst + deltaRSlidePriceRate)) / divConst
+                slidePrice = (price * deltaRSlidePriceRate) / divConst
             }
             return slidePrice
         }
