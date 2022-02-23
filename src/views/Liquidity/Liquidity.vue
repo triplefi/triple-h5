@@ -102,6 +102,43 @@
                 </div>
             </el-dialog>
         </div>
+        <div class="recommend-pools" v-if="recommendList.length > 0">
+            <div class="recommend-title">Recommend Pools</div>
+            <el-row :gutter="32">
+                <el-col :span="8" :key="item.contract" v-for="item in recommendList">
+                    <div class="recommend-item">
+                        <div class="icon-con">
+                            <div class="icons">
+                                <div class="icon icon-1">
+                                    <img :src="item.trade_coin.toUpperCase() | getCoinIcon" alt="" />
+                                </div>
+                                <div class="icon icon-2">
+                                    <img :src="item.margin_coin.toUpperCase() | getCoinIcon" alt="" />
+                                </div>
+                            </div>
+                            <div class="recommend-icon-label">
+                                {{ item.trade_coin.toUpperCase() }}/{{ item.margin_coin.toUpperCase() }}
+                            </div>
+                        </div>
+                        <div class="value-con">
+                            <div class="label">Currency</div>
+                            <div class="value">
+                                <img :src="item.margin_coin.toUpperCase() | getCoinIcon" alt="" />
+                                {{ item.margin_coin.toUpperCase() }}
+                            </div>
+                        </div>
+                        <div class="value-con">
+                            <div class="label">Total Value Locked</div>
+                            <div class="value">{{ item.poolNet | formatMoney }}</div>
+                        </div>
+                        <div class="value-con">
+                            <div class="label">% In Use</div>
+                            <div class="value">{{ item.inUse }}%</div>
+                        </div>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -141,7 +178,9 @@ export default {
             totalPool: 0,
             curPoolNet: 0,
             token0BalanceOf: 0,
-            token0Decimals: 0
+            token0Decimals: 0,
+
+            recommendList: []
         }
     },
     computed: {
@@ -191,11 +230,49 @@ export default {
             immediate: true,
             handler() {
                 this.getPairsInfo()
+                this.getRecommendList()
             }
         }
         // 交易对改变，合约改变
     },
     methods: {
+        async getRecommendList() {
+            const requestList = this.pairList.map((e) => {
+                return this.getNetPoolByContract(e.contract)
+            })
+            const res = await Promise.all(requestList)
+            const recommendList = this.pairList.map((e, i) => {
+                return { ...e, ...res[i] }
+            })
+            this.recommendList = recommendList
+        },
+        // 通过合约地址获取合约netPool,R
+        async getNetPoolByContract(address) {
+            const contract = new this.web3.eth.Contract(abi, address)
+            const [totalPool, priceRes, poolLongPrice, poolLongAmount, poolShortPrice, poolShortAmount, decimals] =
+                await Promise.all([
+                    contract.methods.totalPool().call(),
+                    contract.methods.getLatestPrice().call(),
+                    contract.methods.poolLongPrice().call(),
+                    contract.methods.poolLongAmount().call(),
+                    contract.methods.poolShortPrice().call(),
+                    contract.methods.poolShortAmount().call(),
+                    contract.methods.decimals().call()
+                ])
+            const indexPrice = priceRes[0] * 1
+            const net =
+                poolLongAmount * indexPrice +
+                poolShortAmount * poolShortPrice -
+                (poolLongAmount * poolLongPrice + poolShortAmount * indexPrice)
+            let poolNet = totalPool * 1 + net
+            if (poolNet < 0) {
+                poolNet = 0
+            }
+            // （多头净值 + 空头净值）/ pool liquidity
+            const inUse = ((net / poolNet) * 100).toFixed(2)
+            poolNet = formatNum(poolNet / Math.pow(10, decimals), decimals * 1)
+            return { poolNet, inUse }
+        },
         formatDecimals(val) {
             // 合约换算和精度
             return formatNum(val / Math.pow(10, this.token0Decimals), this.token0Decimals * 1)
@@ -361,7 +438,7 @@ export default {
                 this.pcontract.methods.divConst().call(),
                 this.pcontract.methods.poolNetAmountRateLimitOpen().call()
             ])
-            const [indexPrice] = priceRes[0]
+            const indexPrice = priceRes[0] * 1
             const net =
                 totalPool * 1 +
                 (poolLongAmount * indexPrice + poolShortAmount * poolShortPrice) -
