@@ -269,7 +269,7 @@ export default {
                 poolNet = 0
             }
             // （多头净值 + 空头净值）/ pool liquidity
-            const inUse = ((net / poolNet) * 100).toFixed(2)
+            const inUse = ((((poolShortAmount + poolLongAmount) * indexPrice) / poolNet) * 100).toFixed(2)
             poolNet = formatNum(poolNet / Math.pow(10, decimals), decimals * 1)
             return { poolNet, inUse }
         },
