@@ -244,6 +244,10 @@ export const getNetConfig = () => {
         ]
     }
 }
+// 判断是否为支持的节点
+export const checkSupportChain = (id) => {
+    return [4, 137, 80001].includes(parseInt(id))
+}
 // 判断是否为matic节点
 export const checkMatic = (id) => {
     return id == 80001 || id == 137

@@ -4,7 +4,7 @@ import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { Message } from 'element-ui'
 import { bus } from '@/utils/bus'
-import { checkMatic } from '@/utils/util'
+import { checkMatic, checkSupportChain } from '@/utils/util'
 import { getTradePairs } from '@/api'
 let poolInterval = null
 let pairTimeHandler = null
@@ -16,9 +16,11 @@ export default {
         if (typeof window.ethereum !== 'undefined') {
             commit('setMetaMask', true)
             try {
+                console.time('请求用户账号授权')
                 const provider = window.ethereum
                 await provider.enable() // 请求用户账号授权
                 await commit('setWallet', 'MetaMask')
+                console.timeEnd('请求用户账号授权')
                 localStorage.setItem('wallet', 'MetaMask')
                 commit('setProvider', provider)
                 dispatch('providerEvents')
@@ -109,6 +111,7 @@ export default {
     async initWeb3({ state, commit, dispatch }) {
         try {
             // web3
+            console.time('initWeb3')
             const web3 = new Web3(state.provider)
             commit('setWeb3', web3)
             const chainId = await web3.eth.getChainId()
@@ -165,6 +168,7 @@ export default {
             //   if (success)
             //     console.log('Successfully unsubscribed!');
             // });
+            console.timeEnd('initWeb3')
             return Promise.resolve()
         } catch (error) {
             Message({
@@ -177,6 +181,7 @@ export default {
     },
     async initContract({ state, commit, dispatch }, payload = {}) {
         try {
+            console.time('initContract')
             commit('setReady', false)
             commit('clearTrades')
             let { notFirst, pairInfo } = payload
@@ -249,10 +254,11 @@ export default {
                 // networkId首次连接监听事件，只切换账户不需要（会重复监听）
                 dispatch('contractEvents')
             }
+            console.timeEnd('initContract')
             commit('setNetworkError', false)
         } catch (error) {
             console.log(error, '=======')
-            if (state.chainId) {
+            if (state.chainId && !checkSupportChain(state.chainId)) {
                 commit('setNetworkError', true)
             }
         }
