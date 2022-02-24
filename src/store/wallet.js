@@ -7,6 +7,7 @@ import { bus } from '@/utils/bus'
 import { checkMatic } from '@/utils/util'
 import { getTradePairs } from '@/api'
 let poolInterval = null
+let pairTimeHandler = null
 export default {
     // Login, getProvider
     // 选择MetaMask钱包
@@ -466,7 +467,8 @@ export default {
                 dispatch('setPairCoin', pairInfo)
             }
             commit('setPairList', list)
-            setTimeout(() => {
+            clearTimeout(pairTimeHandler)
+            pairTimeHandler = setTimeout(() => {
                 dispatch('getPairsList', { noSetPairInfo: true })
             }, 3000)
         } catch (error) {
