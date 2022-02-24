@@ -229,8 +229,6 @@ export default {
                     return this.contract.methods.traders(e.Account).call()
                 })
             )
-            console.log(curList)
-            console.log(res)
             const tableData = []
             res.forEach((e, i) => {
                 let { longAmount, longPrice, shortAmount, shortPrice } = e

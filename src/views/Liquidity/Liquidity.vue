@@ -133,7 +133,7 @@
                         </div>
                         <div class="value-con">
                             <div class="label">% In Use</div>
-                            <div class="value">{{ item.inUse }}%</div>
+                            <div class="value">{{ item.inUse | formatNum(3) }}%</div>
                         </div>
                     </div>
                 </el-col>
@@ -249,7 +249,7 @@ export default {
         // 通过合约地址获取合约netPool,R
         async getNetPoolByContract(address) {
             const contract = new this.web3.eth.Contract(abi, address)
-            const [totalPool, priceRes, poolLongPrice, poolLongAmount, poolShortPrice, poolShortAmount, decimals] =
+            let [totalPool, priceRes, poolLongPrice, poolLongAmount, poolShortPrice, poolShortAmount, decimals] =
                 await Promise.all([
                     contract.methods.totalPool().call(),
                     contract.methods.getLatestPrice().call(),
@@ -259,6 +259,10 @@ export default {
                     contract.methods.poolShortAmount().call(),
                     contract.methods.decimals().call()
                 ])
+            poolShortAmount = poolShortAmount * 1
+            poolLongAmount = poolLongAmount * 1
+            poolShortPrice = poolShortPrice * 1
+            poolLongPrice = poolLongPrice * 1
             const indexPrice = priceRes[0] * 1
             const net =
                 poolLongAmount * indexPrice +
@@ -269,7 +273,7 @@ export default {
                 poolNet = 0
             }
             // （多头净值 + 空头净值）/ pool liquidity
-            const inUse = ((((poolShortAmount + poolLongAmount) * indexPrice) / poolNet) * 100).toFixed(2)
+            const inUse = (((poolShortAmount + poolLongAmount) * indexPrice) / poolNet) * 100
             poolNet = formatNum(poolNet / Math.pow(10, decimals), decimals * 1)
             return { poolNet, inUse }
         },
