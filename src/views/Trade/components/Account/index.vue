@@ -141,7 +141,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['token0Balance', 'position', 'profitInfo', 'price']),
+        ...mapState(['token0Balance', 'position', 'profitInfo', 'price', 'keepMarginScale']),
         ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice', 'symbol']),
         precision() {
             return Math.abs(this.decimals) || 2
@@ -161,8 +161,8 @@ export default {
         },
         keepMargin(state) {
             if (JSON.stringify(state.position) !== '{}') {
-                const { longPrice, longAmount, shortPrice, shortAmount, margin } = state.position
-                const keepMargin = (longAmount * longPrice + shortAmount * shortPrice) / state.keepMarginScale
+                const { longPrice, longAmount, shortPrice, shortAmount } = state.position
+                const keepMargin = (longAmount * longPrice + shortAmount * shortPrice) / this.keepMarginScale
                 return keepMargin
             }
             return 0
