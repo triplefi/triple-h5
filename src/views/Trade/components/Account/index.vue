@@ -168,8 +168,9 @@ export default {
             return 0
         },
         liquidationStatus() {
+            const value = /^MATIC/.test(this.symbol) ? 0.03 : 0.01
             if (this.LiquidationPrice > 0 && this.price) {
-                if (Math.abs((this.price - this.LiquidationPrice) / this.price) < 0.03) {
+                if (Math.abs((this.price - this.LiquidationPrice) / this.price) < value) {
                     return 1
                 }
                 return 2
