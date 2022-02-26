@@ -301,12 +301,6 @@ export default {
                 this.curPair = this.list[i]
             }
         },
-        tipsCoinBaseError() {
-            this.$message({
-                type: 'error',
-                message: 'Please connect wallet first.'
-            })
-        },
         // 获取全部合约信息，用于过滤空资产item
         async getAllContractInfo(list) {
             if (!this.coinbase) {

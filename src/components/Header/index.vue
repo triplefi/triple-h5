@@ -173,6 +173,12 @@ export default {
             if (v) {
                 this.onSwitchNetwork(this.networkTypeList[0])
             }
+        },
+        '$route.name'(v) {
+            const wallet = localStorage.getItem('wallet')
+            if (wallet !== 'MetaMask' && wallet !== 'WalletConnect' && v != 'Home') {
+                this.tipsCoinBaseError()
+            }
         }
     },
     mounted() {
@@ -181,6 +187,12 @@ export default {
     },
     methods: {
         ...mapActions(['metaMaskInit', 'walletConnectInit', 'disconnect']),
+        tipsCoinBaseError() {
+            this.$message({
+                type: 'error',
+                message: 'Please connect wallet first.'
+            })
+        },
         screenFull() {
             if (this.isFull) {
                 exitFull()
@@ -223,10 +235,7 @@ export default {
                     }
                 }
             } else {
-                this.$message({
-                    type: 'error',
-                    message: 'Please connect wallet first.'
-                })
+                this.tipsCoinBaseError()
             }
         },
         async handleGetTokens() {

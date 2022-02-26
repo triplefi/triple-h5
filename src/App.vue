@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header v-show="$route.name !== 'Home'"></Header>
+        <Header v-show="$route.name != 'Home'"></Header>
         <router-view v-if="initWeb3" />
     </div>
 </template>
@@ -18,17 +18,11 @@ export default {
         Header
     },
     methods: {
-        ...mapActions(['metaMaskInit', 'walletConnectInit', 'getPairsList']),
-        tipsCoinBaseError() {
-            this.$message({
-                type: 'error',
-                message: 'Please connect wallet first.'
-            })
-        }
+        ...mapActions(['metaMaskInit', 'walletConnectInit', 'getPairsList'])
     },
     async mounted() {
         const wallet = localStorage.getItem('wallet')
-        if (this.$route.path === '/') {
+        if (this.$route.name != 'Home') {
             this.initWeb3 = true
         }
         if (wallet === 'MetaMask') {
@@ -37,7 +31,6 @@ export default {
             await this.walletConnectInit()
         } else {
             await this.getPairsList()
-            this.tipsCoinBaseError()
         }
         this.initWeb3 = true
     }

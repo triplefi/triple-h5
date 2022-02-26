@@ -268,5 +268,6 @@ export const getNetUrl = (url) => {
     replaceList.forEach((e) => {
         url = url.replace(e, '://' + netUrl)
     })
+    // url = url.replace(/http:\/\//, 'https://')
     return url
 }
