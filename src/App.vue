@@ -22,7 +22,7 @@ export default {
     },
     async mounted() {
         const wallet = localStorage.getItem('wallet')
-        if (this.$route.name != 'Home') {
+        if (this.$route.name == 'Home') {
             this.initWeb3 = true
         }
         if (wallet === 'MetaMask') {

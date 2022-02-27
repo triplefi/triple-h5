@@ -25,6 +25,21 @@
                 "internalType": "int8",
                 "name": "_amountDecimal",
                 "type": "int8"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_keepMarginScale",
+                "type": "uint8"
+            },
+            {
+                "internalType": "int24",
+                "name": "_ROpen",
+                "type": "int24"
+            },
+            {
+                "internalType": "int24",
+                "name": "_RPrice",
+                "type": "int24"
             }
         ],
         "stateMutability": "nonpayable",
@@ -809,9 +824,14 @@
                 "type": "uint256"
             },
             {
-                "internalType": "int256",
+                "internalType": "uint256",
                 "name": "",
-                "type": "int256"
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",

@@ -63,8 +63,16 @@ export default {
     LongMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const { price, priceExcursion, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate } =
-                state
+            const {
+                price,
+                priceExcursionDown,
+                leverage,
+                token0Balance,
+                poolNet,
+                feeRate,
+                divConst,
+                singleOpenLimitRate
+            } = state
             if (!divConst || !price) {
                 return 0
             }
@@ -85,12 +93,8 @@ export default {
             // const x = xL || xS
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
-            let priceEx = price
-            // 偏移价格大于0时，针对开多限制总开仓量
-            if (priceExcursion < 0) {
-                priceEx = price + Math.abs(priceExcursion)
-            }
-            console.log(price, priceExcursion, priceEx, '===========')
+            // 买单使用下偏移量
+            let priceEx = price + priceExcursionDown
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
             return Math.min(limitSAmount, xL) * state.limitCoefficient
         } else {
@@ -100,8 +104,16 @@ export default {
     ShortMaxAmount(state, getters) {
         if (JSON.stringify(state.position) !== '{}') {
             // const { longAmount, shortAmount } = state.position
-            const { price, priceExcursion, leverage, token0Balance, poolNet, feeRate, divConst, singleOpenLimitRate } =
-                state
+            const {
+                price,
+                priceExcursionUp,
+                leverage,
+                token0Balance,
+                poolNet,
+                feeRate,
+                divConst,
+                singleOpenLimitRate
+            } = state
             if (!divConst || !price) {
                 return 0
             }
@@ -122,12 +134,9 @@ export default {
             // const x = xL || xS
             // 单笔可开仓量最大值限制：limitSAmount = 对冲池净值（合约函数getPoolNet）*比例系数（合约中的singleOpenLimitRate/divConst）/标准价格（合约函数getLatestPrice）
             // x和limitSAmount取较小值，做为用户开仓量的100%；其他的开仓比例按照比例计算即可。
-            let priceEx = price
+            // 卖单上偏移
+            let priceEx = price - priceExcursionUp
             // 偏移价格小于0时，针对开空限制总开仓量
-            if (priceExcursion > 0) {
-                priceEx = price - Math.abs(priceExcursion)
-            }
-            console.log(price, priceExcursion, priceEx, '====++++===')
             let limitSAmount = Math.floor((poolNet * singleOpenLimitRate) / divConst / priceEx)
             return Math.min(limitSAmount, xS) * state.limitCoefficient
         } else {
@@ -135,27 +144,21 @@ export default {
         }
     },
     CloseLongMaxAmount(state) {
-        const { poolNet, singleCloseLimitRate, divConst, price, priceExcursion } = state
+        const { poolNet, singleCloseLimitRate, divConst, price, priceExcursionUp } = state
         if (!price || !divConst) {
             return 0
         }
         //同开空
-        let priceEx = price
-        if (priceExcursion > 0) {
-            priceEx = price - Math.abs(priceExcursion)
-        }
+        let priceEx = price - priceExcursionUp
         return ((poolNet * singleCloseLimitRate) / divConst / priceEx) * state.limitCoefficient
     },
     CloseShortMaxAmount(state) {
-        const { poolNet, singleCloseLimitRate, divConst, price, priceExcursion } = state
+        const { poolNet, singleCloseLimitRate, divConst, price, priceExcursionDown } = state
         if (!price || !divConst) {
             return 0
         }
         // 同开多
-        let priceEx = price
-        if (priceExcursion < 0) {
-            priceEx = price + Math.abs(priceExcursion)
-        }
+        let priceEx = price + priceExcursionDown
         return ((poolNet * singleCloseLimitRate) / divConst / priceEx) * state.limitCoefficient
     },
     canUseMargin(state, getters) {

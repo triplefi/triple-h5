@@ -45,7 +45,8 @@ const store = new Vuex.Store({
         allowance: 0,
 
         price: '', // indexPrice
-        priceExcursion: '', // 价格偏移
+        priceExcursionUp: '', // 价格上偏移
+        priceExcursionDown: 0, //价格下偏移
         totalPool: '',
         position: {}, // 持仓
         trades: [], // 成交记录
@@ -175,8 +176,11 @@ const store = new Vuex.Store({
         setPrice(state, payload) {
             state.price = payload
         },
-        setPriceExcursion(state, payload) {
-            state.priceExcursion = payload
+        setPriceExcursionUp(state, payload) {
+            state.priceExcursionUp = payload
+        },
+        setPriceExcursionDown(state, payload) {
+            state.priceExcursionDown = payload
         },
         setPoolState(state, payload) {
             state.poolState = payload

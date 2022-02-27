@@ -26,10 +26,12 @@ export default {
                 dispatch('providerEvents')
                 return dispatch('initWeb3')
             } catch (error) {
-                Message({
-                    type: 'error',
-                    message: 'User denied account access'
-                })
+                if (window.location.pathname !== '/') {
+                    Message({
+                        type: 'error',
+                        message: 'User denied account access'
+                    })
+                }
                 return Promise.reject()
             }
         } else {
@@ -416,15 +418,16 @@ export default {
             const poolLongAmount = res[3] * 1
             const poolShortAmount = res[4] * 1
             const price = res[5][0] * 1
-            const excursion = res[5][1] * 1
-            console.log(res[5])
+            const excursionUp = res[5][1] * 1 || 0
+            const excursionDown = res[5][2] * 1 || 0
             const poolState = res[7] * 1
             commit('setPoolLongPrice', poolLongPrice)
             commit('setPoolShortPrice', poolShortPrice)
             commit('setTotalPool', totalPool)
             commit('setPoolLongAmount', poolLongAmount)
             commit('setPoolShortAmount', poolShortAmount)
-            commit('setPriceExcursion', excursion)
+            commit('setPriceExcursionUp', excursionUp)
+            commit('setPriceExcursionDown', excursionDown)
             commit('setPrice', price)
             commit('setPoolState', poolState)
             let poolNet = totalPool
@@ -540,7 +543,8 @@ export default {
     resetPair({ commit }) {
         commit('setPosition', {})
         commit('setPrice', 0)
-        commit('setPriceExcursion', 0)
+        commit('setPriceExcursionUp', 0)
+        commit('setPriceExcursionDown', 0)
         commit('setPoolLongPrice', 0)
         commit('setPoolShortPrice', 0)
         commit('setTotalPool', 0)

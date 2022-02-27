@@ -115,10 +115,7 @@ export default {
                 return 0
             }
             //多仓偏移价格
-            let value = this.price + (this.slidePrice[1] || 0)
-            if (this.priceExcursion < 0) {
-                value = value + Math.abs(this.priceExcursion)
-            }
+            let value = this.price + (this.slidePrice[1] || 0) + this.priceExcursionDown
             return value
         },
         slidePriceShort() {
@@ -126,10 +123,7 @@ export default {
                 return 0
             }
             //空仓偏移价格
-            let value = this.price + (this.slidePrice[0] || 0)
-            if (this.priceExcursion > 0) {
-                value = value - Math.abs(this.priceExcursion)
-            }
+            let value = this.price + (this.slidePrice[0] || 0) - this.priceExcursionUp
             return value
         },
         precision() {
