@@ -1,8 +1,8 @@
 // vue.config.js
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const PrerenderSPAPlugin = require('prerender-spa-plugin')
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+// const PrerenderSPAPlugin = require('prerender-spa-plugin')
+// const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 module.exports = {
     // publicPath: '/',
     devServer: {
@@ -56,39 +56,25 @@ module.exports = {
                             drop_console: false
                         }
                     }
-                }),
-                // 预渲染，SEO优化
-                new PrerenderSPAPlugin({
-                    staticDir: path.join(__dirname, 'dist'),
-                    routes: ['/'], // 你需要预渲染的路由
-                    renderer: new Renderer({
-                        // inject: {
-                        //     _m: 'prerender'
-                        // },
-                        // 渲染时显示浏览器窗口，调试时有用
-                        headless: true,
-                        // 等待触发目标时间后，开始预渲染
-                        renderAfterDocumentEvent: 'render-event'
-                    })
                 })
             )
         } else {
             config.devtool = 'source-map'
             // 为开发环境修改配置...
-            // 预渲染，SEO优化
-            new PrerenderSPAPlugin({
-                staticDir: path.join(__dirname, 'dist'),
-                routes: ['/'], // 你需要预渲染的路由
-                renderer: new Renderer({
-                    // inject: {
-                    //     _m: 'prerender'
-                    // },
-                    // 渲染时显示浏览器窗口，调试时有用
-                    headless: true,
-                    // 等待触发目标时间后，开始预渲染
-                    renderAfterDocumentEvent: 'render-event'
-                })
-            })
         }
+        // 预渲染，SEO优化
+        // new PrerenderSPAPlugin({
+        //     staticDir: path.join(__dirname, 'dist'),
+        //     routes: ['/'], // 你需要预渲染的路由
+        //     renderer: new Renderer({
+        //         // inject: {
+        //         //     _m: 'prerender'
+        //         // },
+        //         // 渲染时显示浏览器窗口，调试时有用
+        //         headless: true,
+        //         // 等待触发目标时间后，开始预渲染
+        //         renderAfterDocumentEvent: 'render-event'
+        //     })
+        // })
     }
 }

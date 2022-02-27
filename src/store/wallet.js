@@ -547,5 +547,9 @@ export default {
         commit('setPoolLongAmount', 0)
         commit('setPoolShortAmount', 0)
         commit('setPoolNet', 0)
+        commit('clearTrades')
+        if (window.getTradeHandler) {
+            clearInterval(window.getTradeHandler)
+        }
     }
 }

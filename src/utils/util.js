@@ -264,7 +264,7 @@ export const getNetUrl = (url) => {
     if (!netUrl) {
         netUrl = netDic[137]
     }
-    const replaceList = ['://triple.fi', '://test.triple.fi', /:\/\/127.0.0.1:\d{4}/]
+    const replaceList = ['://triple.fi', '://www.triple.fi', '://test.triple.fi', /:\/\/127.0.0.1:\d{4}/]
     replaceList.forEach((e) => {
         url = url.replace(e, '://' + netUrl)
     })

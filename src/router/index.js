@@ -68,7 +68,7 @@ const routes = [
 
 const router = new VueRouter({
     // mode: process.env.NODE_ENV === 'development' ? 'hash' : 'history',
-    mode: 'hash',
+    mode: 'history',
     routes
 })
 

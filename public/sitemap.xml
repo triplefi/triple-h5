@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <url>
+    <loc>https://triple.fi</loc>
+    <lastmod>2022-02-07T18:34:10+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://triple.fi/trade</loc>
+    <lastmod>2022-02-07T18:34:10+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://triple.fi/pool</loc>
+    <lastmod>2022-02-07T18:34:10+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://triple.fi/pool/add/usdt</loc>
+    <lastmod>2022-02-07T18:34:10+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://triple.fi/analytics</loc>
+    <lastmod>2022-02-07T18:34:10+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.1</priority>
+  </url>
+</urlset>
