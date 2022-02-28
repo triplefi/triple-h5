@@ -9,7 +9,7 @@
         <router-link class="tab btn14" to="/pool">Pool</router-link>
         <router-link class="tab btn14" to="/analytics">Analytics</router-link>
         <el-button
-            v-if="!!coinbase && chainId == 4"
+            v-if="!!coinbase && chainId == 80001"
             :loading="getTokenLoading"
             :disabled="getTokenDisable"
             @click="handleGetTokens"
@@ -248,7 +248,7 @@ export default {
                 if (res.result) {
                     this.$message({
                         type: 'success',
-                        message: 'Succeeded! 0.1ETH and 10000USDT will be in your Rinkeby wallet soon.'
+                        message: 'Succeeded! 10000USDT will be in your Mumbai wallet soon.'
                     })
                 } else {
                     this.$message({

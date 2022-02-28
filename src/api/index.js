@@ -64,9 +64,9 @@ export const getAccountInterest = ({ contract, account, count }) => {
 // 获取测试币
 export const getTestCoin = (address) => {
     return request({
-        url: '/api/account/gettestcoin',
+        url: '/api/odds/testcoin',
         method: 'get',
-        params: { user: address }
+        params: { account: address }
     })
 }
 
