@@ -176,77 +176,42 @@ export const getCoinIcon = (coin) => {
 
 // 获取节点配置文件
 export const getNetConfig = () => {
-    if (/test.triple.fi/.test(window.location.href) || /127.0.0.1/.test(window.location.href)) {
-        return [
-            {
-                type: 'matic',
-                label: 'Mumbai',
-                icon: 'ic_matic',
-                id: 80001,
-                size: 16,
-                token: 'MATIC',
-                rpc: 'https://rpc-mumbai.matic.today',
-                explorerUrl: 'https://mumbai.polygonscan.com/',
-                nativeCurrency: {
-                    name: 'MATIC',
-                    decimals: 18,
-                    symbol: 'MATIC'
-                }
-            },
-            {
-                type: 'rinkeby',
-                id: 4,
-                label: 'Rinkeby',
-                icon: 'ic_rinkeby',
-                size: 18,
-                token: 'ETH',
-                rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-                explorerUrl: 'https://rinkeby.etherscan.io',
-                nativeCurrency: {
-                    name: 'ETH',
-                    decimals: 18,
-                    symbol: 'ETH'
-                }
+    return [
+        {
+            type: 'matic',
+            label: 'Polygon',
+            icon: 'ic_matic',
+            id: 137,
+            size: 16,
+            token: 'MATIC',
+            rpc: 'https://polygon-rpc.com',
+            explorerUrl: 'https://polygonscan.com',
+            nativeCurrency: {
+                name: 'MATIC',
+                decimals: 18,
+                symbol: 'MATIC'
             }
-        ]
-    } else {
-        return [
-            {
-                type: 'matic',
-                label: 'Polygon',
-                icon: 'ic_matic',
-                id: 137,
-                size: 16,
-                token: 'MATIC',
-                rpc: 'https://polygon-rpc.com',
-                explorerUrl: 'https://polygonscan.com',
-                nativeCurrency: {
-                    name: 'MATIC',
-                    decimals: 18,
-                    symbol: 'MATIC'
-                }
-            },
-            {
-                type: 'rinkeby',
-                id: 4,
-                label: 'Rinkeby',
-                icon: 'ic_rinkeby',
-                size: 18,
-                token: 'ETH',
-                rpc: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-                explorerUrl: 'https://rinkeby.etherscan.io',
-                nativeCurrency: {
-                    name: 'ETH',
-                    decimals: 18,
-                    symbol: 'ETH'
-                }
+        },
+        {
+            type: 'matic',
+            label: 'Mumbai',
+            icon: 'ic_matic',
+            id: 80001,
+            size: 16,
+            token: 'MATIC',
+            rpc: 'https://rpc-mumbai.matic.today',
+            explorerUrl: 'https://mumbai.polygonscan.com/',
+            nativeCurrency: {
+                name: 'MATIC',
+                decimals: 18,
+                symbol: 'MATIC'
             }
-        ]
-    }
+        }
+    ]
 }
 // 判断是否为支持的节点
 export const checkSupportChain = (id) => {
-    return [4, 137, 80001].includes(parseInt(id))
+    return [137, 80001].includes(parseInt(id))
 }
 // 判断是否为matic节点
 export const checkMatic = (id) => {
@@ -256,8 +221,8 @@ export const checkMatic = (id) => {
 export const getNetUrl = (url) => {
     const netDic = {
         137: 'polygon.triple.fi',
-        80001: 'mumbai.triple.fi',
-        4: 'rinkeby.triple.fi'
+        80001: 'mumbai.triple.fi'
+        // 4: 'rinkeby.triple.fi'
     }
     const curChainId = window.localStorage.getItem('curChainId')
     let netUrl = netDic[curChainId]

@@ -63,7 +63,7 @@ export default {
     Welcome to use TripleFi!</br>
     Please have USDT (polygon) and Matic in your wallet first.</br>
     Then click the “Approve” button and have fun trading!</br>
-    You can also switch to Rinkeby Testnet to test with stimulated trading for free.</br></br></div>`,
+    You can also switch to Mumbai Testnet to test with stimulated trading for free.</br></br></div>`,
                                 {
                                     confirmButtonText: 'Confirm',
                                     dangerouslyUseHTMLString: true
@@ -73,7 +73,7 @@ export default {
                             this.$alert(
                                 `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
     Welcome to use the Triple.Fi stimulated trading version! Please follow the steps below,</br>
-    1. Switch your wallet to Ethereum Rinkeby Test Network.</br>
+    1. Switch your wallet to Ethereum Mumbai Test Network.</br>
     2. Get free test tokens on the top left corner.</br>
     3. Click “Approve” button and have fun trading!</br></br></div>`,
                                 {

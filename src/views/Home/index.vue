@@ -790,7 +790,7 @@
                         </div>
                     </router-link>
                     <router-link to="/trade">
-                        <div class="label">Stimulated trading available on Rinkeby Testnet</div>
+                        <div class="label">Stimulated trading available on Mumbai Testnet</div>
                     </router-link>
                     <!-- <a
                         class="active"

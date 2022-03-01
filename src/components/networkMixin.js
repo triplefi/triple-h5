@@ -7,7 +7,7 @@ export default {
         isNetworkError: {
             handler(v) {
                 if (v) {
-                    this.$alert('Please connect to Polygon (Matic) or Rinkeby network.', 'Wrong Network', {
+                    this.$alert('Please connect to Polygon or Matic network.', 'Wrong Network', {
                         confirmButtonText: 'Confirm'
                     })
                 }
