@@ -96,3 +96,35 @@ export const addEmail = (email) => {
         params: { email }
     })
 }
+
+// 首次获取合约交易记录
+export const getContractTrades = (address) => {
+    return request({
+        url: '/api/contract/trade',
+        method: 'get',
+        params: {
+            contract: address
+        }
+    })
+}
+// 首次获取合约爆仓记录
+export const getContractExplosive = (address) => {
+    return request({
+        url: '/api/contract/explosive',
+        method: 'get',
+        params: {
+            contract: address
+        }
+    })
+}
+
+// 获取合约常量
+export const getContractCons = (address) => {
+    return request({
+        url: '/api/contract/pair_params',
+        method: 'get',
+        params: {
+            contract: address
+        }
+    })
+}

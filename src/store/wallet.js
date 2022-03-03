@@ -5,7 +5,7 @@ import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { Message } from 'element-ui'
 import { bus } from '@/utils/bus'
 import { checkMatic, checkSupportChain } from '@/utils/util'
-import { getTradePairs } from '@/api'
+import { getTradePairs, getContractTrades, getContractCons, getContractExplosive } from '@/api'
 let poolInterval = null
 let pairTimeHandler = null
 export default {
@@ -121,10 +121,13 @@ export default {
             window.localStorage.setItem('curChainId', chainId)
             await dispatch('getPairsList')
             const coinbase = await web3.eth.getCoinbase() // 链接的账户
-            let balance
             if (coinbase) {
-                balance = await web3.eth.getBalance(coinbase) // 账户余额
-                balance = web3.utils.fromWei(balance, 'ether')
+                web3.eth.getBalance(coinbase).then((res) => {
+                    let balance = web3.utils.fromWei(res, 'ether')
+                    commit('setBalance', balance * 1)
+                })
+                // balance = await web3.eth.getBalance(coinbase) // 账户余额
+                // balance = web3.utils.fromWei(balance, 'ether')
             } else {
                 Message({
                     type: 'success',
@@ -136,7 +139,6 @@ export default {
             // console.log(networkId, '-----')
             // const blockNumber = await web3.eth.getBlockNumber();
             commit('setCoinbase', coinbase)
-            commit('setBalance', balance * 1)
 
             // 开启pool池数据拉取
             if (poolInterval) {
@@ -198,59 +200,44 @@ export default {
                 return
             }
 
+            // 获取合约常量
+            const divConst = 1000000
+            const constRes = await getContractCons(contractAddress)
+            const {
+                fee_rate,
+                keep_margin_scale,
+                leverage,
+                min_amount,
+                r_open,
+                r_price,
+                single_close_limit_rate,
+                single_open_limit_rate,
+                token0,
+                token0_decimal
+            } = constRes.data
+
             // commit('setContractAddress', contractAddress)
             console.log('contractAddress=', contractAddress)
             const contract = new state.web3.eth.Contract(abi, contractAddress)
-            const amountDecimal = await contract.methods.amountDecimal().call()
-            const decimals = await contract.methods.decimals().call()
+            const amountDecimal = Math.log10(min_amount)
+            const decimals = Math.log10(token0_decimal)
             commit('setContract', contract)
-            commit('setAmountDecimal', amountDecimal * 1)
-            commit('setDecimals', decimals * 1)
+            commit('setAmountDecimal', amountDecimal)
+            commit('setDecimals', decimals)
             commit('setReady', true)
-
-            try {
-                const keepMarginScale = await contract.methods.keepMarginScale().call()
-                commit('setKeepMarginScale', keepMarginScale * 1)
-            } catch (error) {
-                console.log(error)
-            }
-
-            const constantRes = await Promise.all([
-                contract.methods.leverage().call(),
-                contract.methods.feeRate().call(),
-                contract.methods.divConst().call(),
-                contract.methods.singleCloseLimitRate().call(),
-                contract.methods.singleOpenLimitRate().call(),
-                contract.methods.poolNetAmountRateLimitOpen().call(),
-                contract.methods.poolNetAmountRateLimitPrice().call(),
-                contract.methods.token0().call()
-            ])
-            commit('setLeverage', constantRes[0] * 1)
-            commit('setFeeRate', constantRes[1] * 1)
-            commit('setDivConst', constantRes[2] * 1)
-            commit('setSingleCloseLimitRate', constantRes[3] * 1)
-            commit('setSingleOpenLimitRate', constantRes[4] * 1)
-            commit('setPoolNetAmountRateLimitOpen', constantRes[5] * 1)
-            commit('setPoolNetAmountRateLimitPrice', constantRes[6] * 1)
-
+            commit('setKeepMarginScale', keep_margin_scale)
+            commit('setLeverage', leverage)
+            commit('setFeeRate', fee_rate * divConst)
+            commit('setDivConst', divConst)
+            commit('setSingleCloseLimitRate', single_close_limit_rate * divConst)
+            commit('setSingleOpenLimitRate', single_open_limit_rate * divConst)
+            commit('setPoolNetAmountRateLimitOpen', r_open * divConst)
+            commit('setPoolNetAmountRateLimitPrice', r_price * divConst)
             // token0
-            const token0Address = constantRes[7] // 获取token0address
-            console.log(token0Address, '000000000')
-            // const token0Address = pairInfo.margin_address // 获取token0address
-            const token0 = new state.web3.eth.Contract(erc20abi, token0Address) // 生成token0合约对象
-            const token0Decimals = await token0.methods.decimals().call() // token0精度
-            commit('setToken0', token0)
-            commit('setToken0Address', token0Address)
-            commit('setToken0Decimals', token0Decimals * 1)
-
-            if (state.coinbase) {
-                dispatch('getPosition')
-                // dispatch('getFundingRate')
-                const token0Balance = await token0.methods.balanceOf(state.coinbase).call() // 用户lp数量
-                const allowance = await token0.methods.allowance(state.coinbase, contractAddress).call() // 查询账户允许合约的消费限额
-                commit('setToken0Balance', token0Balance * 1)
-                commit('setAllowance', allowance / Math.pow(10, token0Decimals))
-            }
+            const token0Contract = new state.web3.eth.Contract(erc20abi, token0) // 生成token0合约对象
+            commit('setToken0', token0Contract)
+            commit('setToken0Address', token0)
+            commit('setToken0Decimals', decimals)
 
             if (!notFirst) {
                 // networkId首次连接监听事件，只切换账户不需要（会重复监听）
@@ -258,8 +245,15 @@ export default {
             }
             console.timeEnd('initContract')
             commit('setNetworkError', false)
+
+            if (state.coinbase) {
+                dispatch('getPosition')
+                const token0Balance = await token0Contract.methods.balanceOf(state.coinbase).call() // 用户lp数量
+                const allowance = await token0Contract.methods.allowance(state.coinbase, contractAddress).call() // 查询账户允许合约的消费限额
+                commit('setToken0Balance', token0Balance * 1)
+                commit('setAllowance', allowance / Math.pow(10, decimals))
+            }
         } catch (error) {
-            console.log(error, '=======')
             if (state.chainId && !checkSupportChain(state.chainId)) {
                 commit('setNetworkError', true)
             }
@@ -270,15 +264,20 @@ export default {
         console.log('contractEvents')
         commit('clearTrades')
         let toBlock = await state.web3.eth.getBlockNumber()
-        const limit = checkMatic(state.chainId) ? 1000 : 10000
+        // const limit = checkMatic(state.chainId) ? 1000 : 10000
+        const limit = 10
         const getFromBlock = (to) => {
             return to - limit > 0 ? to - limit : 0
         }
-        let fromBlock = getFromBlock(toBlock)
-
+        const changeTradesList = (list) => {
+            list.forEach(async (item) => {
+                const block = await state.web3.eth.getBlock(item.blockNumber)
+                item.time = block.timestamp * 1000
+                commit('setTrade', item)
+            })
+        }
         // matic网络，轮询获取trades
-        let requestNum = 0
-        const getPastEvents = (from, to, isGetAll = false, key = 'Trade', contractAddress = '') => {
+        const getPastEvents = (from, to, key = 'Trade', contractAddress = '') => {
             state.contract.getPastEvents(
                 key,
                 {
@@ -289,7 +288,6 @@ export default {
                     if (err) {
                         console.log(err)
                     } else {
-                        // console.log('PastTrades', event)
                         if (event.length) {
                             const _list = event.map((item) => {
                                 const { amount, direction, price } = item.returnValues
@@ -301,38 +299,40 @@ export default {
                                     transactionHash: item.transactionHash
                                 }
                             })
-                            _list.forEach(async (item) => {
-                                const block = await state.web3.eth.getBlock(item.blockNumber)
-                                item.time = block.timestamp * 1000
-                                commit('setTrade', item)
-                            })
-                        }
-                        if (
-                            requestNum < 50 &&
-                            isGetAll &&
-                            (event.length || 0) + state.trades.length < 30 &&
-                            from > 0 &&
-                            state.contractAddress === contractAddress
-                        ) {
-                            if (!event.length) {
-                                requestNum++
-                            }
-                            getPastEvents(getFromBlock(from), from, true, key, contractAddress)
+                            changeTradesList(_list)
                         }
                     }
                 }
             )
         }
         // 获取历史交易数据，包括爆仓
-        const getAllPaseEvents = (from, to, isGetAll = false) => {
-            getPastEvents(from, to, isGetAll, 'Trade', state.contractAddress)
-            getPastEvents(from, to, isGetAll, 'Explosive', state.contractAddress)
+        const getAllPaseEvents = (from, to) => {
+            getPastEvents(from, to, 'Trade', state.contractAddress)
+            getPastEvents(from, to, 'Explosive', state.contractAddress)
         }
-        // 首次获取历史数据，截止获取到50条。
-        getAllPaseEvents(fromBlock, toBlock, true, 'Trade')
+        // 首次获取历史数据，截止获取到50条，2022-03-03修改为通过接口获取
+        // getAllPaseEvents(fromBlock, toBlock, true, 'Trade')
+        Promise.all([getContractTrades(state.contractAddress), getContractExplosive(state.contractAddress)])
+            .then((res) => {
+                const resList = [...(res[0].data || []), ...(res[1].data || [])]
+                const list = resList.map((e) => {
+                    const { amount, direction, price, block, tx } = e
+                    return {
+                        amount,
+                        direction,
+                        price,
+                        blockNumber: block,
+                        transactionHash: tx
+                    }
+                })
+                changeTradesList(list)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
         // matic无法收到trade消息，只能通过轮询获取trade信息
         if (checkMatic(state.chainId)) {
-            fromBlock = getFromBlock(toBlock)
             if (window.getTradeHandler) {
                 clearInterval(window.getTradeHandler)
             }
