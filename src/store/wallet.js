@@ -463,6 +463,15 @@ export default {
         try {
             const res = await getTradePairs()
             let list = res.result ? res.data : []
+            const sortList = ['eth', 'btc', 'iota', 'matic', 'bct']
+            let newList = []
+            sortList.forEach((d) => {
+                const item = list.find((e) => e.trade_coin === d)
+                if (item) {
+                    newList.push(item)
+                }
+            })
+            newList = [...newList, ...list.filter((e) => !sortList.includes(e.trade_coin))]
             if (!params?.noSetPairInfo) {
                 let pairInfo = {}
                 try {
@@ -471,11 +480,11 @@ export default {
                 } catch (error) {
                     pairInfo = {}
                 }
-                const findInfo = list.find((e) => e.trade_coin === pairInfo.trade_coin)
-                pairInfo = findInfo || list[0] || {}
+                const findInfo = newList.find((e) => e.trade_coin === pairInfo.trade_coin)
+                pairInfo = findInfo || newList[0] || {}
                 dispatch('setPairCoin', pairInfo)
             }
-            commit('setPairList', list)
+            commit('setPairList', newList)
             clearTimeout(pairTimeHandler)
             pairTimeHandler = setTimeout(() => {
                 dispatch('getPairsList', { noSetPairInfo: true })
