@@ -16,22 +16,22 @@ export default {
         if (typeof window.ethereum !== 'undefined') {
             commit('setMetaMask', true)
             try {
-                console.time('请求用户账号授权')
                 const provider = window.ethereum
-                await provider.enable() // 请求用户账号授权
-                await commit('setWallet', 'MetaMask')
-                console.timeEnd('请求用户账号授权')
-                localStorage.setItem('wallet', 'MetaMask')
                 commit('setProvider', provider)
+                localStorage.setItem('wallet', 'MetaMask')
+                commit('setWallet', 'MetaMask')
                 dispatch('providerEvents')
+                // 请求用户账号授权
+                provider.enable().catch(() => {
+                    if (window.location.pathname !== '/') {
+                        Message({
+                            type: 'error',
+                            message: 'User denied account access'
+                        })
+                    }
+                })
                 return dispatch('initWeb3')
             } catch (error) {
-                if (window.location.pathname !== '/') {
-                    Message({
-                        type: 'error',
-                        message: 'User denied account access'
-                    })
-                }
                 return Promise.reject()
             }
         } else {
@@ -129,10 +129,13 @@ export default {
                 // balance = await web3.eth.getBalance(coinbase) // 账户余额
                 // balance = web3.utils.fromWei(balance, 'ether')
             } else {
-                Message({
-                    type: 'success',
-                    message: 'No account connected'
-                })
+                const isUnlocked = await state.provider._metamask.isUnlocked()
+                if (isUnlocked) {
+                    Message({
+                        type: 'success',
+                        message: 'No account connected'
+                    })
+                }
             }
             web3.eth.defaultAccount = coinbase
             // const networkId = await web3.eth.net.getId()
