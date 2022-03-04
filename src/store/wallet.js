@@ -4,14 +4,14 @@ import abi from '@/contracts/HedgexSingle.json'
 import erc20abi from '@/contracts/TokenERC20.json' // 标准ERC20代币ABI
 import { Message } from 'element-ui'
 import { bus } from '@/utils/bus'
-import { checkMatic, checkSupportChain } from '@/utils/util'
+import { checkMatic, getNetConfig, checkSupportChain } from '@/utils/util'
 import { getTradePairs, getContractTrades, getContractCons, getContractExplosive } from '@/api'
 let poolInterval = null
 let pairTimeHandler = null
 export default {
     // Login, getProvider
     // 选择MetaMask钱包
-    async metaMaskInit({ commit, dispatch }) {
+    async metaMaskInit({ state, commit, dispatch }) {
         console.log('metaMaskInit')
         if (typeof window.ethereum !== 'undefined') {
             commit('setMetaMask', true)
@@ -22,12 +22,25 @@ export default {
                 commit('setWallet', 'MetaMask')
                 dispatch('providerEvents')
                 // 请求用户账号授权
-                provider.enable().catch(() => {
+                provider.enable().catch(async (err) => {
                     if (window.location.pathname !== '/') {
                         Message({
                             type: 'error',
                             message: 'User denied account access'
                         })
+                    }
+                    if (err.code == '-32002') {
+                        const curChainId = await state.web3.eth.getChainId()
+                        let chainId = getNetConfig().find((e) => e.id != curChainId)?.id
+                        chainId = '0x' + parseInt(chainId).toString(16)
+                        provider
+                            .request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId }]
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     }
                 })
                 return dispatch('initWeb3')
@@ -76,6 +89,10 @@ export default {
     // https://docs.metamask.io/guide/ethereum-provider.html#events
     providerEvents({ state, dispatch }) {
         // Subscribe Events
+        if (window.isAddProviderEvents) {
+            return
+        }
+        window.isAddProviderEvents = true
         state.provider.on('accountsChanged', async (accounts) => {
             console.log('accountsChanged', accounts)
             try {
@@ -189,6 +206,10 @@ export default {
     async initContract({ state, commit, dispatch }, payload = {}) {
         try {
             console.time('initContract')
+            const isUnlocked = await state.provider._metamask.isUnlocked()
+            if (!isUnlocked) {
+                return
+            }
             commit('setReady', false)
             commit('clearTrades')
             let { notFirst, pairInfo } = payload
