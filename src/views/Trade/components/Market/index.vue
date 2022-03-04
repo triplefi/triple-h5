@@ -50,7 +50,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['pairInfo', 'pairList']),
+        ...mapState(['pairInfo', 'pairList', 'ready']),
         showList() {
             let list = []
             if (this.query) {
@@ -66,15 +66,26 @@ export default {
         }
     },
     watch: {
+        pairInfo() {
+            this.initDecimalsInfo()
+        },
+        ready(v) {
+            if (v) {
+                this.initDecimalsInfo()
+            }
+        },
         pairList(v) {
             if (this.web3) {
                 v.forEach(async (item) => {
-                    const contract = new this.web3.eth.Contract(abi, item.contract)
-                    const amountDecimal = await contract.methods.amountDecimal().call()
-                    const decimals = await contract.methods.decimals().call()
-                    this.decimalsInfo[`${item.trade_coin}_${item.margin_coin}`] = {
-                        amountDecimal,
-                        decimals
+                    const key = `${item.trade_coin}_${item.margin_coin}`
+                    if (!this.decimalsInfo[key]) {
+                        const contract = new this.web3.eth.Contract(abi, item.contract)
+                        const amountDecimal = await contract.methods.amountDecimal().call()
+                        const decimals = await contract.methods.decimals().call()
+                        this.decimalsInfo[key] = {
+                            amountDecimal,
+                            decimals
+                        }
                     }
                 })
             }
@@ -82,6 +93,19 @@ export default {
     },
     methods: {
         ...mapActions(['initContract', 'setPairCoin', 'setPairCoin']),
+        initDecimalsInfo() {
+            const v = this.pairInfo
+            if (v?.trade_coin) {
+                if (this.amountDecimal || this.decimals) {
+                    const key = `${v.trade_coin}_${v.margin_coin}`
+                    this.decimalsInfo[key] = {
+                        amountDecimal: this.amountDecimal,
+                        decimals: this.decimals
+                    }
+                }
+            }
+            console.log(JSON.stringify(this.decimalsInfo), '-=---')
+        },
         checkActive(item) {
             return item.trade_coin.toUpperCase() == this.tradeCoin && item.margin_coin.toUpperCase() == this.marginCoin
         },

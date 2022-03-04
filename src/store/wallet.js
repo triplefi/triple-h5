@@ -224,7 +224,6 @@ export default {
             commit('setContract', contract)
             commit('setAmountDecimal', amountDecimal)
             commit('setDecimals', decimals)
-            commit('setReady', true)
             commit('setKeepMarginScale', keep_margin_scale)
             commit('setLeverage', leverage)
             commit('setFeeRate', fee_rate * divConst)
@@ -238,6 +237,7 @@ export default {
             commit('setToken0', token0Contract)
             commit('setToken0Address', token0)
             commit('setToken0Decimals', decimals)
+            commit('setReady', true)
 
             if (!notFirst) {
                 // networkId首次连接监听事件，只切换账户不需要（会重复监听）
