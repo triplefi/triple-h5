@@ -217,6 +217,10 @@ export const checkSupportChain = (id) => {
 export const checkMatic = (id) => {
     return id == 80001 || id == 137
 }
+// 判断是否为主网节点
+export const checkMain = (id) => {
+    return id == 137
+}
 // 根据链ID，获取api，wss地址
 export const getNetUrl = (url) => {
     const netDic = {

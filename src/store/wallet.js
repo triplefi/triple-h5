@@ -28,19 +28,19 @@ export default {
                             type: 'error',
                             message: 'User denied account access'
                         })
-                    }
-                    if (err.code == '-32002') {
-                        const curChainId = await state.web3.eth.getChainId()
-                        let chainId = getNetConfig().find((e) => e.id != curChainId)?.id
-                        chainId = '0x' + parseInt(chainId).toString(16)
-                        provider
-                            .request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId }]
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
+                        if (err.code == '-32002') {
+                            let chainId = getNetConfig()[0].id
+                            chainId = '0x' + parseInt(chainId).toString(16)
+                            console.log(chainId, '=====')
+                            provider
+                                .request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [{ chainId }]
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
+                        }
                     }
                 })
                 return dispatch('initWeb3')

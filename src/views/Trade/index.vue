@@ -31,7 +31,7 @@ import Order from './components/Order'
 import Kline from './components/Kline'
 import networkMixin from '@/components/networkMixin'
 import { mapState } from 'vuex'
-import { checkMatic } from '@/utils/util'
+import { checkMain } from '@/utils/util'
 export default {
     name: 'Trade',
     mixins: [networkMixin],
@@ -56,8 +56,7 @@ export default {
                     const isShowTips = window.localStorage.getItem(key) || 0
                     window.localStorage.setItem(key, 1)
                     if (parseInt(isShowTips) === 0) {
-                        console.log(v, '----', checkMatic(v))
-                        if (checkMatic(v)) {
+                        if (checkMain(v)) {
                             this.$alert(
                                 `<div style="line-height:40px;font-size:15px;">Dear traders,</br></br>
     Welcome to use TripleFi!</br>
