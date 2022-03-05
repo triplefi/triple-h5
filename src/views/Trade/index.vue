@@ -45,42 +45,53 @@ export default {
         Kline
     },
     computed: {
-        ...mapState(['chainId'])
+        ...mapState(['chainId', 'provider']),
+        isUnlocked() {
+            return this.provider._state.isUnlocked
+        }
     },
     watch: {
+        isUnlocked() {
+            this.showDialog()
+        },
         chainId: {
             immediate: true,
             handler(v) {
-                if (v) {
-                    const key = `isFirstTrade${v}`
-                    const isShowTips = window.localStorage.getItem(key) || 0
-                    window.localStorage.setItem(key, 1)
-                    if (parseInt(isShowTips) === 0) {
-                        if (checkMain(v)) {
-                            this.$alert(
-                                `<div style="line-height:40px;font-size:15px;">Dear traders,</br></br>
+                this.showDialog()
+            }
+        }
+    },
+    methods: {
+        showDialog() {
+            if (this.chainId && this.isUnlocked) {
+                const key = `isFirstTrade${this.chainId}`
+                const isShowTips = window.localStorage.getItem(key) || 0
+                window.localStorage.setItem(key, 1)
+                if (parseInt(isShowTips) === 0) {
+                    if (checkMain(this.chainId)) {
+                        this.$alert(
+                            `<div style="line-height:40px;font-size:15px;">Dear traders,</br></br>
     Welcome to use TripleFi!</br>
     Please have USDT (polygon) and Matic in your wallet first.</br>
     Then click the “Approve” button and have fun trading!</br>
     You can also switch to Mumbai Testnet to test with stimulated trading for free.</br></br></div>`,
-                                {
-                                    confirmButtonText: 'Confirm',
-                                    dangerouslyUseHTMLString: true
-                                }
-                            )
-                        } else {
-                            this.$alert(
-                                `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
+                            {
+                                confirmButtonText: 'Confirm',
+                                dangerouslyUseHTMLString: true
+                            }
+                        )
+                    } else {
+                        this.$alert(
+                            `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
     Welcome to use the Triple.Fi stimulated trading version! Please follow the steps below,</br>
     1. Switch your wallet to Ethereum Mumbai Test Network.</br>
     2. Get free test tokens on the top left corner.</br>
     3. Click “Approve” button and have fun trading!</br></br></div>`,
-                                {
-                                    confirmButtonText: 'Confirm',
-                                    dangerouslyUseHTMLString: true
-                                }
-                            )
-                        }
+                            {
+                                confirmButtonText: 'Confirm',
+                                dangerouslyUseHTMLString: true
+                            }
+                        )
                     }
                 }
             }
