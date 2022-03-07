@@ -253,7 +253,7 @@ export default {
                 this.closeLong(params)
                     .then((res) => {
                         console.log(res)
-                        this.refreshData()
+                        this.delayRefreshData()
 
                         // 计算收益
                         this.calcProfitInfo(res?.events?.Trade?.returnValues, row, res?.events?.Trade?.transactionHash)
@@ -269,7 +269,7 @@ export default {
                 this.closeShort(params)
                     .then((res) => {
                         console.log(res)
-                        this.refreshData()
+                        this.delayRefreshData()
 
                         // 计算收益
                         this.calcProfitInfo(res?.events?.Trade?.returnValues, row, res?.events?.Trade?.transactionHash)

@@ -23,6 +23,12 @@ export default {
     },
     methods: {
         ...mapActions(['refreshData']),
+        // 延迟刷新数据
+        delayRefreshData() {
+            setTimeout(() => {
+                this.refreshData()
+            }, 800)
+        },
         formatDecimals(val) {
             // 合约换算和精度
             return formatNum(val / Math.pow(10, this.decimals), this.decimals * 1)

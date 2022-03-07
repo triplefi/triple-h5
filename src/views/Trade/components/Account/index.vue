@@ -214,7 +214,7 @@ export default {
                 .then((res) => {
                     console.log(res)
                     this.amount1 = 0
-                    this.refreshData()
+                    this.delayRefreshData()
                 })
                 .catch((err) => {
                     console.error(err)
@@ -232,7 +232,7 @@ export default {
                 .then((res) => {
                     console.log(res)
                     this.amount2 = 0
-                    this.refreshData()
+                    this.delayRefreshData()
                 })
                 .catch((err) => {
                     console.error(err)

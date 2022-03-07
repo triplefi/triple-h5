@@ -8,6 +8,7 @@ import { checkMatic, getNetConfig, checkSupportChain } from '@/utils/util'
 import { getTradePairs, getContractTrades, getContractCons, getContractExplosive } from '@/api'
 let poolInterval = null
 let pairTimeHandler = null
+let positioTimeHandler = null
 export default {
     // Login, getProvider
     // 选择MetaMask钱包
@@ -271,10 +272,8 @@ export default {
             commit('setNetworkError', false)
 
             if (state.coinbase) {
-                dispatch('getPosition')
-                const token0Balance = await token0Contract.methods.balanceOf(state.coinbase).call() // 用户lp数量
+                dispatch('refreshData')
                 const allowance = await token0Contract.methods.allowance(state.coinbase, contractAddress).call() // 查询账户允许合约的消费限额
-                commit('setToken0Balance', token0Balance * 1)
                 commit('setAllowance', allowance / Math.pow(10, decimals))
             }
         } catch (error) {
@@ -413,12 +412,17 @@ export default {
     },
     // 更新数据
     async refreshData({ state, commit, dispatch }) {
-        let balance = await state.web3.eth.getBalance(state.coinbase)
-        balance = state.web3.utils.fromWei(balance, 'ether')
-        commit('setBalance', balance * 1)
-        const token0Balance = await state.token0.methods.balanceOf(state.coinbase).call()
-        commit('setToken0Balance', token0Balance * 1)
-        dispatch('getPosition')
+        const request = async () => {
+            let balance = await state.web3.eth.getBalance(state.coinbase)
+            balance = state.web3.utils.fromWei(balance, 'ether')
+            commit('setBalance', balance * 1)
+            const token0Balance = await state.token0.methods.balanceOf(state.coinbase).call()
+            commit('setToken0Balance', token0Balance * 1)
+            dispatch('getPosition')
+            clearTimeout(positioTimeHandler)
+            positioTimeHandler = setTimeout(request, 5000)
+        }
+        request()
     },
     // 获取pool动态数据
     async getPoolData({ state, commit }) {

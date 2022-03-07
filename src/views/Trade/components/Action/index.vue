@@ -390,7 +390,7 @@ export default {
                 .then((res) => {
                     console.log(res)
                     this.longLoading = false
-                    this.refreshData()
+                    this.delayRefreshData()
                 })
                 .catch((err) => {
                     this.longLoading = false
@@ -437,7 +437,7 @@ export default {
                 .then((res) => {
                     console.log(res)
                     this.shortLoading = false
-                    this.refreshData()
+                    this.delayRefreshData()
                 })
                 .catch((err) => {
                     this.shortLoading = false
