@@ -415,6 +415,10 @@ export default {
                 console.log('addLiquidity', res)
                 this.addModel = false
                 this.getContractInfo()
+                this.$message({
+                    type: 'success',
+                    message: 'Deposit Succeeded'
+                })
             } catch (error) {
                 console.log(error)
             }
