@@ -399,16 +399,19 @@ export default {
     async getPosition({ state, commit, dispatch }) {
         const position = await state.contract.methods.traders(state.coinbase).call()
         const { longAmount, longPrice, margin, shortAmount, shortPrice } = position
-        commit('setPosition', {
+        const newPosition = {
             longAmount: longAmount * 1,
             longPrice: longPrice * 1,
             margin: margin * 1,
             shortAmount: shortAmount * 1,
             shortPrice: shortPrice * 1
-        })
-        dispatch('getPoolData')
-        // 发生交易时更新持仓
-        bus.$emit('updateUserPosition')
+        }
+        if (JSON.stringify(newPosition) !== JSON.stringify(state.position)) {
+            commit('setPosition', newPosition)
+            dispatch('getPoolData')
+            // 发生交易时更新持仓
+            bus.$emit('updateUserPosition')
+        }
     },
     // 更新数据
     async refreshData({ state, commit, dispatch }) {

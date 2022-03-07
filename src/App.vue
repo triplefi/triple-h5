@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <Header v-show="$route.name != 'Home'"></Header>
-        <router-view v-if="initWeb3" />
+        <router-view />
     </div>
 </template>
 
@@ -20,19 +20,19 @@ export default {
     methods: {
         ...mapActions(['metaMaskInit', 'walletConnectInit', 'getPairsList'])
     },
-    async mounted() {
-        const wallet = localStorage.getItem('wallet')
-        if (this.$route.name == 'Home') {
-            this.initWeb3 = true
+    watch: {
+        async '$route.name'(v) {
+            if (v !== 'Home' && !this.web3) {
+                const wallet = localStorage.getItem('wallet')
+                if (wallet === 'MetaMask') {
+                    await this.metaMaskInit()
+                } else if (wallet === 'WalletConnect') {
+                    await this.walletConnectInit()
+                } else {
+                    await this.getPairsList()
+                }
+            }
         }
-        if (wallet === 'MetaMask') {
-            await this.metaMaskInit()
-        } else if (wallet === 'WalletConnect') {
-            await this.walletConnectInit()
-        } else {
-            await this.getPairsList()
-        }
-        this.initWeb3 = true
     }
 }
 </script>
