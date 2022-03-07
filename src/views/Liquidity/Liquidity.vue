@@ -106,7 +106,7 @@
             <div class="recommend-title">Recommend Pools</div>
             <el-row :gutter="32">
                 <el-col :span="8" :key="item.contract" v-for="item in recommendList">
-                    <div class="recommend-item">
+                    <div class="recommend-item" @click="add({ currency: item.margin_coin, token: item.trade_coin })">
                         <div class="icon-con">
                             <div class="icons">
                                 <div class="icon icon-1">

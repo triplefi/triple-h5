@@ -137,8 +137,10 @@ export default {
             const chainId = await web3.eth.getChainId()
             commit('setChainId', chainId)
             window.localStorage.setItem('curChainId', chainId)
-            await dispatch('getPairsList')
             const coinbase = await web3.eth.getCoinbase() // 链接的账户
+            web3.eth.defaultAccount = coinbase
+            commit('setCoinbase', coinbase)
+            await dispatch('getPairsList')
             if (coinbase) {
                 web3.eth.getBalance(coinbase).then((res) => {
                     let balance = web3.utils.fromWei(res, 'ether')
@@ -155,11 +157,10 @@ export default {
                     })
                 }
             }
-            web3.eth.defaultAccount = coinbase
+
             // const networkId = await web3.eth.net.getId()
             // console.log(networkId, '-----')
             // const blockNumber = await web3.eth.getBlockNumber();
-            commit('setCoinbase', coinbase)
 
             // 开启pool池数据拉取
             if (poolInterval) {
