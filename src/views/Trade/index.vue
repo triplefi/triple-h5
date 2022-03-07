@@ -47,7 +47,7 @@ export default {
     computed: {
         ...mapState(['chainId', 'provider']),
         isUnlocked() {
-            return this.provider._state.isUnlocked
+            return this.provider?._state?.isUnlocked
         }
     },
     watch: {

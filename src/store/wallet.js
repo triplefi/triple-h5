@@ -292,10 +292,10 @@ export default {
         const getFromBlock = (to) => {
             return to - limit > 0 ? to - limit : 0
         }
-        const changeTradesList = (list) => {
-            list.forEach(async (item) => {
-                const block = await state.web3.eth.getBlock(item.blockNumber)
-                item.time = block.timestamp * 1000
+        const changeTradesList = async (list) => {
+            const requestList = await Promise.all(list.map((e) => state.web3.eth.getBlock(e.blockNumber)))
+            list.forEach((item, i) => {
+                item.time = requestList[i].timestamp * 1000
                 commit('setTrade', item)
             })
         }
