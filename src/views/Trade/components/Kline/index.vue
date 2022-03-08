@@ -1,7 +1,7 @@
 <template>
     <div class="kline" v-loading="showLoading">
         <c-tv
-            v-if="contractAddress"
+            v-if="contractAddress && ready"
             class="tvCon active"
             @chartReady="onChartReady"
             @wsData="onWsData"
