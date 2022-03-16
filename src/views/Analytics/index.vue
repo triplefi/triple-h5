@@ -39,11 +39,11 @@
                     </div>
                     <div class="item">
                         <div class="label">long amount</div>
-                        <div class="value">{{ amountPrecision(poolShortAmount) }}</div>
+                        <div class="value">{{ amountPrecision(poolLongAmount) }}</div>
                     </div>
                     <div class="item">
                         <div class="label">short amount</div>
-                        <div class="value">{{ amountPrecision(poolLongAmount) }}</div>
+                        <div class="value">{{ amountPrecision(poolShortAmount) }}</div>
                     </div>
                     <div class="item">
                         <div class="label">R</div>
