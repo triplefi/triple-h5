@@ -264,8 +264,8 @@ export default {
             await this.getAllAccount(this.pairInfo.contract)
             const totalRes = await this.contract.methods.getPoolPosition().call()
             this.totalInfo = {
-                longAmount: this.formatNum(totalRes[1]),
-                shortAmount: this.formatNum(totalRes[3]),
+                longAmount: this.formatNum(totalRes[3]),
+                shortAmount: this.formatNum(totalRes[1]),
                 longNum: this.addressList.filter((e) => !!e.Lposition).length,
                 shortNum: this.addressList.filter((e) => !!e.Sposition).length,
                 totalNum: this.posAddressList.length
