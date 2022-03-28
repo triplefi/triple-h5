@@ -142,7 +142,8 @@ export default {
                 Twitter: 'https://twitter.com/TripleFi_',
                 Medium: 'https://triplefi.medium.com/',
                 Telegram: 'https://t.me/triplefi',
-                Discord: 'https://discord.com/invite/Ar6aDuCuxY'
+                Discord: 'https://discord.com/invite/Ar6aDuCuxY',
+                Audits: 'https://solidity.finance/audits/TripleFi'
             },
             networkTypeList: getNetConfig()
         }

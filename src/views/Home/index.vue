@@ -5839,43 +5839,49 @@
                             />
                         </svg>
                     </a>
+                    <a target="_blank" class="audits-con" href="https://solidity.finance/audits/TripleFi">
+                        <svg width="24" height="30" viewBox="0 0 24 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M1.044 2.49L12 0L22.956 2.49C23.2521 2.55731 23.5169 2.72586 23.7067 2.96782C23.8965 3.20979 23.9999 3.5107 24 3.82091V17.4395C23.9999 18.7865 23.6747 20.1125 23.0532 21.3C22.4317 22.4875 21.5332 23.4997 20.4373 24.2468L12 30L3.56267 24.2468C2.46703 23.4999 1.56861 22.4879 0.947131 21.3006C0.325648 20.1134 0.000315142 18.7876 0 17.4409V3.82091C5.20504e-05 3.5107 0.103517 3.20979 0.293319 2.96782C0.483122 2.72586 0.747916 2.55731 1.044 2.49Z"
+                                fill="white"
+                            />
+                        </svg>
+                    </a>
                 </div>
                 <a class="button" href="mailto:support@triple.fi">Contact Us</a>
                 <p>support@triple.fi</p>
             </div>
         </div>
-        <div class="bottom">
-            <svg
-                @click="goTop"
-                style="cursor: pointer"
-                width="50"
-                height="52"
-                viewBox="0 0 50 52"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M46.3559 38.3977V25.9795V13.4795L24.7405 1L3.125 13.5818V26V38.5L24.7405 51L46.3559 38.3977ZM10.8055 34.0401V25.9795V17.9804L24.7405 9.85843L38.6754 17.919V25.9795V33.9787L24.7405 42.1007L10.8055 34.0401Z"
-                    fill="#5F549E"
-                />
-                <path
-                    d="M3.125 13.5818L10.8055 17.9804L24.7405 9.87888L38.6754 17.919L46.3559 13.4795L24.7405 1L3.125 13.5818Z"
-                    fill="white"
-                />
-                <path
-                    d="M3.125 13.5818L24.7405 1L46.3559 13.4795V38.3977L24.7405 50.9795L3.125 38.4795V13.5818Z"
-                    stroke="#5F549E"
-                    stroke-width="0.180005"
-                    stroke-miterlimit="10"
-                />
-                <path
-                    d="M10.8054 17.9804L24.7404 9.87891L38.6753 17.919V33.9787L24.7404 42.1007L10.8054 34.0401V17.9804Z"
-                    stroke="#5F549E"
-                    stroke-width="0.180005"
-                    stroke-miterlimit="10"
-                />
-            </svg>
-            <p>Copyright © 2021 TripleFi All Rights Reserved.</p>
+        <div class="bottom" @click="goTop" style="cursor: pointer">
+            <div class="bottom-left">
+                <svg width="50" height="52" viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M46.3559 38.3977V25.9795V13.4795L24.7405 1L3.125 13.5818V26V38.5L24.7405 51L46.3559 38.3977ZM10.8055 34.0401V25.9795V17.9804L24.7405 9.85843L38.6754 17.919V25.9795V33.9787L24.7405 42.1007L10.8055 34.0401Z"
+                        fill="#5F549E"
+                    />
+                    <path
+                        d="M3.125 13.5818L10.8055 17.9804L24.7405 9.87888L38.6754 17.919L46.3559 13.4795L24.7405 1L3.125 13.5818Z"
+                        fill="white"
+                    />
+                    <path
+                        d="M3.125 13.5818L24.7405 1L46.3559 13.4795V38.3977L24.7405 50.9795L3.125 38.4795V13.5818Z"
+                        stroke="#5F549E"
+                        stroke-width="0.180005"
+                        stroke-miterlimit="10"
+                    />
+                    <path
+                        d="M10.8054 17.9804L24.7404 9.87891L38.6753 17.919V33.9787L24.7404 42.1007L10.8054 34.0401V17.9804Z"
+                        stroke="#5F549E"
+                        stroke-width="0.180005"
+                        stroke-miterlimit="10"
+                    />
+                </svg>
+                <p>Copyright © 2021 TripleFi All Rights Reserved.</p>
+            </div>
+            <a class="bottom-right" @click.stop="() => {}" target="_blank" href="https://solidity.finance/">
+                <p>Audited by</p>
+                <div class="bottom-label"><img src="./img/auditedBy.png" alt="" />SOLIDITY FINANCE</div>
+            </a>
         </div>
     </div>
 </template>
