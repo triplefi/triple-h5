@@ -84,7 +84,7 @@ export default {
                         this.$alert(
                             `<div style="line-height:40px;font-size:15px;">Dear users,</br></br>
     Welcome to use the Triple.Fi stimulated trading version! Please follow the steps below,</br>
-    1. Switch your wallet to Ethereum Mumbai Test Network.</br>
+    1. Switch your wallet to Polygon Mumbai Test Network.</br>
     2. Get free test tokens on the top left corner.</br>
     3. Click “Approve” button and have fun trading!</br></br></div>`,
                             {
