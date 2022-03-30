@@ -202,6 +202,7 @@ export default {
             if (returnValues) {
                 const closePrice = returnValues.price
                 const openPrice = row.openPrice
+                console.log(closePrice, openPrice)
                 // 平多
                 if (returnValues.direction == -2 && closePrice <= openPrice) {
                     return

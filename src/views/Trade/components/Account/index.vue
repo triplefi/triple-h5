@@ -56,11 +56,16 @@
 
         <div class="profit-con" v-if="profitInfo && profitInfo.pair === symbol" :key="profitInfo.transactionHash">
             <div class="close-con">
-                <div></div>
+                <div class="leverage-con">
+                    <span class="long-flag" v-if="profitInfo.direction == -2">Long</span>
+                    <span class="short-flag" v-else>Short</span>
+                    <span>{{ leverage }}X</span>
+                    <span>{{ symbol }}</span>
+                </div>
                 <svg-icon icon-class="ic_close" class-name="close" @click.native.stop="handleCloseProfit()"></svg-icon>
             </div>
             <div>
-                <div class="label">{{ profitInfo.direction == -2 ? 'Long' : 'Short' }} Amount</div>
+                <div class="label">Amount</div>
                 <div class="value">{{ amountPrecision(profitInfo.amount) | formatMoney }}</div>
             </div>
             <div>
@@ -71,10 +76,21 @@
                 <div class="label">Close Price</div>
                 <div class="value">{{ pricePrecision(profitInfo.closePrice) | formatMoney }}</div>
             </div>
-            <div>
+            <div class="profit-bg">
                 <div class="label"><span class="profit-label">Profit</span>USDT</div>
                 <div class="value profit-value">{{ profitInfo.profit | formatMoney }}</div>
                 <div class="amount-ani value">+ {{ profitInfo.profit | formatMoney }}</div>
+            </div>
+            <div class="icon-con">
+                <div class="icon-left">
+                    <svg-icon icon-class="exchange" class-name="icon"></svg-icon>
+                </div>
+                <div class="icon-right">
+                    <svg-icon icon-class="download" class-name="icon"></svg-icon>
+                    <svg-icon icon-class="twitter" class-name="icon"></svg-icon>
+                    <svg-icon icon-class="telegram" class-name="icon"></svg-icon>
+                    <svg-icon icon-class="discoed" class-name="icon"></svg-icon>
+                </div>
             </div>
         </div>
 
@@ -141,7 +157,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['token0Balance', 'position', 'profitInfo', 'price', 'keepMarginScale']),
+        ...mapState(['token0Balance', 'position', 'profitInfo', 'price', 'keepMarginScale', 'leverage']),
         ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice', 'symbol']),
         precision() {
             return Math.abs(this.decimals) || 2

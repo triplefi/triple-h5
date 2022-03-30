@@ -1,6 +1,6 @@
 .account {
     padding: 16px 32px 24px 24px;
-    height: 320px;
+    height: 420px;
     box-sizing: border-box;
     // font-family: Roboto Condensed;
     .account-title {
@@ -65,10 +65,26 @@
         margin-top: 20px;
         border: 1px solid var(--COLOR-t4);
         border-radius: 16px;
-        padding: 8px;
+        padding: 8px 0 4px 0;
         z-index: 0;
         .close-con {
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .leverage-con {
+                font-weight: 700;
+                font-size: 15px;
+                span {
+                    margin-right: 8px;
+                }
+                .long-flag {
+                    color: var(--COLOR-c1);
+                }
+                .short-flag {
+                    color: var(--COLOR-c3);
+                }
+            }
             .close {
                 font-size: 20px;
                 cursor: pointer;
@@ -79,7 +95,8 @@
             align-items: center;
             justify-content: space-between;
             position: relative;
-            margin-bottom: 5px;
+            // margin-bottom: 5px;
+            padding: 4px 8px;
         }
         .label {
             font-size: 12px;
@@ -88,15 +105,38 @@
         .value {
             font-size: 12px;
             color: var(--COLOR-t1);
+            font-weight: 600;
+        }
+        .profit-bg {
+            background: rgba(247, 172, 10, 0.05);
         }
         .profit-label {
             font-size: 14px;
             margin-right: 5px;
-            color: #f9d3b4;
+            // color: #f9d3b4;
             font-weight: bold;
+            color: #fff;
         }
         .profit-value {
             color: #f9d3b4;
+            font-weight: 600;
+        }
+
+        .icon-con {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            .icon-right {
+                display: flex;
+                align-items: center;
+            }
+            .icon {
+                font-size: 20px;
+                color: var(--COLOR-t2);
+                margin-left: 8px;
+                cursor: pointer;
+            }
         }
 
         .amount-ani {
