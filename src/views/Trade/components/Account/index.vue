@@ -53,7 +53,6 @@
                 {{ formatDecimals(keepMargin) | formatMoney }}
             </div>
         </div>
-
         <div class="profit-con" v-if="profitInfo && profitInfo.pair === symbol" :key="profitInfo.transactionHash">
             <div class="close-con">
                 <div class="leverage-con">
@@ -95,9 +94,24 @@
                     <div @click="handleDownload">
                         <svg-icon icon-class="download" class-name="icon"></svg-icon>
                     </div>
-                    <svg-icon icon-class="twitter" class-name="icon"></svg-icon>
-                    <svg-icon icon-class="telegram" class-name="icon"></svg-icon>
-                    <svg-icon icon-class="discoed" class-name="icon"></svg-icon>
+                    <a
+                        data-sharer="twitter"
+                        data-title="Checkout Sharer.js!"
+                        data-hashtags="awesome, sharer.js"
+                        data-url="https://ellisonleao.github.io/sharer.js/"
+                    >
+                        <svg-icon icon-class="twitter" class-name="icon"></svg-icon>
+                    </a>
+                    <a
+                        data-sharer="telegram"
+                        data-title="Checkout Sharer.js!"
+                        data-url="https://ellisonleao.github.io/sharer.js/"
+                    >
+                        <svg-icon icon-class="telegram" class-name="icon"></svg-icon>
+                    </a>
+                    <a target="blank" href="https://discord.com/invite/Ar6aDuCuxY">
+                        <svg-icon icon-class="discoed" class-name="icon"></svg-icon>
+                    </a>
                 </div>
             </div>
         </div>
@@ -148,6 +162,7 @@
             </div>
         </el-dialog>
         <el-dialog
+            v-if="profitInfo"
             custom-class="profit-dialog-con"
             width="520px"
             :visible.sync="showProfitCard"
@@ -276,8 +291,10 @@ export default {
             if (v) {
                 let audio = new Audio()
                 audio.src = require('./video.mp3')
-                console.log(audio)
                 audio.play()
+                this.$nextTick(() => {
+                    window.Sharer.init()
+                })
             }
         }
     },
