@@ -204,13 +204,13 @@ export default {
                 const openPrice = row.openPrice
                 console.log(closePrice, openPrice)
                 // 平多
-                if (returnValues.direction == -2 && closePrice <= openPrice) {
-                    return
-                }
-                // 平空
-                if (returnValues.direction == 2 && closePrice >= openPrice) {
-                    return
-                }
+                // if (returnValues.direction == -2 && closePrice <= openPrice) {
+                //     return
+                // }
+                // // 平空
+                // if (returnValues.direction == 2 && closePrice >= openPrice) {
+                //     return
+                // }
                 const profitInfo = {
                     closePrice,
                     openPrice,
@@ -222,7 +222,9 @@ export default {
                             Big(closePrice).minus(openPrice).times(returnValues.amount).div(Math.pow(10, this.decimals))
                         )
                     ),
-                    pair: row.pair
+                    pair: row.pair,
+                    R: (Math.abs((closePrice - openPrice) / openPrice) * 100).toFixed(2) + '%',
+                    isShowR: false
                 }
                 this.setProfitInfo(profitInfo)
             }

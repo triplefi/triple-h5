@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="flex flex-ac flex-bt">
-            <div class="fs12 name">Maintenance margin</div>
+            <div class="fs12 name">Maintenance Margin</div>
             <div class="fs12 value">
                 {{ formatDecimals(keepMargin) | formatMoney }}
             </div>
@@ -60,7 +60,7 @@
                     <span class="long-flag" v-if="profitInfo.direction == -2">Long</span>
                     <span class="short-flag" v-else>Short</span>
                     <span>{{ leverage }}X</span>
-                    <span>{{ symbol }}</span>
+                    <span>{{ profitInfo.pair }}</span>
                 </div>
                 <svg-icon icon-class="ic_close" class-name="close" @click.native.stop="handleCloseProfit()"></svg-icon>
             </div>
@@ -77,16 +77,24 @@
                 <div class="value">{{ pricePrecision(profitInfo.closePrice) | formatMoney }}</div>
             </div>
             <div class="profit-bg">
-                <div class="label"><span class="profit-label">Profit</span>USDT</div>
-                <div class="value profit-value">{{ profitInfo.profit | formatMoney }}</div>
+                <div class="label">
+                    <span class="profit-label">Profit{{ profitInfo.isShowR ? '%' : '' }}</span
+                    ><template v-if="!profitInfo.isShowR">USDT</template>
+                </div>
+                <div v-if="profitInfo.isShowR" class="value profit-value">
+                    {{ profitInfo.R }}
+                </div>
+                <div class="value profit-value" v-else>{{ profitInfo.profit | formatMoney }}</div>
                 <div class="amount-ani value">+ {{ profitInfo.profit | formatMoney }}</div>
             </div>
             <div class="icon-con">
-                <div class="icon-left">
+                <div @click="exchangeProfitInfo" class="icon-left">
                     <svg-icon icon-class="exchange" class-name="icon"></svg-icon>
                 </div>
                 <div class="icon-right">
-                    <svg-icon icon-class="download" class-name="icon"></svg-icon>
+                    <div @click="handleDownload">
+                        <svg-icon icon-class="download" class-name="icon"></svg-icon>
+                    </div>
                     <svg-icon icon-class="twitter" class-name="icon"></svg-icon>
                     <svg-icon icon-class="telegram" class-name="icon"></svg-icon>
                     <svg-icon icon-class="discoed" class-name="icon"></svg-icon>
@@ -139,17 +147,85 @@
                 </el-tabs>
             </div>
         </el-dialog>
+        <el-dialog
+            custom-class="profit-dialog-con"
+            width="520px"
+            :visible.sync="showProfitCard"
+            :modal="false"
+            :show-close="false"
+        >
+            <template slot="title"></template>
+            <div id="profit-card" class="profit-card-con">
+                <div class="profit-con" :key="profitInfo.transactionHash">
+                    <div class="close-con">
+                        <div class="leverage-con">
+                            <span class="long-flag" v-if="profitInfo.direction == -2">Long</span>
+                            <span class="short-flag" v-else>Short</span>
+                            <span>{{ leverage }}X</span>
+                        </div>
+                        <div class="icons">
+                            <div class="icon icon-1">
+                                <img :src="profitInfo.pair.split('/')[0] | getCoinIcon" alt="" />
+                            </div>
+                            <div class="icon icon-2">
+                                <img :src="profitInfo.pair.split('/')[1] | getCoinIcon" alt="" />
+                            </div>
+                            <span>{{ profitInfo.pair }}</span>
+                        </div>
+                        <!-- <svg-icon
+                            icon-class="ic_close"
+                            class-name="close"
+                            @click.native.stop="handleCloseProfit()"
+                        ></svg-icon> -->
+                    </div>
+                    <div>
+                        <div class="label">Amount</div>
+                        <div class="value">{{ amountPrecision(profitInfo.amount) | formatMoney }}</div>
+                    </div>
+                    <div>
+                        <div class="label">Open Price</div>
+                        <div class="value">{{ pricePrecision(profitInfo.openPrice) | formatMoney }}</div>
+                    </div>
+                    <div>
+                        <div class="label">Close Price</div>
+                        <div class="value">{{ pricePrecision(profitInfo.closePrice) | formatMoney }}</div>
+                    </div>
+                    <div class="profit-bg">
+                        <div class="label">
+                            <span class="profit-label">Profit{{ profitInfo.isShowR ? '%' : '' }}</span
+                            ><template v-if="!profitInfo.isShowR">USDT</template>
+                        </div>
+                        <div v-if="profitInfo.isShowR" class="value profit-value">
+                            {{ profitInfo.R }}
+                        </div>
+                        <div class="value profit-value" v-else>{{ profitInfo.profit | formatMoney }}</div>
+                    </div>
+                </div>
+                <div class="bottom-info">
+                    <div>
+                        <img class="icon" src="./website.png" alt="" />
+                        <span>https://triple.fi/</span>
+                    </div>
+                    <div>
+                        <img class="icon" src="./w_telegram.png" alt="" />
+                        <span>triplefi</span>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import Big from 'big.js'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import html2canvas from 'html2canvas'
 export default {
     name: 'Account',
     data() {
         return {
             showTab: false,
+            showProfitCard: false,
             amount1: 0,
             amount2: 0,
 
@@ -196,7 +272,7 @@ export default {
         }
     },
     watch: {
-        profitInfo(v) {
+        'profitInfo.transactionHash'(v) {
             if (v) {
                 let audio = new Audio()
                 audio.src = require('./video.mp3')
@@ -256,6 +332,46 @@ export default {
         },
         handleCloseProfit() {
             this.setProfitInfo(null)
+        },
+        exchangeProfitInfo() {
+            this.setProfitInfo({
+                ...this.profitInfo,
+                isShowR: !this.profitInfo.isShowR
+            })
+        },
+        dataURLToBlob(dataurl) {
+            let arr = dataurl.split(',')
+            let mime = arr[0].match(/:(.*?);/)[1]
+            let bstr = atob(arr[1])
+            let n = bstr.length
+            let u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return new Blob([u8arr], { type: mime })
+        },
+        handleDownload() {
+            this.showProfitCard = true
+            this.$nextTick(() => {
+                html2canvas(document.getElementById('profit-card')).then((canvas) => {
+                    let a = document.createElement('a')
+                    let dom = document.body.appendChild(canvas)
+                    dom.style.display = 'none'
+                    a.style.display = 'none'
+                    document.body.removeChild(dom)
+                    let blob = this.dataURLToBlob(dom.toDataURL('image/png', 1))
+                    a.setAttribute('href', URL.createObjectURL(blob))
+                    //这块是保存图片操作  可以设置保存的图片的信息
+                    a.setAttribute('download', 'Profit.png')
+                    document.body.appendChild(a)
+                    a.click()
+                    URL.revokeObjectURL(blob)
+                    document.body.removeChild(a)
+                    setTimeout(() => {
+                        this.showProfitCard = false
+                    }, 1000)
+                })
+            })
         }
     }
 }
