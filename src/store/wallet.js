@@ -495,7 +495,7 @@ export default {
         try {
             const res = await getTradePairs()
             let list = res.result ? res.data : []
-            const sortList = ['bct', 'btc', 'iota', 'matic', 'eth']
+            const sortList = ['quick', 'bct', 'btc', 'iota', 'matic', 'eth']
             let newList = []
             sortList.forEach((d) => {
                 const item = list.find((e) => e.trade_coin === d)
