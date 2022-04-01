@@ -108,7 +108,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['position', 'tolerance', 'poolNet']),
+        ...mapState(['position', 'tolerance', 'poolNet', 'leverage']),
         ...mapGetters(['symbol', 'slidePrice', 'CloseLongMaxAmount', 'CloseShortMaxAmount']),
         slidePriceLong() {
             if (!this.price) {
@@ -223,7 +223,7 @@ export default {
                         )
                     ),
                     pair: row.pair,
-                    R: (Math.abs((closePrice - openPrice) / openPrice) * 100).toFixed(2) + '%',
+                    R: (Math.abs((closePrice - openPrice) / openPrice) * 100 * this.leverage).toFixed(2) + '%',
                     isShowR: false
                 }
                 this.setProfitInfo(profitInfo)

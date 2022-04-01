@@ -94,19 +94,10 @@
                     <div @click="handleDownload">
                         <svg-icon icon-class="download" class-name="icon"></svg-icon>
                     </div>
-                    <a
-                        data-sharer="twitter"
-                        data-title="Checkout Sharer.js!"
-                        data-hashtags="awesome, sharer.js"
-                        data-url="https://ellisonleao.github.io/sharer.js/"
-                    >
+                    <a data-sharer="twitter" :data-title="shareStr" data-url="https://triple.fi/">
                         <svg-icon icon-class="twitter" class-name="icon"></svg-icon>
                     </a>
-                    <a
-                        data-sharer="telegram"
-                        data-title="Checkout Sharer.js!"
-                        data-url="https://ellisonleao.github.io/sharer.js/"
-                    >
+                    <a data-sharer="telegram" :data-title="shareStr" data-url="https://triple.fi/">
                         <svg-icon icon-class="telegram" class-name="icon"></svg-icon>
                     </a>
                     <a target="blank" href="https://discord.com/invite/Ar6aDuCuxY">
@@ -233,6 +224,7 @@
 
 <script>
 import Big from 'big.js'
+import { formatMoney } from '@/utils/util'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import html2canvas from 'html2canvas'
 export default {
@@ -248,7 +240,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['token0Balance', 'position', 'profitInfo', 'price', 'keepMarginScale', 'leverage']),
+        ...mapState(['coinbase', 'token0Balance', 'position', 'profitInfo', 'price', 'keepMarginScale', 'leverage']),
         ...mapGetters(['UsedMargin', 'NetValue', 'canUseMargin', 'LiquidationPrice', 'symbol']),
         precision() {
             return Math.abs(this.decimals) || 2
@@ -284,6 +276,16 @@ export default {
             } else {
                 return 0
             }
+        },
+        shareStr() {
+            const { pair, direction, closePrice, openPrice, R } = this.profitInfo || {}
+            return `Brilliant! Congratulations to ${this.coinbase} on #TripleFi!
+Rate of return: +${R}
+Pair: ${pair}
+Direction: ${direction == -2 ? 'Long' : 'Short'}
+Open Price: ${formatMoney(this.pricePrecision(openPrice))}
+Close Price: ${formatMoney(this.pricePrecision(closePrice))}
+`
         }
     },
     watch: {
