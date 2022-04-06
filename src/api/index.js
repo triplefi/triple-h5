@@ -128,3 +128,14 @@ export const getContractCons = (address) => {
         }
     })
 }
+
+// 上传文件
+export const postFile = (file) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return request({
+        url: '/upload/share',
+        method: 'post',
+        data: formData
+    })
+}

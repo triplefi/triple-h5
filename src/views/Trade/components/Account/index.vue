@@ -91,13 +91,13 @@
                     <svg-icon icon-class="exchange" class-name="icon"></svg-icon>
                 </div>
                 <div class="icon-right">
-                    <div @click="handleDownload">
+                    <div @click="handleDownload()">
                         <svg-icon icon-class="download" class-name="icon"></svg-icon>
                     </div>
-                    <a data-sharer="twitter" :data-title="shareStr" data-url="https://triple.fi/">
+                    <a data-sharer="twitter" :data-title="shareStr" :data-url="shareUrl">
                         <svg-icon icon-class="twitter" class-name="icon"></svg-icon>
                     </a>
-                    <a data-sharer="telegram" :data-title="shareStr" data-url="https://triple.fi/">
+                    <a data-sharer="telegram" :data-title="shareStr" :data-url="shareUrl">
                         <svg-icon icon-class="telegram" class-name="icon"></svg-icon>
                     </a>
                     <a target="blank" href="https://discord.com/invite/Ar6aDuCuxY">
@@ -227,6 +227,7 @@ import Big from 'big.js'
 import { formatMoney } from '@/utils/util'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import html2canvas from 'html2canvas'
+import { postFile } from '@/api'
 export default {
     name: 'Account',
     data() {
@@ -286,6 +287,10 @@ Direction: ${direction == -2 ? 'Long' : 'Short'}
 Open Price: ${formatMoney(this.pricePrecision(openPrice))}
 Close Price: ${formatMoney(this.pricePrecision(closePrice))}
 `
+        },
+        shareUrl() {
+            const { imgUrl } = this.profitInfo || {}
+            return `${imgUrl || ''} , https://triple.fi/`
         }
     },
     watch: {
@@ -297,6 +302,7 @@ Close Price: ${formatMoney(this.pricePrecision(closePrice))}
                 this.$nextTick(() => {
                     window.Sharer.init()
                 })
+                this.handleDownload(false)
             }
         }
     },
@@ -369,7 +375,7 @@ Close Price: ${formatMoney(this.pricePrecision(closePrice))}
             }
             return new Blob([u8arr], { type: mime })
         },
-        handleDownload() {
+        handleDownload(bool = true) {
             this.showProfitCard = true
             this.$nextTick(() => {
                 html2canvas(document.getElementById('profit-card')).then((canvas) => {
@@ -379,16 +385,27 @@ Close Price: ${formatMoney(this.pricePrecision(closePrice))}
                     a.style.display = 'none'
                     document.body.removeChild(dom)
                     let blob = this.dataURLToBlob(dom.toDataURL('image/png', 1))
-                    a.setAttribute('href', URL.createObjectURL(blob))
-                    //这块是保存图片操作  可以设置保存的图片的信息
-                    a.setAttribute('download', 'Profit.png')
-                    document.body.appendChild(a)
-                    a.click()
-                    URL.revokeObjectURL(blob)
-                    document.body.removeChild(a)
+                    if (bool) {
+                        a.setAttribute('href', URL.createObjectURL(blob))
+                        //这块是保存图片操作  可以设置保存的图片的信息
+                        a.setAttribute('download', 'Profit.png')
+                        document.body.appendChild(a)
+                        a.click()
+                        URL.revokeObjectURL(blob)
+                        document.body.removeChild(a)
+                    }
                     setTimeout(() => {
                         this.showProfitCard = false
                     }, 1000)
+                    if (!this.profitInfo?.imgUrl) {
+                        const file = new File([blob], 'Profit.png')
+                        postFile(file).then((res) => {
+                            this.setProfitInfo({
+                                ...this.profitInfo,
+                                imgUrl: `${window.location.origin}/share/${res.data}`
+                            })
+                        })
+                    }
                 })
             })
         }
