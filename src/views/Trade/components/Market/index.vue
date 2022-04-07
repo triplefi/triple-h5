@@ -40,6 +40,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { formatNum } from '@/utils/util'
+import { getContractCons } from '@/api'
 import abi from '@/contracts/HedgexSingle.json'
 export default {
     name: 'Market',
@@ -79,12 +80,11 @@ export default {
                 v.forEach(async (item) => {
                     const key = `${item.trade_coin}_${item.margin_coin}`
                     if (!this.decimalsInfo[key]) {
-                        const contract = new this.web3.eth.Contract(abi, item.contract)
-                        const amountDecimal = await contract.methods.amountDecimal().call()
-                        const decimals = await contract.methods.decimals().call()
+                        const constRes = await getContractCons(item.contract)
+                        const { min_amount, token0_decimal } = constRes.data
                         this.decimalsInfo[key] = {
-                            amountDecimal,
-                            decimals
+                            amountDecimal: Math.log10(min_amount),
+                            decimals: Math.log10(token0_decimal)
                         }
                     }
                 })
