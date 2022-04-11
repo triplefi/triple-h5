@@ -241,8 +241,7 @@ export const getNetUrl = (url) => {
     const netDic = {
         137: 'polygon.triple.fi',
         80001: 'mumbai.triple.fi',
-        // 85: 'meteora.triple.fi',
-        85: 'mumbai.triple.fi'
+        85: 'meteora.triple.fi'
     }
     const curChainId = window.localStorage.getItem('curChainId')
     let netUrl = netDic[curChainId]
