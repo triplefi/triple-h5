@@ -1,6 +1,7 @@
 // vue.config.js
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 // const PrerenderSPAPlugin = require('prerender-spa-plugin')
 // const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 module.exports = {
@@ -62,6 +63,15 @@ module.exports = {
             config.devtool = 'source-map'
             // 为开发环境修改配置...
         }
+        config.plugins.push(
+            new CompressionWebpackPlugin({
+                filename: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: new RegExp('\\.(js|css)$'),
+                threshold: 10240, // 对超过10K的数据进行压缩
+                minRatio: 0.8 // 极小比
+            })
+        )
         // 预渲染，SEO优化
         // new PrerenderSPAPlugin({
         //     staticDir: path.join(__dirname, 'dist'),

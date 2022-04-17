@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header v-show="$route.name != 'Home'"></Header>
+        <Header></Header>
         <router-view />
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     },
     watch: {
         async '$route.name'(v) {
-            if (v !== 'Home' && !this.web3) {
+            if (!this.web3) {
                 const wallet = localStorage.getItem('wallet')
                 if (wallet === 'MetaMask') {
                     await this.metaMaskInit()
