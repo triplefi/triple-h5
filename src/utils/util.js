@@ -176,6 +176,7 @@ export const getCoinIcon = (coin) => {
 
 // 获取节点配置文件
 export const getNetConfig = () => {
+    const isProd = window.location.host === 'triple.fi'
     return [
         {
             type: 'matic',
@@ -207,7 +208,7 @@ export const getNetConfig = () => {
                 symbol: 'MATIC'
             }
         },
-        {
+        !isProd && {
             type: 'gateio',
             label: 'Gate-Meteore',
             icon: 'ic_gateio',
@@ -222,7 +223,7 @@ export const getNetConfig = () => {
                 symbol: 'GT'
             }
         }
-    ]
+    ].filter((e) => !!e)
 }
 // 判断是否为支持的节点
 export const checkSupportChain = (id) => {
