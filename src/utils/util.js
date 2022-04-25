@@ -208,7 +208,7 @@ export const getNetConfig = () => {
                 symbol: 'MATIC'
             }
         },
-        !isProd && {
+        {
             type: 'gateio',
             label: 'Gate-Meteore',
             icon: 'ic_gateio',
