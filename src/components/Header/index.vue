@@ -172,7 +172,7 @@ export default {
         },
         isNetworkError(v) {
             if (v) {
-                this.onSwitchNetwork(this.networkTypeList[0])
+                // this.onSwitchNetwork(this.networkTypeList[0])
             }
         },
         '$route.name'(v) {
