@@ -21,10 +21,14 @@
         >
         <!-- <router-link class="tab btn14" to="/about">Components</router-link> -->
         <!-- <div v-if="!coinbase" class="wallet btn14" @click="model = true">Ethereum</div> -->
-        <div class="ethereum-network">
-            <div class="flex flex-ac">
+        <div class="ethereum-network" :class="{'select-con':!curNetwork.id}">
+            <div v-if="curNetwork.id" class="flex flex-ac">
                 <svg-icon :icon-class="curNetwork.icon" class-name="ethereum-icon"></svg-icon>
-                {{ curNetwork.label }}
+                {{ curNetwork.label || 'Switch network' }}
+            </div>
+            <div v-else>
+                Switch network
+                <svg-icon icon-class="down" class-name="ethereum-select-icon"></svg-icon>
             </div>
             <div class="network-wrap">
                 <div class="network-list">
@@ -152,7 +156,7 @@ export default {
         ...mapState(['provider', 'coinbase', 'balance', 'wallet', 'isMetaMask', 'isNetworkError', 'chainId']),
         curNetwork() {
             const info = this.networkTypeList.find((e) => e.id == this.chainId)
-            return info || this.networkTypeList[0]
+            return info || {}
         }
     },
     filters: {

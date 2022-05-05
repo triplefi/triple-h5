@@ -69,9 +69,20 @@
         border: 2px solid var(--COLOR-c5);
         padding: 0 8px;
         cursor: pointer;
+        &.select-con {
+            border: 2px solid var(--COLOR-bg3);
+            background: var(--COLOR-bg3);
+            &:hover {
+                border: 2px solid var(--COLOR-c5);
+            }
+        }
         .ethereum-icon {
             margin-right: 5px;
             font-size: 20px;
+        }
+        .ethereum-select-icon {
+            font-size: 11px;
+            margin-left: 3px;
         }
         &:hover {
             background: var(--COLOR-bg2);
@@ -99,7 +110,7 @@
             }
             .network-list {
                 // width: 124px;
-                width:140px;
+                width: 140px;
                 background: var(--COLOR-bg2);
                 border: 2px solid var(--COLOR-c5);
                 border-radius: 10px;
