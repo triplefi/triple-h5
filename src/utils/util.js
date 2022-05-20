@@ -210,6 +210,21 @@ export const getNetConfig = () => {
         },
         {
             type: 'gateio',
+            label: 'Gate',
+            icon: 'ic_gateio',
+            id: 86,
+            size: 16,
+            token: 'GT',
+            rpc: 'https://evm.gatenode.cc',
+            explorerUrl: 'https://gatescan.org/',
+            nativeCurrency: {
+                name: 'GT',
+                decimals: 18,
+                symbol: 'GT'
+            }
+        },
+        !isProd && {
+            type: 'gateio',
             label: 'Gate-Meteore',
             icon: 'ic_gateio',
             id: 85,
@@ -227,7 +242,7 @@ export const getNetConfig = () => {
 }
 // 判断是否为支持的节点
 export const checkSupportChain = (id) => {
-    return [137, 80001, 85].includes(parseInt(id))
+    return [137, 80001, 85, 86].includes(parseInt(id))
 }
 // 判断是否为matic节点
 export const checkMatic = (id) => {
@@ -235,14 +250,15 @@ export const checkMatic = (id) => {
 }
 // 判断是否为主网节点
 export const checkMain = (id) => {
-    return id == 137
+    return id == 13 || id == 86
 }
 // 根据链ID，获取api，wss地址
 export const getNetUrl = (url) => {
     const netDic = {
         137: 'polygon.triple.fi',
         80001: 'mumbai.triple.fi',
-        85: 'meteora.triple.fi'
+        85: 'meteora.triple.fi',
+        86: 'gate.triple.fi'
     }
     const curChainId = window.localStorage.getItem('curChainId')
     let netUrl = netDic[curChainId]
