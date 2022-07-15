@@ -210,7 +210,7 @@ export const getNetConfig = () => {
         },
         {
             type: 'gateio',
-            label: 'Gate',
+            label: 'GateChain',
             icon: 'ic_gateio',
             id: 86,
             size: 16,
